@@ -17,16 +17,16 @@ pipeline {
         stage('Docker build') {
             agent any
             steps {
-                sh 'docker build -t apiServer-image:latest ./backend/a103'
+                sh 'docker build -t backend-server-image:latest ./backend/a103'
             }
         }
         stage('Docker run') {
             agent any
             steps {
-                sh 'docker ps -f name=apiServer-container -q | xargs --no-run-if-empty docker container stop'
-                sh 'docker container ls -a -fname=apiServer-container -q | xargs -r docker container rm'
+                sh 'docker ps -f name=backend-server-container -q | xargs --no-run-if-empty docker container stop'
+                sh 'docker container ls -a -fname=backend-server-container -q | xargs -r docker container rm'
 	            sh 'docker rmi $(docker images -f "dangling=true" -q)'
-				sh 'docker run -d --name apiServer-container -p 9000:9000 apiServer-image:latest'
+				sh 'docker run -d --name backend-server-container -p 9000:9000 backend-server-image:latest'
             }
         }
     }
