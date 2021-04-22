@@ -22,25 +22,16 @@ public class TestController {
 	@Autowired
 	TestDao testDao;
 	
-	@GetMapping(value="getTest")
-	public void test(){
-		System.out.println("ASDASD");
-	}
-	
 	@GetMapping(value="getId/{id}")
 	public Object getTestById(@PathVariable("id") int id){
 		try {
-			
-			System.out.println(id);
 			Optional<Test> testOpt = testDao.findTestById(id);
-			
 			
 			testOpt.ifPresent(selectTest -> {
 				System.out.println(selectTest);
 	        });
 			
 		} catch (Exception e) {
-			System.out.println("에러");
 			return new ResponseEntity<HttpStatus>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		
@@ -60,7 +51,6 @@ public class TestController {
 			return new ResponseEntity<HttpStatus>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		
-		
 		return new ResponseEntity<HttpStatus>(HttpStatus.OK);
 	}
 	
@@ -78,8 +68,6 @@ public class TestController {
 		
 		return new ResponseEntity<HttpStatus>(HttpStatus.OK);
 	}
-	
-	
 	
 	@DeleteMapping("/delete/{id}")
 	public Object deleteById(@PathVariable("id") int id) {		
@@ -99,10 +87,9 @@ public class TestController {
 	
 	@PostMapping("/save/{name}")
 	public Object save(@PathVariable("name") String name) {		
+		
 		Test dto = new Test();
-		
 		dto.setName(name);
-		
 		testDao.save(dto);
 		
 		return new ResponseEntity<HttpStatus>(HttpStatus.OK);
@@ -114,9 +101,7 @@ public class TestController {
 			Optional<Test> testOpt = testDao.findTestByName(name);
 			
 			testOpt.ifPresent(selectTest -> {
-				
 				selectTest.setName(newName);
-				
 				testDao.save(selectTest);
 	        });
 			
@@ -126,5 +111,4 @@ public class TestController {
 		
 		return new ResponseEntity<HttpStatus>(HttpStatus.OK);
 	}
-
 }
