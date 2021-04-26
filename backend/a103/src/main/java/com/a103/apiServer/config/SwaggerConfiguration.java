@@ -47,7 +47,7 @@ public class SwaggerConfiguration {
 	private Predicate<String> postPaths() {
 		return PathSelectors.any();
 	}
-//
+
 	private ApiKey apiKey() {
 		return new ApiKey("x-access-token", "x-access-token", "header");
 	}
