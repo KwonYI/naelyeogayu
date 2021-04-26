@@ -13,7 +13,7 @@ import org.springframework.web.servlet.HandlerInterceptor;
 public class JwtInterceptor implements HandlerInterceptor{
 
 	@Autowired
-    private JwtService jwtService;
+        private JwtService jwtService;
 	
 	public static final Logger logger = LoggerFactory.getLogger(JwtInterceptor.class);
 
