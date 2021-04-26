@@ -1,0 +1,33 @@
+pipeline {
+    agent none
+    options { skipDefaultCheckout(true) }
+    stages {
+        stage('Build and Test') {
+            agent {
+                docker {
+                    image 'maven:3-alpine'
+                    args '-v /root/.m2:/root/.m2'
+                }
+            }
+            options { skipDefaultCheckout(false) }
+            steps {
+                sh 'mvn -f backend/a103/pom.xml -B -DskipTests clean package'
+            }
+        }
+        stage('Docker build') {
+            agent any
+            steps {
+                sh 'docker build -t backend-server-image:latest ./backend/a103'
+            }
+        }
+        stage('Docker run') {
+            agent any
+            steps {
+                sh 'docker ps -f name=backend-server-container -q | xargs --no-run-if-empty docker container stop'
+                sh 'docker container ls -a -fname=backend-server-container -q | xargs -r docker container rm'
+	            sh 'docker rmi $(docker images -f "dangling=true" -q)'
+				sh 'docker run -d --name backend-server-container -p 9000:9000 backend-server-image:latest'
+            }
+        }
+    }
+}
