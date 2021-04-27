@@ -24,33 +24,30 @@ public class BuyController {
 	@Autowired
 	BuyDao buyDao;
 
-	public static final Logger logger = LoggerFactory.getLogger(BuyController.class);
+	private static final Logger logger = LoggerFactory.getLogger(BuyController.class);
 
 	@GetMapping(value = "list/{member_id}")
-	public ResponseEntity<Map<String, Object>> getBuyList(@PathVariable("member_id") int memberId) {
-		ResponseEntity<Map<String, Object>> entity = null;
-		Map<String, Object> result = new HashMap<>();
-		
+	public ResponseEntity getBuyList(@PathVariable("member_id") int memberId) {
+		ResponseEntity entity = null;
+		Map result = new HashMap<>();
+
 		try {
 			List<Buy> buyList = buyDao.findListBuyByMemberId(memberId);
-			
-			if (buyList.size() != 0){
-	            result.put("success", "success");
-	            result.put("data", buyList);
-	            entity = new ResponseEntity<>(result, HttpStatus.OK);
-	            
-	        }
-	        else {
-	            result.put("success", "fail");
-	            entity = new ResponseEntity<>(result, HttpStatus.OK);
-	        }
-			
+
+			if (buyList.size() != 0) {
+				result.put("success", "success");
+				result.put("data", buyList);
+				entity = new ResponseEntity<>(result, HttpStatus.OK);
+			} else {
+				result.put("success", "fail");
+				entity = new ResponseEntity<>(result, HttpStatus.OK);
+			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error("error", e);
 			result.put("success", "error");
 			entity = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
 		}
-
+		
 		return entity;
 	}
 }

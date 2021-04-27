@@ -29,18 +29,11 @@ public class Buy {
 	private int price;
 
 	private int count;
-
-//	@ManyToOne
-//	@JoinColumn(name = "member_id")
-//	private Member member;
 	
 	@Column(name = "member_id")
 	private long memberId;
 
-//	@ManyToOne
-//	@JoinColumn(name = "product_id")
-//	private Product product;
-	
-	@Column(name = "product_id")
-	private long productId;
+	@ManyToOne
+	@JoinColumn(name = "product_id")
+	private Product product;
 }
