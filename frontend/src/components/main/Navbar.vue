@@ -3,9 +3,14 @@
     <div id="intro">
       <h1 id="logo">
         <router-link to="/" style="color: black; text-decoration: none">
-          <img src="@/assets/logo.png" alt="logo" height="100px" />
+          <img src="@/assets/logo.png" alt="logo" />
         </router-link>
       </h1>
+      <div id="about">
+        <router-link to="/about" style="color: black; text-decoration: none"
+          >ABOUT</router-link
+        >
+      </div>
       <div id="join">
         <router-link to="/join" style="color: black; text-decoration: none"
           >회원가입</router-link
@@ -117,7 +122,14 @@ export default {};
   font-size: 14px;
   font-family: "NEXON Lv1 Gothic OTF";
 }
-
+#about {
+  position: absolute;
+  top: 50%;
+  bottom: 0;
+  right: 200px;
+  font-size: 14px;
+  font-family: "NEXON Lv1 Gothic OTF";
+}
 #join {
   position: absolute;
   top: 50%;
