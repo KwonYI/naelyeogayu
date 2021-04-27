@@ -1,0 +1,36 @@
+pipeline {
+    agent none
+    options { skipDefaultCheckout(true) }
+    stages {
+        stage('Build and Test') {
+            agent {
+                docker {
+                    image 'node:12.16.1-alpine'
+                }
+            }
+            options { skipDefaultCheckout(false) }
+            steps {
+		dir("frontend"){
+				sh 'npm -v'
+				sh 'npm install'
+				sh 'npm run build'
+		}
+            }
+        }
+        stage('Docker build') {
+            agent any
+            steps {
+                sh 'docker build -t vue-client-image:latest ./frontend'
+            }
+        }
+        stage('Docker run') {
+            agent any
+            steps {
+                sh 'docker ps -f name=vue-client-container -q | xargs --no-run-if-empty docker container stop'
+                sh 'docker container ls -a -fname=vue-client-container -q | xargs -r docker container rm'
+                sh 'docker rmi $(docker images -f "dangling=true" -q)'
+                sh 'docker run -d --name vue-client-container -p 80:80 vue-client-image:latest'
+            }
+        }
+    }
+}
