@@ -1,25 +1,30 @@
 <template>
-  <div id="desc">
-    <v-carousel hide-delimiters cycle interval="5000" height="400">
-      <v-carousel-item src="@/assets/banner/1.png"></v-carousel-item>
-      <v-carousel-item src="@/assets/banner/2.png"></v-carousel-item>
-      <v-carousel-item src="@/assets/banner/4.png"></v-carousel-item>
-      <v-carousel-item src="@/assets/banner/5.png"></v-carousel-item>
-    </v-carousel>
-    <div id="desc1"></div>
+  <div>
+    <div id="banner">
+      <v-carousel hide-delimiters cycle interval="5000" height="400">
+        <v-carousel-item src="@/assets/banner/1.png"></v-carousel-item>
+        <v-carousel-item
+          src="@/assets/banner/2.png"
+          to="/login"
+        ></v-carousel-item>
+        <v-carousel-item src="@/assets/banner/3.png"></v-carousel-item>
+        <v-carousel-item
+          src="@/assets/banner/4.png"
+          to="/login"
+        ></v-carousel-item>
+      </v-carousel>
+    </div>
   </div>
 </template>
 
 <script>
 export default {
-  data() {
-    return {};
-  },
+  methods: {},
 };
 </script>
 
 <style>
-#desc {
+#banner {
   position: relative;
   width: 1280px;
   margin-left: auto;
