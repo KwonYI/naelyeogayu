@@ -19,11 +19,15 @@ public class Member {
 	private long id;
 	
 	private String email;
-	private String nickname;
-	private String password;
-	private String address;
-	private String phone;
-	private int point;
 	
+	private String nickname;
+	
+	private String password;
+	
+	private String address;
+	
+	private String phone;
+	
+	private int point;
 	
 }
