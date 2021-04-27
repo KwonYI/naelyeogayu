@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.a103.apiServer.model.Member;
 
-
 @RestController
 @RequestMapping("/member")
 public class MemberController {
