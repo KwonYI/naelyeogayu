@@ -41,7 +41,6 @@ public class MemberController {
 			Member newUser = memberDao.save(member);
 			
 			result.put("success", "success");
-			result.put("data", newUser);
 			
 			entity = new ResponseEntity(result, HttpStatus.OK);
 		} catch (Exception e) {
