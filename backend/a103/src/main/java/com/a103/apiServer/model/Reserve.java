@@ -26,13 +26,12 @@ public class Reserve {
 	@Column(name = "member_id")
 	private long memberId;
 
-	@ManyToOne
-	@JoinColumn(name = "product_id")
-	private Product product;
-	
+	@Column(name = "product_id")
+	private long productId;
+
 	@Column(name = "due_date")
 	private LocalDate dueDate;
-	
+
 	private int price;
 
 	private int count;
