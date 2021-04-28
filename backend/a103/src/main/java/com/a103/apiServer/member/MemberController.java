@@ -44,7 +44,7 @@ public class MemberController {
 			
 			entity = new ResponseEntity(result, HttpStatus.OK);
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error("error", e);
             result.put("success", "error");
             entity = new ResponseEntity(result, HttpStatus.BAD_REQUEST);
 		}
@@ -75,7 +75,7 @@ public class MemberController {
 	            entity = new ResponseEntity(result, HttpStatus.BAD_REQUEST);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error("error", e);
             result.put("success", "error");
             entity = new ResponseEntity(result, HttpStatus.BAD_REQUEST);
 		}
