@@ -12,6 +12,7 @@ local.properties
 .recommenders
 
 application.yml
+application.properties
 
 # External tool builders
 .externalToolBuilders/
