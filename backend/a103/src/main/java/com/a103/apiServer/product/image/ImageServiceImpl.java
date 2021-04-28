@@ -35,9 +35,9 @@ public class ImageServiceImpl implements ImageService {
 	public void setS3Client() throws Exception {
 		AWSCredentials credentials = new BasicAWSCredentials(this.accessKey, this.secretKey);
 
-	    s3Client = AmazonS3ClientBuilder.standard()
-	        .withCredentials(new AWSStaticCredentialsProvider(credentials))
-	        .withRegion(this.region).build();
+        s3Client = AmazonS3ClientBuilder.standard()
+            .withCredentials(new AWSStaticCredentialsProvider(credentials))
+            .withRegion(this.region).build();
 
 	}
 
