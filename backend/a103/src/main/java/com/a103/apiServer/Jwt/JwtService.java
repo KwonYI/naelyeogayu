@@ -7,6 +7,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
+import com.a103.apiServer.model.Member;
+
 import io.jsonwebtoken.*;
 
 @Component
@@ -18,8 +20,7 @@ public class JwtService {
 	private Long expireMin = 30L;
 
 //	    로그인 성공시 사용자 정보를 기반으로 JWTToken을 생성하여 반환.
-	public String create() {
-//		public String create(UserDto memberDto) {
+	public String create(Member member) {
 		JwtBuilder jwtBuilder = Jwts.builder();
 //		JWT Token = Header + Payload + Signature
 		
@@ -30,8 +31,7 @@ public class JwtService {
 		jwtBuilder
 			.setSubject("로그인토큰") // 토큰의 제목 설정
 			.setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * expireMin)) // 유효기간 설정
-			;
-			//.claim("user", memberDto).claim("greeting", "환영합니다. " + memberDto.getName()); // 담고 싶은 정보 설정.
+			.claim("user", member).claim("greeting", "환영합니다. " + member.getNickname()); // 담고 싶은 정보 설정.
 		
 //		signature 설정
 		jwtBuilder.signWith(SignatureAlgorithm.HS256, signature.getBytes());
