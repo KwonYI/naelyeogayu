@@ -35,9 +35,8 @@ public class ImageServiceImpl implements ImageService {
 	public void setS3Client() throws Exception {
 		AWSCredentials credentials = new BasicAWSCredentials(this.accessKey, this.secretKey);
 
-        s3Client = AmazonS3ClientBuilder.standard()
-            .withCredentials(new AWSStaticCredentialsProvider(credentials))
-            .withRegion(this.region).build();
+		s3Client = AmazonS3ClientBuilder.standard().withCredentials(new AWSStaticCredentialsProvider(credentials))
+				.withRegion(this.region).build();
 
 	}
 
@@ -46,7 +45,7 @@ public class ImageServiceImpl implements ImageService {
 		String fileName = file.getOriginalFilename();
 
 		s3Client.putObject(new PutObjectRequest(bucket, fileName, file.getInputStream(), null)
-                .withCannedAcl(CannedAccessControlList.PublicRead));
-        return s3Client.getUrl(bucket, fileName).toString();
+				.withCannedAcl(CannedAccessControlList.PublicRead));
+		return s3Client.getUrl(bucket, fileName).toString();
 	}
 }
