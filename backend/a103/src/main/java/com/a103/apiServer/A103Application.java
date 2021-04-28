@@ -28,6 +28,7 @@ public class A103Application implements WebMvcConfigurer{
 	  		  "/member/login",
 	  		  "/member/social",
 	  		  "/member/password",
+	  		  "/member/modify",
 	   		  "/member/signup",
 	   		  "/member/certify"));// 적용 제외 경로
 	}
