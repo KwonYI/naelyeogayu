@@ -22,90 +22,122 @@ import com.a103.apiServer.model.Member;
 @RestController
 @RequestMapping("/member")
 public class MemberController {
-	
+
 	@Autowired
 	private JwtService jwtService;
-	
+
 	@Autowired
 	private MemberDao memberDao;
-	
+
 	private static final Logger logger = LoggerFactory.getLogger(MemberController.class);
-	
+
+	@PostMapping(value = "/social")
+	public ResponseEntity socialLogin(@RequestBody Member member) {
+		ResponseEntity entity = null;
+		Map result = new HashMap();
+
+		try {
+			Member socialLoginUser = memberDao.findMemberByEmail(member.getEmail());
+
+			if (socialLoginUser == null) {
+				// 해당 이메일의 맴버가 없으면 회원가입 하기
+				member.setPoint(0);
+				socialLoginUser = memberDao.save(member);
+
+				result.put("first", "first");
+			}
+
+			String token = jwtService.create(socialLoginUser);
+			logger.trace("token", token);
+
+			result.put("success", "success");
+			result.put("x-access-token", token);
+			result.put("data", socialLoginUser);
+
+			entity = new ResponseEntity(result, HttpStatus.OK);
+		} catch (Exception e) {
+			logger.error("error", e);
+			result.put("success", "error");
+			entity = new ResponseEntity(result, HttpStatus.BAD_REQUEST);
+		}
+
+		return entity;
+	}
+
 	@PostMapping(value = "/signup")
 	public ResponseEntity signup(@RequestBody Member member) {
 		ResponseEntity entity = null;
 		Map result = new HashMap();
-		
+
 		try {
 			member.setPoint(0);
 			Member newUser = memberDao.save(member);
-			
+
 			result.put("success", "success");
-			
+
 			entity = new ResponseEntity(result, HttpStatus.OK);
 		} catch (Exception e) {
 			logger.error("error", e);
-            result.put("success", "error");
-            entity = new ResponseEntity(result, HttpStatus.BAD_REQUEST);
+			result.put("success", "error");
+			entity = new ResponseEntity(result, HttpStatus.BAD_REQUEST);
 		}
-		
+
 		return entity;
 	}
-	
-	
+
 	@PostMapping(value = "/login")
 	public ResponseEntity login(@RequestBody Member member) {
 		ResponseEntity entity = null;
 		Map result = new HashMap();
-		
+
 		try {
 			Member loginUser = memberDao.findMemberByEmailAndPassword(member.getEmail(), member.getPassword());
-			
-			if(loginUser != null) {
+
+			if (loginUser != null) {
 				String token = jwtService.create(loginUser);
 				logger.trace("token", token);
-				
+
 				result.put("success", "success");
 				result.put("x-access-token", token);
 				result.put("data", loginUser);
-				
+
 				entity = new ResponseEntity(result, HttpStatus.OK);
-			}else {
+			} else {
 				result.put("success", "fail");
-	            entity = new ResponseEntity(result, HttpStatus.BAD_REQUEST);
+				entity = new ResponseEntity(result, HttpStatus.BAD_REQUEST);
 			}
 		} catch (Exception e) {
 			logger.error("error", e);
-            result.put("success", "error");
-            entity = new ResponseEntity(result, HttpStatus.BAD_REQUEST);
+			result.put("success", "error");
+			entity = new ResponseEntity(result, HttpStatus.BAD_REQUEST);
 		}
-		
+
 		return entity;
 	}
-	
+
 	@GetMapping(value = "profile/{email}")
 	public ResponseEntity getMember(@PathVariable("email") String email) {
 		ResponseEntity entity = null;
 		Map result = new HashMap<>();
-		
+
 		try {
 			Member member = memberDao.findMemberByEmail(email);
-			
-			if(member != null) {
-				result.put("success","success");
+
+			if (member != null) {
+				result.put("success", "success");
 				result.put("data", member);
 				entity = new ResponseEntity<>(result, HttpStatus.OK);
-			}else {
-				result.put("success","fail");
+			} else {
+				result.put("success", "fail");
 				entity = new ResponseEntity<>(result, HttpStatus.OK);
 			}
 		} catch (Exception e) {
 			logger.error("error", e);
-			result.put("success","error");
+			result.put("success", "error");
 			entity = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
 		}
-		
+
 		return entity;
 	}
-	
+
 }
