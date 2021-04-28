@@ -31,6 +31,28 @@ public class MemberController {
 	
 	private static final Logger logger = LoggerFactory.getLogger(MemberController.class);
 	
+	@PostMapping(value = "/signup")
+	public ResponseEntity signup(@RequestBody Member member) {
+		ResponseEntity entity = null;
+		Map result = new HashMap();
+		
+		try {
+			member.setPoint(0);
+			Member newUser = memberDao.save(member);
+			
+			result.put("success", "success");
+			
+			entity = new ResponseEntity(result, HttpStatus.OK);
+		} catch (Exception e) {
+			logger.error("error", e);
+            result.put("success", "error");
+            entity = new ResponseEntity(result, HttpStatus.BAD_REQUEST);
+		}
+		
+		return entity;
+	}
+	
+	
 	@PostMapping(value = "/login")
 	public ResponseEntity login(@RequestBody Member member) {
 		ResponseEntity entity = null;
@@ -53,7 +75,7 @@ public class MemberController {
 	            entity = new ResponseEntity(result, HttpStatus.BAD_REQUEST);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error("error", e);
             result.put("success", "error");
             entity = new ResponseEntity(result, HttpStatus.BAD_REQUEST);
 		}
