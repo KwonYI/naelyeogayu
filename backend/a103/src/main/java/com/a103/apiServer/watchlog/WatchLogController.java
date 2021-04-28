@@ -56,7 +56,7 @@ public class WatchLogController {
 		return entity;
 	}
 	
-	//ip 주소 검증
+	//ip header 검증
 	public static String getClientIpAddr(HttpServletRequest request) {
 		return IP_HEADERS.stream().map(request::getHeader).filter(Objects::nonNull)
 				.filter(ip -> !ip.isEmpty() && !ip.equalsIgnoreCase("unknown")).findFirst()
