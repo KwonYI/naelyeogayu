@@ -82,7 +82,6 @@ public class MemberController {
 
 			result.put("success", "success");
 			result.put("x-access-token", token);
-//			result.put("data", socialLoginUser);
 
 			entity = new ResponseEntity(result, HttpStatus.OK);
 		} catch (Exception e) {
@@ -129,7 +128,6 @@ public class MemberController {
 
 				result.put("success", "success");
 				result.put("x-access-token", token);
-//				result.put("data", loginUser);
 
 				entity = new ResponseEntity(result, HttpStatus.OK);
 			} else {
