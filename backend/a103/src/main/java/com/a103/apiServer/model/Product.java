@@ -21,7 +21,7 @@ public class Product {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 
-	@Column(length = 100)
+	@Column(length = 45)
 	private String name;
 
 	@Column(name = "start_price")
@@ -36,7 +36,7 @@ public class Product {
 	private String imageUrl;
 
 	@Column(length = 500)
-	private String desc;
+	private String descript;
 
 	@Column(name = "start_date")
 	private LocalDate startDate;
@@ -53,4 +53,9 @@ public class Product {
 
 	@Column(name = "expiration_date")
 	private LocalDate expirationDate;
+	
+	private int status;
+	
+	@Column(name = "seller_id")
+	private int sellerId;
 }
