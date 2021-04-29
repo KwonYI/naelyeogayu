@@ -10,9 +10,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -119,12 +121,12 @@ public class ProductController {
 
 		return entity;
 	}
-	
+
 	@GetMapping(value = "/new")
 	public ResponseEntity getNewProductList() {
 		ResponseEntity entity = null;
 		Map result = new HashMap<>();
-		
+
 		try {
 			List<Product> productList = productDao.findListProductByStartDate(LocalDate.now().plusDays(1));
 
@@ -143,7 +145,26 @@ public class ProductController {
 		}
 
 		return entity;
-		
+
+	}
+
+	@DeleteMapping
+	public ResponseEntity deleteProduct(@RequestHeader(value = "product_id") long productId) {
+		ResponseEntity entity = null;
+		Map result = new HashMap<>();
+
+		try {
+			Product product = productDao.findProductById(productId);
+			productDao.delete(product);
+			result.put("success", "success");
+			entity = new ResponseEntity<>(result, HttpStatus.OK);
+		} catch (Exception e) {
+			logger.error("error", e);
+			result.put("success", "error");
+			entity = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+		}
+
+		return entity;
 	}
 
 }
