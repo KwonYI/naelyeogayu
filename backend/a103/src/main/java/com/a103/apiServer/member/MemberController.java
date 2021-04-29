@@ -34,8 +34,8 @@ public class MemberController {
 
 	private static final Logger logger = LoggerFactory.getLogger(MemberController.class);
 
-	@GetMapping(value = "/certify")
-	public ResponseEntity emailCheck(String email) {
+	@GetMapping(value = "/certify/{email}")
+	public ResponseEntity emailCheck(@PathVariable("email") String email) {
 		ResponseEntity entity = null;
 		Map result = new HashMap();
 
