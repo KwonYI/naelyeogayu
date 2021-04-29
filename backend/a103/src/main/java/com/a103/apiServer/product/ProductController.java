@@ -69,4 +69,29 @@ public class ProductController {
 		return entity;
 	}
 
+	@GetMapping(value = "/ugly")
+	public ResponseEntity getUglyProductList() {
+		ResponseEntity entity = null;
+		Map result = new HashMap<>();
+
+		try {
+			List<Product> productList = productDao.findListProductByCategory(2);
+
+			if (productList.size() != 0) {
+				result.put("success", "success");
+				result.put("data", productList);
+				entity = new ResponseEntity<>(result, HttpStatus.OK);
+			} else {
+				result.put("success", "fail");
+				entity = new ResponseEntity<>(result, HttpStatus.OK);
+			}
+		} catch (Exception e) {
+			logger.error("error", e);
+			result.put("success", "error");
+			entity = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+		}
+
+		return entity;
+	}
+
 }
