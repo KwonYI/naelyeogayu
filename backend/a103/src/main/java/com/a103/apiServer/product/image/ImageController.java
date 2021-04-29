@@ -31,7 +31,6 @@ public class ImageController {
 
 		try {
 			String imgPath = imageService.upload(files);
-			
 			result.put("success", "success");
 			result.put("data", imgPath);
 			entity = new ResponseEntity<>(result, HttpStatus.OK);
