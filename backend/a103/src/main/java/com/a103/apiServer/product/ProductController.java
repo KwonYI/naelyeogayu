@@ -20,6 +20,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.a103.apiServer.model.Product;
+import com.a103.apiServer.model.Watchlog;
+import com.a103.apiServer.watchlog.WatchLogDao;
 
 @RestController
 @RequestMapping("/product")
@@ -27,6 +29,9 @@ public class ProductController {
 
 	@Autowired
 	ProductDao productDao;
+
+	@Autowired
+	WatchLogDao watchLogDao;
 
 	private static final Logger logger = LoggerFactory.getLogger(ProductController.class);
 
@@ -55,16 +60,21 @@ public class ProductController {
 
 		try {
 			List<Product> productList = productDao.findListProductByCategory(1);
+			List<Long> idList = productDao.findIdByCategory(1);
 
 			if (productList.size() != 0) {
+				List<Watchlog> logList = watchLogDao.findListWatchlogByProductIdIn(idList);
+				Map data = new HashMap<>();
+				data.put("product", productList);
+				data.put("watchlog", logList);
 				result.put("success", "success");
-				result.put("data", productList);
+				result.put("data", data);
 				entity = new ResponseEntity<>(result, HttpStatus.OK);
 			} else {
 				result.put("success", "fail");
 				entity = new ResponseEntity<>(result, HttpStatus.OK);
 			}
-			
+
 		} catch (Exception e) {
 			logger.error("error", e);
 			result.put("success", "error");
@@ -81,16 +91,21 @@ public class ProductController {
 
 		try {
 			List<Product> productList = productDao.findListProductByCategory(2);
+			List<Long> idList = productDao.findIdByCategory(2);
 
 			if (productList.size() != 0) {
+				List<Watchlog> logList = watchLogDao.findListWatchlogByProductIdIn(idList);
+				Map data = new HashMap<>();
+				data.put("product", productList);
+				data.put("watchlog", logList);
 				result.put("success", "success");
-				result.put("data", productList);
+				result.put("data", data);
 				entity = new ResponseEntity<>(result, HttpStatus.OK);
 			} else {
 				result.put("success", "fail");
 				entity = new ResponseEntity<>(result, HttpStatus.OK);
 			}
-			
+
 		} catch (Exception e) {
 			logger.error("error", e);
 			result.put("success", "error");
@@ -107,16 +122,21 @@ public class ProductController {
 
 		try {
 			List<Product> productList = productDao.findListProductByCategory(3);
+			List<Long> idList = productDao.findIdByCategory(3);
 
 			if (productList.size() != 0) {
+				List<Watchlog> logList = watchLogDao.findListWatchlogByProductIdIn(idList);
+				Map data = new HashMap<>();
+				data.put("product", productList);
+				data.put("watchlog", logList);
 				result.put("success", "success");
-				result.put("data", productList);
+				result.put("data", data);
 				entity = new ResponseEntity<>(result, HttpStatus.OK);
 			} else {
 				result.put("success", "fail");
 				entity = new ResponseEntity<>(result, HttpStatus.OK);
 			}
-			
+
 		} catch (Exception e) {
 			logger.error("error", e);
 			result.put("success", "error");
@@ -142,7 +162,7 @@ public class ProductController {
 				result.put("success", "fail");
 				entity = new ResponseEntity<>(result, HttpStatus.OK);
 			}
-			
+
 		} catch (Exception e) {
 			logger.error("error", e);
 			result.put("success", "error");

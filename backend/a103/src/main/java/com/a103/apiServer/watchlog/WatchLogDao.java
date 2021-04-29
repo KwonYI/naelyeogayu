@@ -10,5 +10,5 @@ import com.a103.apiServer.model.Watchlog;
 @Repository
 public interface WatchLogDao extends JpaRepository<Watchlog, Long>{
 	List<Watchlog> findListWatchlogByProductId(long productId);
-	
+	List<Watchlog> findListWatchlogByProductIdIn(List<Long> ids);
 }
