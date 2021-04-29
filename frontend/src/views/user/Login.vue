@@ -150,12 +150,14 @@ export default {
                   "userStore/login",
                   response.data["x-access-token"]
                 );
-                alert("구글 로그인에 성공하셨습니다.");
+                if (response.data.first === "first") {
+                  this.$router.push({ name: "SocialJoin" });
+                }
                 this.$router.push({ name: "Home" });
               }
             })
             .catch((error) => {
-              alert("구글 로그인에 실패했습니다.");
+              alert("로그인에 실패했습니다.");
               console.error(error);
             });
         });
@@ -196,12 +198,14 @@ export default {
                     "userStore/login",
                     response.data["x-access-token"]
                   );
-                  alert("카카오 로그인에 성공하셨습니다.");
+                  if (response.data.first === "first") {
+                    this.$router.push({ name: "SocialJoin" });
+                  }
                   this.$router.push({ name: "Home" });
                 }
               })
               .catch((error) => {
-                alert("카카오 로그인에 실패했습니다.");
+                alert("로그인에 실패했습니다.");
                 console.error(error);
               });
           }
@@ -262,8 +266,7 @@ export default {
   margin-top: 90px;
 }
 .socialTitle {
-  border-top: solid 1px;
-  padding: 20px 0 1px 0;
+  padding: 0 0 1px 0;
   border-bottom: solid 1px;
   font-size: 18px;
 }

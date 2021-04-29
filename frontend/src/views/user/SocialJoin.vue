@@ -1,6 +1,6 @@
 <template>
   <div class="join">
-    <div class="joinTitle">회원가입</div>
+    <div class="joinTitle">추가 정보 입력</div>
     <div class="border">
       <v-form class="joinInput">
         <v-container>
@@ -12,16 +12,8 @@
               label="이메일"
               autocapitalize="off"
               required
-              @keyup.enter="signUp()"
+              disabled
             ></v-text-field>
-          </div>
-          <div>
-            <v-btn
-              class="emailCheckButton"
-              @click="emailCheck()"
-              :disabled="!isDupActive"
-              >중복확인</v-btn
-            >
           </div>
           <div class="clear">
             <v-text-field
@@ -31,7 +23,6 @@
               label="닉네임"
               autocapitalize="off"
               required
-              @keyup.enter="signUp()"
             ></v-text-field>
           </div>
           <div>
@@ -42,7 +33,6 @@
               label="비밀번호"
               type="password"
               required
-              @keyup.enter="signUp()"
             ></v-text-field>
           </div>
           <div>
@@ -53,7 +43,6 @@
               label="비밀번호 확인"
               type="password"
               required
-              @keyup.enter="signUp()"
             ></v-text-field>
           </div>
           <div>
@@ -74,7 +63,6 @@
               v-model="addressDetail"
               label="상세주소"
               required
-              @keyup.enter="signUp()"
             ></v-text-field>
           </div>
           <div>
@@ -84,21 +72,17 @@
               :rules="phoneRule"
               label="핸드폰 번호"
               required
-              @keyup.enter="signUp()"
             ></v-text-field>
           </div>
         </v-container>
       </v-form>
       <v-btn
-        @click="signUp()"
-        :class="{ active: isActive, signUpButton: 'signUpButton' }"
+        @click="modify()"
+        :class="{ active: isActive, modifyButton: 'modifyButton' }"
         :disabled="!isActive"
       >
-        회원가입
+        추가 정보 입력
       </v-btn>
-      <v-alert :value="showError" type="error" class="error">
-        {{ errorMessage }}
-      </v-alert>
     </div>
   </div>
 </template>
@@ -168,14 +152,11 @@ export default {
   },
   methods: {
     validateCheck: function () {
-      const emailRegex = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
       const nameRegex = /^[가-핳a-zA-Z]{3,8}$/;
       const passwordRegex = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$/;
       const phoneRegex = /^\d{3}-\d{3,4}-\d{4}$/;
 
-      if (!emailRegex.test(this.email)) {
-        this.isActive = false;
-      } else if (!nameRegex.test(this.nickname)) {
+      if (!nameRegex.test(this.nickname)) {
         this.isActive = false;
       } else if (!passwordRegex.test(this.password)) {
         this.isActive = false;
@@ -186,32 +167,6 @@ export default {
       } else if (!phoneRegex.test(this.phone)) {
         this.isActive = false;
       } else this.isActive = true;
-    },
-    emailFilledCheck: function () {
-      const emailRegex = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
-      if (emailRegex.test(this.email)) {
-        this.isDupActive = true;
-      } else {
-        this.isDupActive = false;
-      }
-    },
-    emailCheck: function () {
-      this.$axios({
-        url: "/member/certify/" + this.email,
-        method: "GET",
-      })
-        .then((response) => {
-          if (response.data.success === "success") {
-            alert("사용가능한 이메일입니다.");
-            this.isValid = true;
-          } else {
-            alert("이미 등록된 이메일입니다.");
-          }
-        })
-        .catch((error) => {
-          console.error(error);
-          alert("입력 정보를 다시 확인해주세요.");
-        });
     },
     findAddress: function () {
       new window.daum.Postcode({
@@ -224,13 +179,13 @@ export default {
         },
       }).open();
     },
-    signUp: function () {
+    modify: function () {
       if (!this.isActive || !this.isValid) {
         return;
       }
       this.$axios({
-        url: "/member/signup",
-        method: "POST",
+        url: "/member/modify",
+        method: "PUT",
         data: {
           email: this.email,
           password: this.password,
@@ -241,14 +196,7 @@ export default {
       })
         .then((response) => {
           if (response.data.success === "success") {
-            alert("회원가입에 성공했습니다.");
-            this.$router.push({ name: "Login" });
-          } else {
-            this.showError = true;
-            this.errorMessage = "회원가입에 실패했습니다.";
-            setTimeout(() => {
-              this.showError = false;
-            }, 5000);
+            this.$router.push({ name: "Home" });
           }
         })
         .catch((error) => {
@@ -257,45 +205,20 @@ export default {
         });
     },
   },
+  created() {
+    this.email = this.$store.getters["userStore/id"];
+    this.nickname = this.$store.getters["userStore/nickname"];
+  },
 };
 </script>
 
 <style>
-.join {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  overflow: hidden;
-  margin-top: 52px;
-}
-.joinTitle {
-  width: 600px;
-  float: left;
-  font-size: 30px;
-}
-.joinInput {
-  width: 500px;
-  align-items: center;
-  margin: 0px;
-}
-.signUpButton {
+.modifyButton {
   width: 25%;
   margin-top: 5px;
   font-weight: bold;
   font-size: 20px;
   border-radius: 8px;
   float: right;
-}
-.emailCheckButton {
-  width: 25%;
-  float: right;
-}
-.addressFindButton {
-  width: 25%;
-  float: right;
-}
-.clear {
-  clear: both;
 }
 </style>
