@@ -29,7 +29,7 @@ public class A103Application implements WebMvcConfigurer{
 	  		  "/member/social",
 	  		  "/member/password",
 	   		  "/member/signup",
-	   		  "/member/certify"));// 적용 제외 경로
+	   		  "/member/certify/*"));// 적용 제외 경로
 	}
 
 	//Interceptor를 이용해서 처리하므로 전역의 Cross Origin 처리를 해준다.
