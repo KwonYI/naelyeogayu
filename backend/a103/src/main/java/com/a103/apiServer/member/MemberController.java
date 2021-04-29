@@ -2,7 +2,6 @@ package com.a103.apiServer.member;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -32,7 +32,21 @@ public class MemberController {
 	@Autowired
 	private MemberDao memberDao;
 
+	@Autowired
+	private PasswordEncoder passwordEncoder;
+
 	private static final Logger logger = LoggerFactory.getLogger(MemberController.class);
+
+	private String matchPassword(String email, String password) throws Exception {
+		Member member = memberDao.findMemberByEmail(email);
+		
+		if (passwordEncoder.matches(password, member.getPassword())) {
+			return member.getPassword();
+		} else {
+			return null;
+		}
+		
+	}
 
 	@GetMapping(value = "/certify/{email}")
 	public ResponseEntity emailCheck(@PathVariable("email") String email) {
@@ -49,6 +63,7 @@ public class MemberController {
 				result.put("success", "fail");
 				entity = new ResponseEntity(result, HttpStatus.OK);
 			}
+			
 		} catch (Exception e) {
 			logger.error("error", e);
 			result.put("success", "error");
@@ -65,9 +80,7 @@ public class MemberController {
 
 		try {
 			memberDao.deleteById(member.getId());
-
 			result.put("success", "success");
-
 			entity = new ResponseEntity(result, HttpStatus.OK);
 		} catch (Exception e) {
 			logger.error("error", e);
@@ -86,16 +99,13 @@ public class MemberController {
 		try {
 			// 변경 가능한 값 => 주소, 닉네임, 비밀번호, 전화번호
 			Member modifyUser = memberDao.findMemberByEmail(member.getEmail());
-
+			String securePw = passwordEncoder.encode(member.getPassword());
 			modifyUser.setAddress(member.getAddress());
 			modifyUser.setNickname(member.getNickname());
-			modifyUser.setPassword(member.getPassword());
+			modifyUser.setPassword(securePw);
 			modifyUser.setPhone(member.getPhone());
-
 			memberDao.save(modifyUser);
-
 			result.put("success", "success");
-
 			entity = new ResponseEntity(result, HttpStatus.OK);
 		} catch (Exception e) {
 			logger.error("error", e);
@@ -118,16 +128,13 @@ public class MemberController {
 				// 해당 이메일의 맴버가 없으면 회원가입 하기
 				member.setPoint(0);
 				socialLoginUser = memberDao.save(member);
-
 				result.put("first", "first");
 			}
 
 			String token = jwtService.create(socialLoginUser);
 			logger.trace("token", token);
-
 			result.put("success", "success");
 			result.put("x-access-token", token);
-
 			entity = new ResponseEntity(result, HttpStatus.OK);
 		} catch (Exception e) {
 			logger.error("error", e);
@@ -144,11 +151,11 @@ public class MemberController {
 		Map result = new HashMap();
 
 		try {
+			String securePw = passwordEncoder.encode(member.getPassword());
+			member.setPassword(securePw);
 			member.setPoint(0);
 			Member newUser = memberDao.save(member);
-
 			result.put("success", "success");
-
 			entity = new ResponseEntity(result, HttpStatus.OK);
 		} catch (Exception e) {
 			logger.error("error", e);
@@ -165,20 +172,28 @@ public class MemberController {
 		Map result = new HashMap();
 
 		try {
-			Member loginUser = memberDao.findMemberByEmailAndPassword(member.getEmail(), member.getPassword());
+			String securePw = matchPassword(member.getEmail(), member.getPassword());
+			
+			if (securePw != null) {
+				member.setPassword(securePw);
+				Member loginUser = memberDao.findMemberByEmailAndPassword(member.getEmail(), member.getPassword());
 
-			if (loginUser != null) {
-				String token = jwtService.create(loginUser);
-				logger.trace("token", token);
-
-				result.put("success", "success");
-				result.put("x-access-token", token);
-
-				entity = new ResponseEntity(result, HttpStatus.OK);
+				if (loginUser != null) {
+					String token = jwtService.create(loginUser);
+					logger.trace("token", token);
+					result.put("success", "success");
+					result.put("x-access-token", token);
+					entity = new ResponseEntity(result, HttpStatus.OK);
+				} else {
+					result.put("success", "fail");
+					entity = new ResponseEntity(result, HttpStatus.BAD_REQUEST);
+				}
+				
 			} else {
 				result.put("success", "fail");
 				entity = new ResponseEntity(result, HttpStatus.BAD_REQUEST);
 			}
+			
 		} catch (Exception e) {
 			logger.error("error", e);
 			result.put("success", "error");
@@ -204,6 +219,7 @@ public class MemberController {
 				result.put("success", "fail");
 				entity = new ResponseEntity<>(result, HttpStatus.OK);
 			}
+			
 		} catch (Exception e) {
 			logger.error("error", e);
 			result.put("success", "error");
