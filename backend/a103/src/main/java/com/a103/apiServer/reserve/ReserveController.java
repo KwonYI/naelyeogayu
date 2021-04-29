@@ -42,6 +42,7 @@ public class ReserveController {
 
 		try {
 			List<Reserve> reserveList = reserveDao.findListReserveByMemberId(memberId);
+			
 			if (reserveList.size() != 0) {
 				result.put("success", "success");
 				result.put("data", reserveList);
@@ -66,11 +67,19 @@ public class ReserveController {
 		Map result = new HashMap<>();
 
 		try {
-			Product product = productDao.findProductById(productId);
-			reserve.setProduct(product);
-			reserveDao.save(reserve);
-			result.put("success", "success");
-			entity = new ResponseEntity<>(result, HttpStatus.OK);
+			long memberId = reserve.getMemberId();
+			Reserve alreadyReserve = reserveDao.findReserveByMemberIdAndProductId(memberId, productId);
+			
+			if(alreadyReserve == null) {
+				Product product = productDao.findProductById(productId);
+				reserve.setProduct(product);
+				reserveDao.save(reserve);
+				result.put("success", "success");
+				entity = new ResponseEntity<>(result, HttpStatus.OK);
+			}else {
+				result.put("success", "fail");
+				entity = new ResponseEntity<>(result, HttpStatus.OK);
+			}
 		} catch (Exception e) {
 			logger.error("error", e);
 			result.put("success", "error");
@@ -110,6 +119,7 @@ public class ReserveController {
 			List<Reserve> reserveList = reserveDao
 					.findListReserveByProductIdAndPriceLessThanEqualAndDueDateGreaterThanEqualOrderByPriceDescIdAsc(
 							productId, price, LocalDate.now());
+			
 			if (reserveList.size() != 0) {
 				result.put("success", "success");
 				result.put("data", reserveList);
