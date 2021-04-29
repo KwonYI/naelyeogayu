@@ -2,6 +2,7 @@ package com.a103.apiServer.member;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -30,6 +32,34 @@ public class MemberController {
 	private MemberDao memberDao;
 
 	private static final Logger logger = LoggerFactory.getLogger(MemberController.class);
+
+	@PutMapping(value = "/modify")
+	public ResponseEntity modify(@RequestBody Member member) {
+		ResponseEntity entity = null;
+		Map result = new HashMap();
+
+		try {
+			// 변경 가능한 값 => 주소, 닉네임, 비밀번호, 전화번호
+			Member modifyUser = memberDao.findMemberByEmail(member.getEmail());
+
+			modifyUser.setAddress(member.getAddress());
+			modifyUser.setNickname(member.getNickname());
+			modifyUser.setPassword(member.getPassword());
+			modifyUser.setPhone(member.getPhone());
+
+			memberDao.save(modifyUser);
+
+			result.put("success", "success");
+
+			entity = new ResponseEntity(result, HttpStatus.OK);
+		} catch (Exception e) {
+			logger.error("error", e);
+			result.put("success", "error");
+			entity = new ResponseEntity(result, HttpStatus.BAD_REQUEST);
+		}
+
+		return entity;
+	}
 
 	@PostMapping(value = "/social")
 	public ResponseEntity socialLogin(@RequestBody Member member) {
@@ -52,7 +82,6 @@ public class MemberController {
 
 			result.put("success", "success");
 			result.put("x-access-token", token);
-			result.put("data", socialLoginUser);
 
 			entity = new ResponseEntity(result, HttpStatus.OK);
 		} catch (Exception e) {
@@ -99,7 +128,6 @@ public class MemberController {
 
 				result.put("success", "success");
 				result.put("x-access-token", token);
-				result.put("data", loginUser);
 
 				entity = new ResponseEntity(result, HttpStatus.OK);
 			} else {
