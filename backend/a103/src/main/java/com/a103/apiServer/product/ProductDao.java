@@ -7,5 +7,5 @@ import com.a103.apiServer.model.Product;
 
 @Repository
 public interface ProductDao extends JpaRepository<Product, Long>{
-	
+	Product findProductById(long id);
 }
