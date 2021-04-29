@@ -34,14 +34,38 @@ public class MemberController {
 
 	private static final Logger logger = LoggerFactory.getLogger(MemberController.class);
 
+	@GetMapping(value = "/certify")
+	public ResponseEntity emailCheck(String email) {
+		ResponseEntity entity = null;
+		Map result = new HashMap();
+
+		try {
+			Member checkEmail = memberDao.findMemberByEmail(email);
+
+			if (checkEmail == null) {
+				result.put("success", "success");
+				entity = new ResponseEntity(result, HttpStatus.OK);
+			} else {
+				result.put("success", "fail");
+				entity = new ResponseEntity(result, HttpStatus.OK);
+			}
+		} catch (Exception e) {
+			logger.error("error", e);
+			result.put("success", "error");
+			entity = new ResponseEntity(result, HttpStatus.BAD_REQUEST);
+		}
+
+		return entity;
+	}
+
 	@DeleteMapping(value = "delete")
 	public ResponseEntity delete(@RequestBody Member member) {
-	    ResponseEntity entity = null;
+		ResponseEntity entity = null;
 		Map result = new HashMap();
 
 		try {
 			memberDao.deleteById(member.getId());
-			
+
 			result.put("success", "success");
 
 			entity = new ResponseEntity(result, HttpStatus.OK);
