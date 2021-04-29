@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -32,6 +33,26 @@ public class MemberController {
 	private MemberDao memberDao;
 
 	private static final Logger logger = LoggerFactory.getLogger(MemberController.class);
+
+	@DeleteMapping(value = "delete")
+	public ResponseEntity delete(@RequestBody Member member) {
+	    ResponseEntity entity = null;
+		Map result = new HashMap();
+
+		try {
+			memberDao.deleteById(member.getId());
+			
+			result.put("success", "success");
+
+			entity = new ResponseEntity(result, HttpStatus.OK);
+		} catch (Exception e) {
+			logger.error("error", e);
+			result.put("success", "error");
+			entity = new ResponseEntity(result, HttpStatus.BAD_REQUEST);
+		}
+
+		return entity;
+	}
 
 	@PutMapping(value = "/modify")
 	public ResponseEntity modify(@RequestBody Member member) {
