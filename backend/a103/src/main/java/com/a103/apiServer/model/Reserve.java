@@ -26,8 +26,9 @@ public class Reserve {
 	@Column(name = "member_id")
 	private long memberId;
 
-	@Column(name = "product_id")
-	private long productId;
+	@ManyToOne
+	@JoinColumn(name = "product_id")
+	private Product product;
 
 	@Column(name = "due_date")
 	private LocalDate dueDate;
