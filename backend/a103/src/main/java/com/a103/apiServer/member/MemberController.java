@@ -100,9 +100,10 @@ public class MemberController {
 			// 변경 가능한 값 => 주소, 닉네임, 비밀번호, 전화번호
 			Member modifyUser = memberDao.findMemberByEmail(member.getEmail());
 
+			String securePw = passwordEncoder.encode(member.getPassword());
 			modifyUser.setAddress(member.getAddress());
 			modifyUser.setNickname(member.getNickname());
-			modifyUser.setPassword(member.getPassword());
+			modifyUser.setPassword(securePw);
 			modifyUser.setPhone(member.getPhone());
 
 			memberDao.save(modifyUser);
@@ -157,11 +158,7 @@ public class MemberController {
 		Map result = new HashMap();
 
 		try {
-			System.out.println(member.getPassword());
-			System.out.println(member);
 			String securePw = passwordEncoder.encode(member.getPassword());
-			System.out.println(member);
-			System.out.println(securePw);
 			member.setPassword(securePw);
 			member.setPoint(0);
 			Member newUser = memberDao.save(member);
