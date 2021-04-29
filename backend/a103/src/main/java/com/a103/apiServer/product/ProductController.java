@@ -1,5 +1,6 @@
 package com.a103.apiServer.product;
 
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -117,6 +118,32 @@ public class ProductController {
 		}
 
 		return entity;
+	}
+	
+	@GetMapping(value = "/new")
+	public ResponseEntity getNewProductList() {
+		ResponseEntity entity = null;
+		Map result = new HashMap<>();
+		
+		try {
+			List<Product> productList = productDao.findListProductByStartDate(LocalDate.now().plusDays(1));
+
+			if (productList.size() != 0) {
+				result.put("success", "success");
+				result.put("data", productList);
+				entity = new ResponseEntity<>(result, HttpStatus.OK);
+			} else {
+				result.put("success", "fail");
+				entity = new ResponseEntity<>(result, HttpStatus.OK);
+			}
+		} catch (Exception e) {
+			logger.error("error", e);
+			result.put("success", "error");
+			entity = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+		}
+
+		return entity;
+		
 	}
 
 }

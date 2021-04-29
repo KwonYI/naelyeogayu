@@ -1,5 +1,6 @@
 package com.a103.apiServer.product;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -12,4 +13,5 @@ public interface ProductDao extends JpaRepository<Product, Long> {
 	
 	Product findProductById(long id);
 	List<Product> findListProductByCategory(int category);
+	List<Product> findListProductByStartDate(LocalDate date);
 }
