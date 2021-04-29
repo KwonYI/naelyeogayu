@@ -173,6 +173,7 @@ public class MemberController {
 
 		try {
 			String securePw = matchPassword(member.getEmail(), member.getPassword());
+			
 			if (securePw != null) {
 				member.setPassword(securePw);
 				Member loginUser = memberDao.findMemberByEmailAndPassword(member.getEmail(), member.getPassword());
