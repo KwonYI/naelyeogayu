@@ -2,7 +2,6 @@ package com.a103.apiServer.member;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -32,7 +32,20 @@ public class MemberController {
 	@Autowired
 	private MemberDao memberDao;
 
+	@Autowired
+	private PasswordEncoder passwordEncoder;
+
 	private static final Logger logger = LoggerFactory.getLogger(MemberController.class);
+
+	private String matchPassword(String email, String password) throws Exception {
+
+		Member member = memberDao.findMemberByEmail(email);
+		if (passwordEncoder.matches(password, member.getPassword())) {
+			return member.getPassword();
+		} else {
+			return null;
+		}
+	}
 
 	@GetMapping(value = "/certify/{email}")
 	public ResponseEntity emailCheck(@PathVariable("email") String email) {
@@ -144,6 +157,12 @@ public class MemberController {
 		Map result = new HashMap();
 
 		try {
+			System.out.println(member.getPassword());
+			System.out.println(member);
+			String securePw = passwordEncoder.encode(member.getPassword());
+			System.out.println(member);
+			System.out.println(securePw);
+			member.setPassword(securePw);
 			member.setPoint(0);
 			Member newUser = memberDao.save(member);
 
@@ -165,16 +184,23 @@ public class MemberController {
 		Map result = new HashMap();
 
 		try {
-			Member loginUser = memberDao.findMemberByEmailAndPassword(member.getEmail(), member.getPassword());
+			String securePw = matchPassword(member.getEmail(), member.getPassword());
+			if (securePw != null) {
+				member.setPassword(securePw);
+				Member loginUser = memberDao.findMemberByEmailAndPassword(member.getEmail(), member.getPassword());
 
-			if (loginUser != null) {
-				String token = jwtService.create(loginUser);
-				logger.trace("token", token);
+				if (loginUser != null) {
+					String token = jwtService.create(loginUser);
+					logger.trace("token", token);
 
-				result.put("success", "success");
-				result.put("x-access-token", token);
+					result.put("success", "success");
+					result.put("x-access-token", token);
 
-				entity = new ResponseEntity(result, HttpStatus.OK);
+					entity = new ResponseEntity(result, HttpStatus.OK);
+				} else {
+					result.put("success", "fail");
+					entity = new ResponseEntity(result, HttpStatus.BAD_REQUEST);
+				}
 			} else {
 				result.put("success", "fail");
 				entity = new ResponseEntity(result, HttpStatus.BAD_REQUEST);
