@@ -1,12 +1,12 @@
 package com.a103.apiServer.reserve;
 
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -42,7 +42,6 @@ public class ReserveController {
 
 		try {
 			List<Reserve> reserveList = reserveDao.findListReserveByMemberId(memberId);
-
 			if (reserveList.size() != 0) {
 				result.put("success", "success");
 				result.put("data", reserveList);
@@ -92,6 +91,33 @@ public class ReserveController {
 			reserveDao.delete(reserve);
 			result.put("success", "success");
 			entity = new ResponseEntity<>(result, HttpStatus.OK);
+		} catch (Exception e) {
+			logger.error("error", e);
+			result.put("success", "error");
+			entity = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+		}
+
+		return entity;
+	}
+
+	@GetMapping(value = "check/{product_id}/{price}")
+	public ResponseEntity checkReserve(@PathVariable(value = "product_id") long productId,
+			@PathVariable(value = "price") int price) {
+		ResponseEntity entity = null;
+		Map result = new HashMap<>();
+
+		try {
+			List<Reserve> reserveList = reserveDao
+					.findListReserveByProductIdAndPriceLessThanEqualAndDueDateGreaterThanEqualOrderByPriceDescIdAsc(
+							productId, price, LocalDate.now());
+			if (reserveList.size() != 0) {
+				result.put("success", "success");
+				result.put("data", reserveList);
+				entity = new ResponseEntity<>(result, HttpStatus.OK);
+			} else {
+				result.put("success", "fail");
+				entity = new ResponseEntity<>(result, HttpStatus.OK);
+			}
 		} catch (Exception e) {
 			logger.error("error", e);
 			result.put("success", "error");
