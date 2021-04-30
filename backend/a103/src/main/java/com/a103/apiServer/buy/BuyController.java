@@ -84,12 +84,12 @@ public class BuyController {
 					product.setStatus(0);
 				}
 
-				buy.setProduct(product);
-				buyDao.save(buy);
 				member.setPoint(memberPoint - usePoint);
 				memberDao.save(member);
 				product.setStock(productStock - buyProductCount);
 				productDao.save(product);
+				buy.setProduct(product);
+				buyDao.save(buy);
 				result.put("success", "success");
 				entity = new ResponseEntity<>(result, HttpStatus.OK);
 			} else {
