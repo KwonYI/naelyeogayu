@@ -1,6 +1,7 @@
 package com.a103.apiServer.product;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.a103.apiServer.model.Product;
+import com.a103.apiServer.model.Test;
 import com.a103.apiServer.watchlog.WatchLogDao;
 
 @RestController
@@ -232,6 +234,38 @@ public class ProductController {
 				entity = new ResponseEntity<>(result, HttpStatus.OK);
 			}
 
+		} catch (Exception e) {
+			logger.error("error", e);
+			result.put("success", "error");
+			entity = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+		}
+
+		return entity;
+	}
+	
+	@GetMapping(value="/search/{option}/{word}")
+	public ResponseEntity getSearchProduct(@PathVariable("option") int option, @PathVariable("word") String word) {
+		ResponseEntity entity = null;
+		Map result = new HashMap<>();
+
+		try {
+			List<Product> productList = new ArrayList<Product>();
+			
+			if(option == 1) {
+				productList = productDao.findListProductByNameContaining(word);				
+			}
+			else if(option == 2) {
+				productList = productDao.findListProductByDescriptContaining(word);
+			}
+
+			if (productList != null) {
+				result.put("data", productList);
+				result.put("success", "success");
+				entity = new ResponseEntity<>(result, HttpStatus.OK);
+			} else {
+				result.put("success", "fail");
+				entity = new ResponseEntity<>(result, HttpStatus.OK);
+			}
 		} catch (Exception e) {
 			logger.error("error", e);
 			result.put("success", "error");
