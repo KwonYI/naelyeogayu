@@ -51,6 +51,7 @@ public class ReserveController {
 				result.put("success", "fail");
 				entity = new ResponseEntity<>(result, HttpStatus.OK);
 			}
+			
 		} catch (Exception e) {
 			logger.error("error", e);
 			result.put("success", "error");
@@ -80,6 +81,7 @@ public class ReserveController {
 				result.put("success", "fail");
 				entity = new ResponseEntity<>(result, HttpStatus.OK);
 			}
+			
 		} catch (Exception e) {
 			logger.error("error", e);
 			result.put("success", "error");
@@ -116,9 +118,7 @@ public class ReserveController {
 		Map result = new HashMap<>();
 
 		try {
-			List<Reserve> reserveList = reserveDao
-					.findListReserveByProductIdAndPriceLessThanEqualAndDueDateGreaterThanEqualOrderByPriceDescIdAsc(
-							productId, price, LocalDate.now());
+			List<Reserve> reserveList = reserveDao.findListReserveByProductIdAndPriceLessThanEqualAndDueDateGreaterThanEqualOrderByPriceDescIdAsc(productId, price, LocalDate.now());
 			
 			if (reserveList.size() != 0) {
 				result.put("success", "success");
@@ -128,6 +128,7 @@ public class ReserveController {
 				result.put("success", "fail");
 				entity = new ResponseEntity<>(result, HttpStatus.OK);
 			}
+			
 		} catch (Exception e) {
 			logger.error("error", e);
 			result.put("success", "error");
