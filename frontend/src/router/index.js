@@ -3,10 +3,26 @@ import VueRouter from "vue-router";
 import Home from "../views/Home.vue";
 import Join from "../views/user/Join.vue";
 import Login from "../views/user/Login.vue";
+import MyPage from "../views/user/MyPage.vue";
 import About from "../views/About.vue";
 import SocialJoin from "../views/user/SocialJoin.vue";
 
 Vue.use(VueRouter);
+
+const originalPush = VueRouter.prototype.push;
+VueRouter.prototype.push = function push(location) {
+  return originalPush.call(this, location).catch(() => {
+    return window.location.reload();
+  });
+};
+
+const requireAuth = () => (to, from, next) => {
+  if (localStorage["token"] && localStorage["token"] !== "") {
+    return next();
+  } else {
+    return next("/");
+  }
+};
 
 const routes = [
   {
@@ -28,6 +44,12 @@ const routes = [
     path: "/socialJoin",
     name: "SocialJoin",
     component: SocialJoin,
+  },
+  {
+    path: "/myPage",
+    name: "MyPage",
+    component: MyPage,
+    beforeEnter: requireAuth(),
   },
   {
     path: "/about",

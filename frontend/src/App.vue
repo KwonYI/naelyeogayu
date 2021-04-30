@@ -3,7 +3,7 @@
     <Navbar />
     <v-main>
       <!-- If using vue-router -->
-      <router-view></router-view>
+      <router-view :key="$route.fullPath"></router-view>
     </v-main>
     <Footer />
   </v-app>

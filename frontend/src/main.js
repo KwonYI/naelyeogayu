@@ -23,13 +23,18 @@ Vue.config.productionTip = false;
 
 Vue.prototype.$axios = axios;
 
-axios.defaults.baseURL = "http://k4a103.p.ssafy.io:9000/a103";
-//axios.defaults.baseURL = "http://localhost:9000/a103";
+//axios.defaults.baseURL = "http://k4a103.p.ssafy.io:9000/a103";
+axios.defaults.baseURL = "http://localhost:9000/a103";
 axios.defaults.headers.post["Content-Type"] = "application/json";
 
 new Vue({
   router,
   store,
   vuetify,
+  beforeCreate() {
+    if (localStorage.getItem("token") !== null) {
+      this.$store.dispatch("userStore/login", localStorage.getItem("token"));
+    }
+  },
   render: (h) => h(App),
 }).$mount("#app");
