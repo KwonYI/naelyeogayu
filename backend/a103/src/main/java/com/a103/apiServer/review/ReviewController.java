@@ -3,6 +3,7 @@ package com.a103.apiServer.review;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -84,7 +85,7 @@ public class ReviewController {
 		Map result = new HashMap();
 
 		try {
-			List<Review> reviewList = reviewDao.findListReviewByProductId(memberId);
+			List<Review> reviewList = reviewDao.findListReviewByMemberId(memberId);
 
 			if (reviewList.size() != 0) {
 				result.put("success", "success");
