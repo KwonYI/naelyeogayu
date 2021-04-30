@@ -33,7 +33,7 @@ public class BuyController {
 
 		try {
 			List<Buy> buyList = buyDao.findListBuyByMemberId(memberId);
-
+			
 			if (buyList.size() != 0) {
 				result.put("success", "success");
 				result.put("data", buyList);
@@ -42,6 +42,7 @@ public class BuyController {
 				result.put("success", "fail");
 				entity = new ResponseEntity<>(result, HttpStatus.OK);
 			}
+			
 		} catch (Exception e) {
 			logger.error("error", e);
 			result.put("success", "error");
