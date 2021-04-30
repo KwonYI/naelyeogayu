@@ -16,6 +16,8 @@ public interface ProductDao extends JpaRepository<Product, Long> {
 	Product findProductById(long id);
 	List<Product> findListProductByCategory(int category);
 	List<Product> findListProductByStartDate(LocalDate date);
+	List<Product> findListProductByNameContaining(String word);
+	List<Product> findListProductByDescriptContaining(String word);
 	
 	@Query(value = "SELECT ID FROM product WHERE CATEGORY = :category", nativeQuery=true)
 	List<Long> findIdByCategory(@Param("category") int category);
