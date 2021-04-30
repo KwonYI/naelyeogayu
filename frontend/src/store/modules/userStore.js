@@ -12,6 +12,7 @@ const userStore = {
     name: "",
     address: "",
     phone: "",
+    isLogined: false,
   },
   mutations: {
     SET_USER(state, user) {
@@ -20,6 +21,7 @@ const userStore = {
       state.name = user.name;
       state.address = user.address;
       state.phone = user.phone;
+      state.isLogined = true;
     },
     FREE_USER(state) {
       state.id = "";
@@ -27,6 +29,7 @@ const userStore = {
       state.name = "";
       state.address = "";
       state.phone = "";
+      state.isLogined = false;
     },
   },
   getters: {
@@ -44,6 +47,9 @@ const userStore = {
     },
     phone: (state) => {
       return state.phone;
+    },
+    isLogined: (state) => {
+      return state.isLogined;
     },
     user: (state) => {
       const user = {

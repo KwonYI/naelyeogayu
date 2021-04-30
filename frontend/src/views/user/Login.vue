@@ -106,6 +106,7 @@ export default {
       })
         .then((response) => {
           if (response.data.success === "success") {
+            localStorage.setItem("token", response.data["x-access-token"]);
             this.$store.dispatch(
               "userStore/login",
               response.data["x-access-token"]
@@ -146,6 +147,7 @@ export default {
           })
             .then((response) => {
               if (response.data.success === "success") {
+                localStorage.setItem("token", response.data["x-access-token"]);
                 this.$store.dispatch(
                   "userStore/login",
                   response.data["x-access-token"]
