@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.a103.apiServer.model.Product;
-import com.a103.apiServer.model.Watchlog;
 import com.a103.apiServer.watchlog.WatchLogDao;
 
 @RestController
@@ -63,13 +62,21 @@ public class ProductController {
 			List<Long> idList = productDao.findIdByCategory(1);
 
 			if (productList.size() != 0) {
-				List<Watchlog> logList = watchLogDao.findListWatchlogByProductIdIn(idList);
-				Map data = new HashMap<>();
-				data.put("product", productList);
-				data.put("watchlog", logList);
-				result.put("success", "success");
-				result.put("data", data);
-				entity = new ResponseEntity<>(result, HttpStatus.OK);
+
+				try {
+					List<Map> logList = watchLogDao.countWatchlogByProductId(idList);
+					Map data = new HashMap<>();
+					data.put("product", productList);
+					data.put("watchlog", logList);
+					result.put("success", "success");
+					result.put("data", data);
+					entity = new ResponseEntity<>(result, HttpStatus.OK);
+				} catch (Exception e) {
+					logger.error("error", e);
+					result.put("success", "error");
+					entity = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+				}
+
 			} else {
 				result.put("success", "fail");
 				entity = new ResponseEntity<>(result, HttpStatus.OK);
@@ -94,13 +101,21 @@ public class ProductController {
 			List<Long> idList = productDao.findIdByCategory(2);
 
 			if (productList.size() != 0) {
-				List<Watchlog> logList = watchLogDao.findListWatchlogByProductIdIn(idList);
-				Map data = new HashMap<>();
-				data.put("product", productList);
-				data.put("watchlog", logList);
-				result.put("success", "success");
-				result.put("data", data);
-				entity = new ResponseEntity<>(result, HttpStatus.OK);
+
+				try {
+					List<Map> logList = watchLogDao.countWatchlogByProductId(idList);
+					Map data = new HashMap<>();
+					data.put("product", productList);
+					data.put("watchlog", logList);
+					result.put("success", "success");
+					result.put("data", data);
+					entity = new ResponseEntity<>(result, HttpStatus.OK);
+				} catch (Exception e) {
+					logger.error("error", e);
+					result.put("success", "error");
+					entity = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+				}
+
 			} else {
 				result.put("success", "fail");
 				entity = new ResponseEntity<>(result, HttpStatus.OK);
@@ -125,13 +140,21 @@ public class ProductController {
 			List<Long> idList = productDao.findIdByCategory(3);
 
 			if (productList.size() != 0) {
-				List<Watchlog> logList = watchLogDao.findListWatchlogByProductIdIn(idList);
-				Map data = new HashMap<>();
-				data.put("product", productList);
-				data.put("watchlog", logList);
-				result.put("success", "success");
-				result.put("data", data);
-				entity = new ResponseEntity<>(result, HttpStatus.OK);
+
+				try {
+					List<Map> logList = watchLogDao.countWatchlogByProductId(idList);
+					Map data = new HashMap<>();
+					data.put("product", productList);
+					data.put("watchlog", logList);
+					result.put("success", "success");
+					result.put("data", data);
+					entity = new ResponseEntity<>(result, HttpStatus.OK);
+				} catch (Exception e) {
+					logger.error("error", e);
+					result.put("success", "error");
+					entity = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+				}
+
 			} else {
 				result.put("success", "fail");
 				entity = new ResponseEntity<>(result, HttpStatus.OK);
