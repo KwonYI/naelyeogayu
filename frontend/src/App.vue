@@ -2,21 +2,20 @@
   <v-app>
     <Navbar />
     <v-main>
-      <!-- If using vue-router -->
       <router-view></router-view>
     </v-main>
-    <Footer />
+    <!-- <Footer /> -->
   </v-app>
 </template>
 
 <script>
 import Navbar from "@/components/main/Navbar.vue";
-import Footer from "@/components/main/Footer.vue";
+// import Footer from "@/components/main/Footer.vue";
 
 export default {
   name: "App",
 
-  components: { Navbar, Footer },
+  components: { Navbar },
 
   data: () => ({
     //
