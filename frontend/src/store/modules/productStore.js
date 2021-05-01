@@ -10,7 +10,6 @@ const productStore = {
   getters: {},
   actions: {
     upload(context, product) {
-      console.log(product);
       axios({
         method: "post",
         url: `http://k4a103.p.ssafy.io:9000/a103/product`,

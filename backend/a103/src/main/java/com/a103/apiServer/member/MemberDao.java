@@ -8,4 +8,6 @@ import com.a103.apiServer.model.Member;
 @Repository
 public interface MemberDao extends JpaRepository<Member, Long>{
 	Member findMemberByEmail(String email);
+	Member findMemberByEmailAndPassword(String email, String password);
+	Member findMemberById(long id);
 }

@@ -11,14 +11,24 @@
           >ABOUT</router-link
         >
       </div>
-      <div id="join">
+      <div id="join" v-show="!isLogined">
         <router-link to="/join" style="color: black; text-decoration: none"
           >회원가입</router-link
         >
       </div>
-      <div id="login">
+      <div id="login" v-show="!isLogined">
         <router-link to="/login" style="color: black; text-decoration: none"
           >로그인</router-link
+        >
+      </div>
+      <div id="myPage" v-show="isLogined">
+        <router-link to="/myPage" style="color: black; text-decoration: none"
+          >마이페이지</router-link
+        >
+      </div>
+      <div id="logout" v-show="isLogined">
+        <a @click="logout()" style="color: black; text-decoration: none"
+          >로그아웃</a
         >
       </div>
     </div>
@@ -78,7 +88,21 @@
 </template>
 
 <script>
-export default {};
+export default {
+  computed: {
+    isLogined() {
+      return this.$store.getters["userStore/isLogined"];
+    },
+    nickname() {
+      return this.$store.getters["userStore/nickname"];
+    },
+  },
+  methods: {
+    logout: function () {
+      this.$store.dispatch("userStore/logout");
+    },
+  },
+};
 </script>
 
 <style>
@@ -125,6 +149,7 @@ export default {};
   width: 60px;
   font-family: "NEXON Lv1 Gothic OTF";
 }
+
 #about {
   position: absolute;
   top: 50%;
@@ -134,6 +159,7 @@ export default {};
   font-size: 14px;
   font-family: "NEXON Lv1 Gothic OTF";
 }
+
 #join {
   position: absolute;
   top: 50%;
@@ -144,10 +170,25 @@ export default {};
   font-family: "NEXON Lv1 Gothic OTF";
 }
 
+#logout {
+  position: absolute;
+  top: 50%;
+  bottom: 0;
+  right: 0;
+  font-size: 14px;
+  font-family: "NEXON Lv1 Gothic OTF";
+}
+#myPage {
+  position: absolute;
+  top: 50%;
+  bottom: 0;
+  right: 95px;
+  font-size: 14px;
+  font-family: "NEXON Lv1 Gothic OTF";
+}
 #nav {
   position: relative;
 }
-
 #menu {
   width: 1280px;
   height: 60px;

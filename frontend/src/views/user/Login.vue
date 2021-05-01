@@ -26,7 +26,7 @@
 
       <v-btn
         :class="{ active: isActive, loginButton: 'loginButton' }"
-        height="63"
+        height="45"
         @click="login"
         :disabled="!isActive"
         >로그인</v-btn
@@ -55,7 +55,7 @@
           />
         </div>
         <div class="loginJoin">
-          혹시 아이디가 없으시다면, <a @click="join">회원가입</a>을
+          혹시 아이디가 없으시다면, <a @click="goJoin">회원가입</a>을
           클릭해주세요.
         </div>
       </div>
@@ -97,7 +97,7 @@ export default {
     },
     login: function () {
       this.$axios({
-        url: "/members/login",
+        url: "/member/login",
         method: "POST",
         data: {
           email: this.email,
@@ -105,8 +105,12 @@ export default {
         },
       })
         .then((response) => {
-          this.$store.commit("LOGIN", response.data.accesstoken);
           if (response.data.success === "success") {
+            localStorage.setItem("token", response.data["x-access-token"]);
+            this.$store.dispatch(
+              "userStore/login",
+              response.data["x-access-token"]
+            );
             // 로그인 성공시 메인 페이지로 분기
             this.$router.push({ name: "Home" });
           } else {
@@ -129,21 +133,33 @@ export default {
         .auth()
         .signInWithPopup(provider)
         .then((result) => {
-          this.id = result.user.email;
           this.$axios({
-            url: "/members/social",
+            url: "/member/social",
             method: "POST",
             data: {
               email: result.user.email,
+              nickname: result.user.displayName,
+              password: null,
+              address: null,
+              phone: null,
+              point: 0,
             },
           })
             .then((response) => {
-              const token = response.data.accesstoken;
-              this.$store.commit("LOGIN", token);
-              alert("구글 로그인에 성공하셨습니다.");
+              if (response.data.success === "success") {
+                localStorage.setItem("token", response.data["x-access-token"]);
+                this.$store.dispatch(
+                  "userStore/login",
+                  response.data["x-access-token"]
+                );
+                if (response.data.first === "first") {
+                  this.$router.push({ name: "SocialJoin" });
+                }
+                this.$router.push({ name: "Home" });
+              }
             })
             .catch((error) => {
-              alert("구글 로그인에 실패했습니다.");
+              alert("로그인에 실패했습니다.");
               console.error(error);
             });
         });
@@ -160,27 +176,46 @@ export default {
         success: async (res) => {
           const kakaoAccount = res.kakao_account;
           if (kakaoAccount.email === null) {
-            // kakao 전용 회원가입 필요
+            alert("저희 사이트는 이메일 제공에 동의해주셔야 사용가능합니다.");
           } else {
             this.$axios({
-              url: "/members/social",
+              url: "/member/social",
               method: "POST",
               data: {
-                memberEmail: kakaoAccount.email,
+                email: kakaoAccount.email,
+                nickname: kakaoAccount.profile.nickname,
+                password: null,
+                address: null,
+                phone: null,
+                point: 0,
               },
             })
               .then((response) => {
-                const token = response.data.accesstoken;
-                this.$store.commit("LOGIN", token);
-                alert("카카오 로그인에 성공하셨습니다.");
+                if (response.data.success === "success") {
+                  localStorage.setItem(
+                    "token",
+                    response.data["x-access-token"]
+                  );
+                  this.$store.dispatch(
+                    "userStore/login",
+                    response.data["x-access-token"]
+                  );
+                  if (response.data.first === "first") {
+                    this.$router.push({ name: "SocialJoin" });
+                  }
+                  this.$router.push({ name: "Home" });
+                }
               })
               .catch((error) => {
-                alert("카카오 로그인에 실패했습니다.");
+                alert("로그인에 실패했습니다.");
                 console.error(error);
               });
           }
         },
       });
+    },
+    goJoin: function () {
+      this.$router.push({ name: "Join" });
     },
   },
 };
@@ -216,12 +251,15 @@ export default {
   margin-top: 5px;
   font-weight: bold;
   font-size: 20px;
-  color: rgb(0, 128, 79);
   border-radius: 8px;
   float: right;
 }
 .active {
-  background: linear-gradient(109.63deg, palegreen 1.79%, green 101.38%);
+  background: linear-gradient(
+    109.63deg,
+    rgb(200, 245, 192) 1.79%,
+    rgb(4, 195, 4) 101.38%
+  );
 }
 .divider {
   font-size: 10px;
@@ -230,8 +268,7 @@ export default {
   margin-top: 90px;
 }
 .socialTitle {
-  border-top: solid 1px;
-  padding: 20px 0 1px 0;
+  padding: 0 0 1px 0;
   border-bottom: solid 1px;
   font-size: 18px;
 }

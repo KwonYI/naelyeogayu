@@ -317,7 +317,7 @@ export default {
         startPrice: "",
         minPrice: "",
         startDate: moment().add(1, "days").format("YYYY-MM-DD"),
-        endDate: moment().format("YYYY-MM-DD"),
+        endDate: moment().add(7, "days").format("YYYY-MM-DD"),
         releaseDate: moment().format("YYYY-MM-DD"),
         expirationDate: moment().format("YYYY-MM-DD"),
         status: 0,
@@ -409,7 +409,10 @@ export default {
         });
     },
     submit() {
-      if (this.product.category == 0) alert("카테고리를 선택해주세요");
+      if (this.product.category == 0) {
+        alert("카테고리를 선택해주세요");
+        return;
+      }
       this.$emit("upload", this.product);
     },
     backpage() {

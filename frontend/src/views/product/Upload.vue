@@ -17,6 +17,13 @@ export default {
     terms,
     forms,
   },
+  created() {
+    const id = this.getUserId;
+    if (id.length == 0) {
+      alert("로그인 먼저해주세요");
+      this.$router.push({ name: "Login" });
+    }
+  },
   data: function () {
     return {
       step: 1,
@@ -30,7 +37,9 @@ export default {
       if (flag) this.step--;
     },
     submit(product) {
-      product.sellerId = this.getUserId;
+      product.sellerId = Number(this.getUserId);
+      console.log(product);
+      this.$store.dispatch("productStore/upload", product);
     },
   },
   computed: {
