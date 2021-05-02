@@ -54,7 +54,7 @@
               height="17px"
             />
             <router-link to="/" style="color: black; text-decoration: none"
-              >못난이 상품</router-link
+              >못난이 농산물</router-link
             >
           </li>
           <li>
@@ -75,7 +75,9 @@
               width="17px"
               height="17px"
             />
-            <router-link to="/" style="color: black; text-decoration: none"
+            <router-link
+              to="/upload"
+              style="color: black; text-decoration: none"
               >상품 등록</router-link
             >
           </li>
@@ -145,6 +147,7 @@ export default {
   bottom: 0;
   right: 0;
   font-size: 14px;
+  width: 60px;
   font-family: "NEXON Lv1 Gothic OTF";
 }
 
@@ -152,6 +155,7 @@ export default {
   position: absolute;
   top: 50%;
   bottom: 0;
+  width: 60px;
   right: 200px;
   font-size: 14px;
   font-family: "NEXON Lv1 Gothic OTF";
@@ -161,6 +165,7 @@ export default {
   position: absolute;
   top: 50%;
   bottom: 0;
+  width: 60px;
   right: 100px;
   font-size: 14px;
   font-family: "NEXON Lv1 Gothic OTF";
