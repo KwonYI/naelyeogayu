@@ -324,7 +324,7 @@ export default {
         sellerId: 0,
       },
       nameRule: [
-        (v) => v.length > 0 || "2자 이상 입력해주세요",
+        (v) => v.length >= 2 || "2자 이상 입력해주세요",
         (v) => (v && v.length <= 20) || "20자 이내로 작성해주세요",
       ],
       stockRule: [(v) => Number(v) >= 1 || "1개 이상 입력해주세요"],
