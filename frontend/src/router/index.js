@@ -4,6 +4,7 @@ import Home from "../views/Home.vue";
 import Join from "../views/user/Join.vue";
 import Login from "../views/user/Login.vue";
 import About from "../views/About.vue";
+import Upload from "../views/product/Upload.vue";
 import SocialJoin from "../views/user/SocialJoin.vue";
 
 Vue.use(VueRouter);
@@ -33,6 +34,11 @@ const routes = [
     path: "/about",
     name: "About",
     component: About,
+  },
+  {
+    path: "/upload",
+    name: "Upload",
+    component: Upload,
   },
 ];
 
