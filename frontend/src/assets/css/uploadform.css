@@ -27,54 +27,6 @@ div h4 {
   background-color: white;
   text-align: center;
 }
-#pdStar {
-  position: absolute;
-  top: 175px;
-  left: 335px;
-  font-family: "NEXON Lv1 Gothic OTF";
-  font-size: 15px;
-  color: rgb(247, 96, 96);
-}
-#catStar {
-  position: absolute;
-  top: 80px;
-  left: 355px;
-  font-family: "NEXON Lv1 Gothic OTF";
-  font-size: 15px;
-  color: rgb(247, 96, 96);
-}
-#startStar {
-  position: absolute;
-  bottom: 220px;
-  right: 620px;
-  font-family: "NEXON Lv1 Gothic OTF";
-  font-size: 14px;
-  color: rgb(247, 96, 96);
-}
-#spStar {
-  position: absolute;
-  bottom: 175px;
-  left: 480px;
-  font-family: "NEXON Lv1 Gothic OTF";
-  font-size: 15px;
-  color: rgb(247, 96, 96);
-}
-#endStar {
-  position: absolute;
-  bottom: 105px;
-  left: 480px;
-  font-family: "NEXON Lv1 Gothic OTF";
-  font-size: 15px;
-  color: rgb(247, 96, 96);
-}
-#prStar {
-  position: absolute;
-  bottom: 190px;
-  left: 695px;
-  font-family: "NEXON Lv1 Gothic OTF";
-  font-size: 15px;
-  color: rgb(247, 96, 96);
-}
 #input {
   position: absolute;
   top: 50px;
@@ -150,7 +102,7 @@ div h4 {
   margin-top: 20px;
 }
 #discount {
-  width: 300px;
+  width: 400px;
   margin-left: 120px;
 }
 #discount div {

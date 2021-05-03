@@ -7,6 +7,9 @@ import MyPage from "../views/user/MyPage.vue";
 import About from "../views/About.vue";
 import Upload from "../views/product/Upload.vue";
 import SocialJoin from "../views/user/SocialJoin.vue";
+import Expire from "../views/product/Expirelist.vue";
+import Ugly from "../views/product/Uglyfoodlist.vue";
+import Refurb from "../views/product/Refurblist.vue";
 
 Vue.use(VueRouter);
 
@@ -61,6 +64,21 @@ const routes = [
     path: "/upload",
     name: "Upload",
     component: Upload,
+  },
+  {
+    path: "/expire",
+    name: "Expire",
+    component: Expire,
+  },
+  {
+    path: "/uglyfood",
+    name: "Uglyfood",
+    component: Ugly,
+  },
+  {
+    path: "/refurb",
+    name: "Refurb",
+    component: Refurb,
   },
 ];
 

@@ -42,7 +42,9 @@
               width="17px"
               height="17px"
             />
-            <router-link to="/" style="color: black; text-decoration: none"
+            <router-link
+              to="/expire"
+              style="color: black; text-decoration: none"
               >유통임박 상품</router-link
             >
           </li>
@@ -53,7 +55,9 @@
               width="17px"
               height="17px"
             />
-            <router-link to="/" style="color: black; text-decoration: none"
+            <router-link
+              to="/uglyfood"
+              style="color: black; text-decoration: none"
               >못난이 농산물</router-link
             >
           </li>
@@ -64,7 +68,9 @@
               width="17px"
               height="17px"
             />
-            <router-link to="/" style="color: black; text-decoration: none"
+            <router-link
+              to="/refurb"
+              style="color: black; text-decoration: none"
               >리퍼브 상품</router-link
             >
           </li>

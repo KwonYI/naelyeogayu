@@ -1,9 +1,7 @@
 <template>
   <div id="form">
-    <p id="input">* 필수 사항 입력</p>
     <div id="categorys">
       <h4>카테고리 선택</h4>
-      <p id="catStar">*</p>
       <div id="radioform">
         <v-radio-group
           id="radio"
@@ -20,7 +18,6 @@
     </div>
     <div id="productinfo">
       <h4>상품 정보</h4>
-      <p id="pdStar">*</p>
       <v-row>
         <div id="name">
           <v-text-field
@@ -122,7 +119,6 @@
             v-model="product.descript"
             outlined
             label="상품 상세 설명"
-            :rules="nameRule"
             height="150px"
           ></v-textarea>
         </div>
@@ -165,9 +161,9 @@
               <v-text-field
                 autocomplete="off"
                 suffix="원"
-                v-model="product.startPrice"
+                v-model="startPrice"
                 :rules="startPriceRules"
-                @blur="startPriceCommas(product.startPrice)"
+                @blur="startPriceCommas(startPrice)"
                 label="경매 시작가"
               ></v-text-field>
             </div>
@@ -175,19 +171,15 @@
               <v-text-field
                 autocomplete="off"
                 suffix="원"
-                v-model="product.minPrice"
+                v-model="endPrice"
                 :rules="minPriceRules"
-                @blur="minPriceCommas(product.minPrice)"
+                @blur="minPriceCommas(endPrice)"
                 label="경매 최저가"
               ></v-text-field>
             </div>
           </div>
           <div id="date">
             <div id="dateform">
-              <p id="startStar">* 경매시작일은 상품 등록 다음날로 지정됩니다</p>
-              <p id="spStar">*</p>
-              <p id="endStar">*</p>
-              <p id="prStar">*</p>
               <div>
                 <v-menu
                   ref="endDateMenu"
@@ -283,6 +275,11 @@
                 {{ product.startDate }} ~ {{ product.endDate }}</span
               >
             </div>
+            <div>
+              <span style="color: rgb(247, 96, 96); font-size: 15px"
+                >* 경매시작일은 상품 등록 다음날로 지정됩니다</span
+              >
+            </div>
           </div>
         </v-row>
       </div>
@@ -298,6 +295,7 @@
 import axios from "axios";
 import moment from "moment";
 import "moment/locale/ko";
+// const SERVER_URL = process.env.VUE_APP_SERVER_URL;
 export default {
   data() {
     return {
@@ -307,6 +305,8 @@ export default {
       releaseMenu: false,
       totalflag: false,
       dayflag: false,
+      startPrice: "",
+      endPrice: "",
       product: {
         category: 0,
         name: "",
@@ -314,8 +314,8 @@ export default {
         imageUrl: "",
         unit: 0,
         stock: 0,
-        startPrice: "",
-        minPrice: "",
+        startPrice: 0,
+        minPrice: 0,
         startDate: moment().add(1, "days").format("YYYY-MM-DD"),
         endDate: moment().add(7, "days").format("YYYY-MM-DD"),
         releaseDate: moment().format("YYYY-MM-DD"),
@@ -339,7 +339,7 @@ export default {
           "숫자만 입력해주세요!",
         (v) =>
           Number(v.replace(/[^0-9]/g, "")) <
-            Number(this.product.startPrice.replace(/[^0-9]/g, "")) ||
+            Number(this.startPrice.replace(/[^0-9]/g, "")) ||
           "최저가가 시작가보다 높을 수 없습니다!",
       ],
       dateRules: [
@@ -354,15 +354,15 @@ export default {
     "product.endDate": function () {
       this.dayflag = true;
     },
-    "product.minPrice": function () {
+    endPrice: function () {
       this.totalflag = true;
     },
   },
   computed: {
     totalDiscount: function () {
-      var start = Number(this.product.startPrice.replace(/[^0-9]/g, ""));
-      var end = Number(this.product.minPrice.replace(/[^0-9]/g, ""));
-      return ((start - end) / start) * 100;
+      var start = Number(this.startPrice.replace(/[^0-9]/g, ""));
+      var end = Number(this.endPrice.replace(/[^0-9]/g, ""));
+      return (((start - end) / start) * 100).toFixed(2);
     },
     dayDiscount: function () {
       const start = moment(this.product.startDate, "YYYY-MM-DD");
@@ -374,12 +374,12 @@ export default {
     startPriceCommas(x) {
       x = x.replace(/[^0-9]/g, ""); // 입력값이 숫자가 아니면 공백
       x = x.replace(/,/g, ""); // ,값 공백처리
-      this.product.startPrice = x.replace(/\B(?=(\d{3})+(?!\d))/g, ","); // 정규식을 이용해서 3자리 마다 , 추가
+      this.startPrice = x.replace(/\B(?=(\d{3})+(?!\d))/g, ","); // 정규식을 이용해서 3자리 마다 , 추가
     },
     minPriceCommas(x) {
       x = x.replace(/[^0-9]/g, ""); // 입력값이 숫자가 아니면 공백
       x = x.replace(/,/g, ""); // ,값 공백처리
-      this.product.minPrice = x.replace(/\B(?=(\d{3})+(?!\d))/g, ","); // 정규식을 이용해서 3자리 마다 , 추가
+      this.endPrice = x.replace(/\B(?=(\d{3})+(?!\d))/g, ","); // 정규식을 이용해서 3자리 마다 , 추가
     },
     onClickImageUpload() {
       this.$refs.imageInput.click();
@@ -413,6 +413,8 @@ export default {
         alert("카테고리를 선택해주세요");
         return;
       }
+      this.product.startPrice = Number(this.startPrice.replace(/[^0-9]/g, ""));
+      this.product.minPrice = Number(this.endPrice.replace(/[^0-9]/g, ""));
       this.$emit("upload", this.product);
     },
     backpage() {
