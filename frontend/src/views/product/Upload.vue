@@ -32,7 +32,6 @@ export default {
     async submit(product) {
       product.sellerId = Number(this.getUserId);
       await this.$store.dispatch("productStore/upload", product);
-      console.log(this.getCategory);
       alert("등록 성공! 해당 카테고리로 이동합니다");
       if (this.getCategory == 1) {
         this.$router.push({ name: "Expire" });
