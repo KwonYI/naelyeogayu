@@ -36,6 +36,8 @@ public class ProductController {
 
 	private static final int LIMIT = 3;
 
+	private static final int STATUS = 1;
+
 	private static final Logger logger = LoggerFactory.getLogger(ProductController.class);
 
 	@PostMapping
@@ -62,7 +64,7 @@ public class ProductController {
 		Map result = new HashMap<>();
 
 		try {
-			long cnt = productDao.countByCategory(category);
+			long cnt = productDao.countByCategoryAndStatus(category, STATUS);
 
 			if (cnt != 0) {
 				result.put("success", "success");
