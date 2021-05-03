@@ -1,6 +1,7 @@
 package com.a103.apiServer.model;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,6 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.PrePersist;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -31,9 +33,14 @@ public class Reserve {
 	private Product product;
 
 	@Column(name = "due_date")
-	private LocalDate dueDate;
+	private LocalDateTime dueDate;
 
 	private int price;
 
 	private int count;
+	
+	@PrePersist
+	public void dueDate() {
+		this.dueDate = LocalDateTime.now();
+	}
 }
