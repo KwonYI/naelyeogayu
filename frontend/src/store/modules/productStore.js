@@ -22,16 +22,18 @@ const productStore = {
     },
   },
   actions: {
-    upload(context, product) {
+    async upload(context, product) {
       context.commit("setdefault");
-      axios({
+      await axios({
         method: "post",
-        url: `http://k4a103.p.ssafy.io:9000/a103/product`,
+        url: `/product`,
         data: product,
       })
         .then((res) => {
           if (res.data.success == "success") {
             context.commit("setcategory", product);
+            console.log("axios");
+            console.log(product.category);
           }
         })
         .catch((error) => {
