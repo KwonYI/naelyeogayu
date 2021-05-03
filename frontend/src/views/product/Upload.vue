@@ -33,7 +33,6 @@ export default {
       product.sellerId = Number(this.getUserId);
       await this.$store.dispatch("productStore/upload", product);
       alert("등록 성공! 해당 카테고리로 이동합니다");
-      console.log(this.getCategory);
       if (product.category == 1) {
         this.$router.push({ name: "Expire" });
       } else if (product.category == 2) {

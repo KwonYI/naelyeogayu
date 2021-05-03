@@ -432,4 +432,4 @@ export default {
 };
 </script>
 
-<style src="@/assets/css/uploadform.css"></style>
+<style src="@/assets/css/uploadform.css" scoped></style>
