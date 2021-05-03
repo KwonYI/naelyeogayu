@@ -22,9 +22,9 @@ const productStore = {
     },
   },
   actions: {
-    async upload(context, product) {
+    upload(context, product) {
       context.commit("setdefault");
-      await axios({
+      axios({
         method: "post",
         url: `/product`,
         data: product,
