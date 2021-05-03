@@ -32,8 +32,6 @@ const productStore = {
         .then((res) => {
           if (res.data.success == "success") {
             context.commit("setcategory", product);
-            console.log("axios");
-            console.log(product.category);
           }
         })
         .catch((error) => {
