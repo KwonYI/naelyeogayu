@@ -1,6 +1,7 @@
 package com.a103.apiServer.product;
 
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -21,7 +22,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.a103.apiServer.model.Product;
-import com.a103.apiServer.model.Test;
 import com.a103.apiServer.watchlog.WatchLogDao;
 
 @RestController
@@ -55,13 +55,14 @@ public class ProductController {
 	}
 
 	@GetMapping(value = "/expire")
-	public ResponseEntity getExpireProductList() {
+	public ResponseEntity getExpireProductList(@RequestHeader(value = "limit") int limit,
+			@RequestHeader(value = "offset") int offset) {
 		ResponseEntity entity = null;
 		Map result = new HashMap<>();
 
 		try {
-			List<Product> productList = productDao.findListProductByCategory(1);
-			List<Long> idList = productDao.findIdByCategory(1);
+			List<Product> productList = productDao.findListProductByCategory(1, limit, offset);
+			List<Long> idList = productDao.findIdByCategory(1, limit, offset);
 
 			if (productList.size() != 0) {
 
@@ -94,13 +95,14 @@ public class ProductController {
 	}
 
 	@GetMapping(value = "/ugly")
-	public ResponseEntity getUglyProductList() {
+	public ResponseEntity getUglyProductList(@RequestHeader(value = "limit") int limit,
+			@RequestHeader(value = "offset") int offset) {
 		ResponseEntity entity = null;
 		Map result = new HashMap<>();
 
 		try {
-			List<Product> productList = productDao.findListProductByCategory(2);
-			List<Long> idList = productDao.findIdByCategory(2);
+			List<Product> productList = productDao.findListProductByCategory(2, limit, offset);
+			List<Long> idList = productDao.findIdByCategory(2, limit, offset);
 
 			if (productList.size() != 0) {
 
@@ -133,13 +135,14 @@ public class ProductController {
 	}
 
 	@GetMapping(value = "/refurb")
-	public ResponseEntity getRefurbProductList() {
+	public ResponseEntity getRefurbProductList(@RequestHeader(value = "limit") int limit,
+			@RequestHeader(value = "offset") int offset) {
 		ResponseEntity entity = null;
 		Map result = new HashMap<>();
 
 		try {
-			List<Product> productList = productDao.findListProductByCategory(3);
-			List<Long> idList = productDao.findIdByCategory(3);
+			List<Product> productList = productDao.findListProductByCategory(3, limit, offset);
+			List<Long> idList = productDao.findIdByCategory(3, limit, offset);
 
 			if (productList.size() != 0) {
 
@@ -172,12 +175,14 @@ public class ProductController {
 	}
 
 	@GetMapping(value = "/new")
-	public ResponseEntity getNewProductList() {
+	public ResponseEntity getNewProductList(@RequestHeader(value = "limit") int limit,
+			@RequestHeader(value = "offset") int offset) {
 		ResponseEntity entity = null;
 		Map result = new HashMap<>();
 
 		try {
-			List<Product> productList = productDao.findListProductByStartDate(LocalDate.now().plusDays(1));
+			List<Product> productList = productDao.findListProductByStartDate(LocalDate.now().plusDays(1), limit,
+					offset);
 
 			if (productList.size() != 0) {
 				result.put("success", "success");
@@ -242,20 +247,20 @@ public class ProductController {
 
 		return entity;
 	}
-	
-	@GetMapping(value="/search/{option}/{word}")
-	public ResponseEntity getSearchProduct(@PathVariable("option") int option, @PathVariable("word") String word) {
+
+	@GetMapping(value = "/search/{option}/{word}")
+	public ResponseEntity getSearchProduct(@PathVariable("option") int option, @PathVariable("word") String word,
+			@RequestHeader(value = "limit") int limit, @RequestHeader(value = "offset") int offset) {
 		ResponseEntity entity = null;
 		Map result = new HashMap<>();
 
 		try {
 			List<Product> productList = new ArrayList<Product>();
-			
-			if(option == 1) {
-				productList = productDao.findListProductByNameContaining(word);				
-			}
-			else if(option == 2) {
-				productList = productDao.findListProductByDescriptContaining(word);
+
+			if (option == 1) {
+				productList = productDao.findListProductByNameContaining("%" + word + "%", limit, offset);
+			} else if (option == 2) {
+				productList = productDao.findListProductByDescriptContaining("%" + word + "%", limit, offset);
 			}
 
 			if (productList != null) {
@@ -266,7 +271,7 @@ public class ProductController {
 				result.put("success", "fail");
 				entity = new ResponseEntity<>(result, HttpStatus.OK);
 			}
-			
+
 		} catch (Exception e) {
 			logger.error("error", e);
 			result.put("success", "error");
@@ -274,6 +279,144 @@ public class ProductController {
 		}
 
 		return entity;
+	}
+
+	@GetMapping(value = "/hot")
+	public ResponseEntity getHotProductList() {
+		ResponseEntity entity = null;
+		Map result = new HashMap<>();
+
+		try {
+			List<Product> productList = productDao.findListProductOrderByWatchCount();
+
+			if (productList.size() != 0) {
+				result.put("success", "success");
+				result.put("data", productList);
+				entity = new ResponseEntity<>(result, HttpStatus.OK);
+			} else {
+				result.put("success", "fail");
+				entity = new ResponseEntity<>(result, HttpStatus.OK);
+			}
+
+		} catch (Exception e) {
+			logger.error("error", e);
+			result.put("success", "error");
+			entity = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+		}
+
+		return entity;
+	}
+
+	@GetMapping(value = "/sort/end/{category}")
+	public ResponseEntity sortByEndDate(@PathVariable("category") int category,
+			@RequestHeader(value = "limit") int limit, @RequestHeader(value = "offset") int offset) {
+		ResponseEntity entity = null;
+		Map result = new HashMap<>();
+
+		try {
+			List<Product> productList = productDao.findListProductByCategoryOrderByEndDateDesc(category, limit, offset);
+			List<Long> idList = productDao.findIdByCategory(category, limit, offset);
+
+			if (productList.size() != 0) {
+
+				try {
+					List<Map> logList = watchLogDao.countWatchlogByProductId(idList);
+					Map data = new HashMap<>();
+					data.put("product", productList);
+					data.put("watchlog", logList);
+					result.put("success", "success");
+					result.put("data", data);
+					entity = new ResponseEntity<>(result, HttpStatus.OK);
+				} catch (Exception e) {
+					logger.error("error", e);
+					result.put("success", "error");
+					entity = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+				}
+
+			} else {
+				result.put("success", "fail");
+				entity = new ResponseEntity<>(result, HttpStatus.OK);
+			}
+
+		} catch (Exception e) {
+			logger.error("error", e);
+			result.put("success", "error");
+			entity = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+		}
+
+		return entity;
+	}
+
+	@GetMapping(value = "/sort/discount/{category}")
+	public ResponseEntity sortByDiscount(@PathVariable("category") int category) {
+		ResponseEntity entity = null;
+		Map result = new HashMap<>();
+
+		return entity;
+	}
+
+	@GetMapping(value = "/sort/hot/{category}")
+	public ResponseEntity sortByHot(@PathVariable("category") int category, @RequestHeader(value = "limit") int limit,
+			@RequestHeader(value = "offset") int offset) {
+		ResponseEntity entity = null;
+		Map result = new HashMap<>();
+
+		try {
+			List<Product> productList = productDao.findListProductByCategoryOrderByWatchCount(category, limit, offset);
+			List<Long> idList = productDao.findIdByCategory(category, limit, offset);
+
+			if (productList.size() != 0) {
+
+				try {
+					List<Map> logList = watchLogDao.countWatchlogByProductId(idList);
+					Map data = new HashMap<>();
+					data.put("product", productList);
+					data.put("watchlog", logList);
+					result.put("success", "success");
+					result.put("data", data);
+					entity = new ResponseEntity<>(result, HttpStatus.OK);
+				} catch (Exception e) {
+					logger.error("error", e);
+					result.put("success", "error");
+					entity = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+				}
+
+			} else {
+				result.put("success", "fail");
+				entity = new ResponseEntity<>(result, HttpStatus.OK);
+			}
+
+		} catch (Exception e) {
+			logger.error("error", e);
+			result.put("success", "error");
+			entity = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+		}
+
+		return entity;
+	}
+
+	@GetMapping("/test")
+	public void getCurPrice(int id) {
+		Product product = productDao.findProductById(id);
+		int startPrice = product.getStartPrice();
+		int endPrice = product.getMinPrice();
+		LocalDate startDate = product.getStartDate();
+		LocalDate endDate = product.getEndDate();
+
+		float daydiff = ChronoUnit.DAYS.between(startDate, endDate);
+		float priceDiff = startPrice - endPrice;
+
+		float discountRate = priceDiff / daydiff;
+
+		System.out.println(id);
+		System.out.println(startPrice);
+		System.out.println(endPrice);
+		System.out.println(startDate);
+		System.out.println(endDate);
+		System.out.println(daydiff);
+		System.out.println(discountRate);
+		System.out.println(priceDiff);
+		System.out.println(discountRate * (daydiff - 1));
 	}
 
 }
