@@ -17,13 +17,6 @@ export default {
     terms,
     forms,
   },
-  created() {
-    const id = this.getUserId;
-    if (id.length == 0) {
-      alert("로그인 먼저해주세요");
-      this.$router.push({ name: "Login" });
-    }
-  },
   data: function () {
     return {
       step: 1,
@@ -40,9 +33,10 @@ export default {
       product.sellerId = Number(this.getUserId);
       this.$store.dispatch("productStore/upload", product);
       alert("등록 성공! 해당 카테고리로 이동합니다");
-      if (this.getCategory == 1) {
+      console.log(this.getCategory);
+      if (product.category == 1) {
         this.$router.push({ name: "Expire" });
-      } else if (this.getCategory == 2) {
+      } else if (product.category == 2) {
         this.$router.push({ name: "Uglyfood" });
       } else {
         this.$router.push({ name: "Refurb" });
@@ -52,9 +46,6 @@ export default {
   computed: {
     getUserId() {
       return this.$store.getters["userStore/id"];
-    },
-    getCategory() {
-      return this.$store.getters["productStore/getCategory"];
     },
   },
 };
