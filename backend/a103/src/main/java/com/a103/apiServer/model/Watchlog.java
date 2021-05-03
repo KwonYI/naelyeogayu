@@ -1,14 +1,14 @@
 package com.a103.apiServer.model;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.PrePersist;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -28,18 +28,23 @@ public class Watchlog {
 	private long memberId;
 	
 	@Column(name = "date")
-	private LocalDate date;
+	private LocalDateTime date;
 	
 	@Column(name = "ip")
 	private String ip;
 
 	@Builder
-	public Watchlog(long id, long productId, long memberId, LocalDate date, String ip) {
+	public Watchlog(long id, long productId, long memberId, LocalDateTime date, String ip) {
 		super();
 		this.id = id;
 		this.productId = productId;
 		this.memberId = memberId;
 		this.date = date;
 		this.ip = ip;
-	}	
+	}
+	
+	@PrePersist
+	public void date() {
+		this.date = LocalDateTime.now();
+	}
 }
