@@ -132,6 +132,14 @@
               contain
               :aspect-ratio="1.4"
               alt="img"
+              @click="onClickImageUpload"
+            />
+            <img
+              v-else-if="product.category != 0"
+              src="@/assets/fileupload.png"
+              width="250px"
+              alt="img"
+              @click="onClickImageUpload"
             />
             <img v-else src="@/assets/fileupload.png" width="250px" alt="img" />
           </div>
@@ -396,7 +404,7 @@ export default {
       let formData = new FormData();
       formData.append("files", file[0]);
       axios
-        .post(`http://k4a103.p.ssafy.io:9000/a103/uploadImage`, formData, {
+        .post(`/uploadImage`, formData, {
           headers: {
             "Content-Type": "multipart/form-data",
           },
