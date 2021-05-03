@@ -38,7 +38,6 @@ public class ReviewController {
 	public ResponseEntity createReview(@RequestBody Review review) {
 		ResponseEntity entity = null;
 		Map result = new HashMap();
-		review.setDate(LocalDate.now());
 
 		try {
 			reviewDao.save(review);
@@ -111,11 +110,10 @@ public class ReviewController {
 		Map result = new HashMap();
 
 		try {
-			// 변경 가능한 값 => title, descript, date
+			// 변경 가능한 값 => title, descript
 			Review modifyReview = reviewDao.getOne(review.getId());
 			modifyReview.setTitle(review.getTitle());
 			modifyReview.setDescript(review.getDescript());
-			modifyReview.setDate(LocalDate.now());
 			reviewDao.save(modifyReview);
 			result.put("success", "success");
 			entity = new ResponseEntity(result, HttpStatus.OK);

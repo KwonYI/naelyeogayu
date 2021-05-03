@@ -7,12 +7,13 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.PrePersist;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Data
@@ -24,7 +25,7 @@ public class Buy {
 	private long id;
 
 	@Column(name = "buy_date")
-	private LocalDate buyDate;
+	private LocalDateTime buyDate;
 
 	private int price;
 
@@ -36,4 +37,9 @@ public class Buy {
 	@ManyToOne
 	@JoinColumn(name = "product_id")
 	private Product product;
+	
+	@PrePersist
+	public void buyDate() {
+		this.buyDate = LocalDateTime.now();
+	}
 }
