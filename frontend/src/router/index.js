@@ -24,7 +24,7 @@ const requireAuth = () => (to, from, next) => {
   if (localStorage["token"] && localStorage["token"] !== "") {
     return next();
   } else {
-    return next("/");
+    return next("/login");
   }
 };
 
@@ -64,6 +64,7 @@ const routes = [
     path: "/upload",
     name: "Upload",
     component: Upload,
+    beforeEnter: requireAuth(),
   },
   {
     path: "/expire",

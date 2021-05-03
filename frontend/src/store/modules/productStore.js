@@ -26,7 +26,7 @@ const productStore = {
       context.commit("setdefault");
       axios({
         method: "post",
-        url: `http://k4a103.p.ssafy.io:9000/a103/product`,
+        url: `/product`,
         data: product,
       })
         .then((res) => {
