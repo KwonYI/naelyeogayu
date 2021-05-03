@@ -41,7 +41,6 @@ public class WatchLogController {
 	public ResponseEntity saveWatch(@RequestBody Watchlog watchlog, HttpServletRequest request) {
 		ResponseEntity entity = null;
 		Map result = new HashMap<>();
-		watchlog.setDate(LocalDate.now());
 		watchlog.setIp(getClientIpAddr(request));
 
 		try {

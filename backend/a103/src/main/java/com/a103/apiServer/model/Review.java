@@ -1,6 +1,5 @@
 package com.a103.apiServer.model;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import javax.persistence.Column;
@@ -8,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.PrePersist;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -29,11 +29,16 @@ public class Review {
 	private long productId;
 
 	@Column(name = "date")
-	private LocalDate date;
+	private LocalDateTime date;
 
 	@Column(length = 500)
 	private String descript;
 
 	@Column(length = 100)
 	private String title;
+	
+	@PrePersist
+	public void date() {
+		this.date = LocalDateTime.now();
+	}
 }
