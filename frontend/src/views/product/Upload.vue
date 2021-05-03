@@ -29,9 +29,9 @@ export default {
     backpage(flag) {
       if (flag) this.step--;
     },
-    submit(product) {
+    async submit(product) {
       product.sellerId = Number(this.getUserId);
-      this.$store.dispatch("productStore/upload", product);
+      await this.$store.dispatch("productStore/upload", product);
       alert("등록 성공! 해당 카테고리로 이동합니다");
       console.log(this.getCategory);
       if (product.category == 1) {

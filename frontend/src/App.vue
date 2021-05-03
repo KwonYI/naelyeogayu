@@ -2,7 +2,8 @@
   <v-app>
     <Navbar />
     <v-main>
-      <router-view></router-view>
+      <!-- If using vue-router -->
+      <router-view :key="$route.fullPath"></router-view>
     </v-main>
     <!-- <Footer /> -->
   </v-app>

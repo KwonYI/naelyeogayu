@@ -12,6 +12,7 @@ const userStore = {
     name: "",
     address: "",
     phone: "",
+    point: 0,
     isLogined: false,
   },
   mutations: {
@@ -21,6 +22,7 @@ const userStore = {
       state.name = user.name;
       state.address = user.address;
       state.phone = user.phone;
+      state.point = user.point;
       state.isLogined = true;
     },
     FREE_USER(state) {
@@ -29,6 +31,7 @@ const userStore = {
       state.name = "";
       state.address = "";
       state.phone = "";
+      state.point = 0;
       state.isLogined = false;
     },
   },
@@ -48,6 +51,9 @@ const userStore = {
     phone: (state) => {
       return state.phone;
     },
+    point: (state) => {
+      return state.point;
+    },
     isLogined: (state) => {
       return state.isLogined;
     },
@@ -58,6 +64,7 @@ const userStore = {
         name: state.name,
         address: state.address,
         phone: state.phone,
+        point: state.point,
       };
       return user;
     },

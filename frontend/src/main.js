@@ -31,5 +31,10 @@ new Vue({
   router,
   store,
   vuetify,
+  beforeCreate() {
+    if (localStorage.getItem("token") !== null) {
+      this.$store.dispatch("userStore/login", localStorage.getItem("token"));
+    }
+  },
   render: (h) => h(App),
 }).$mount("#app");
