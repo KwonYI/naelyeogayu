@@ -53,6 +53,32 @@ public class ProductController {
 
 		return entity;
 	}
+	
+	@GetMapping(value = "/size/{category}")
+	public ResponseEntity getProductSizeByCategory(@PathVariable(value = "category") int category) {
+		ResponseEntity entity = null;
+		Map result = new HashMap<>();
+		
+		try {
+			long cnt = productDao.countByCategory(category);
+			
+			if(cnt != 0) {
+				result.put("success", "success");
+				result.put("data", cnt);
+				entity = new ResponseEntity<>(result, HttpStatus.OK);
+			}else {
+				result.put("success", "fail");
+				entity = new ResponseEntity<>(result, HttpStatus.OK);
+			}
+			
+		} catch (Exception e) {
+			logger.error("error", e);
+			result.put("success", "error");
+			entity = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+		}
+		
+		return entity;
+	}
 
 	@GetMapping(value = "/expire")
 	public ResponseEntity getExpireProductList(@RequestHeader(value = "limit") int limit,
