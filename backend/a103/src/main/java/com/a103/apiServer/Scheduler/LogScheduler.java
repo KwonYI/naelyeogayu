@@ -18,7 +18,6 @@ public class LogScheduler {
 	@Scheduled(cron = "0 0/10 * * * *")
 	public void nowTimeAlert() {
 		logger.info("현재 시간 : {}", new Date());
-
 	}
 	
 	//매 1초마다 현재 시각 출력
