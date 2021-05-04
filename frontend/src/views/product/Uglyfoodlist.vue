@@ -37,4 +37,4 @@ export default {
 };
 </script>
 
-<style src="@/assets/css/list.css" scoped></style>
+<style src="@/assets/css/List.css" scoped></style>

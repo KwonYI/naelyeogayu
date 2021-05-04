@@ -53,9 +53,8 @@ export default {
         setTimeout(() => {
           if (this.getSize > this.limit) {
             let data = res.data.data;
-            console.log(data);
             for (let key in data) {
-              this.list.push(data[key]);
+              this.list.push(data[key].product);
             }
             this.limit += 6;
             $state.loaded();
