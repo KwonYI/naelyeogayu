@@ -17,7 +17,8 @@ pipeline {
                             color: "#2A42EE", 
                             message: "Build STARTED: ${env.JOB_NAME} #${env.BUILD_NUMBER} (<${env.BUILD_URL}|Link to build>)"
                         )                   
-                    sh 'mvn -f backend/a103/pom.xml -B -DskipTests clean package'
+                        sh 'mvn -f backend/a103/pom.xml -B -DskipTests clean package'
+                        sh 'pwd'
                     } catch(e) {
                         currentBuild.result = "FAILURE"
                     } finally {
