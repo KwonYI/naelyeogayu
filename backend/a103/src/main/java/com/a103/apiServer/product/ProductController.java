@@ -299,8 +299,7 @@ public class ProductController {
 
 			if (option == 1) {
 				productList = productDao.findListProductByNameContaining("%" + word + "%", limit, CONTENT_CNT);
-			} 
-			else if (option == 2) {
+			} else if (option == 2) {
 				productList = productDao.findListProductByDescriptContaining("%" + word + "%", limit, CONTENT_CNT);
 			}
 
