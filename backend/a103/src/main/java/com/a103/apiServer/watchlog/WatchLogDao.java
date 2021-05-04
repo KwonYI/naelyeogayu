@@ -13,6 +13,7 @@ import com.a103.apiServer.model.Watchlog;
 @Repository
 public interface WatchLogDao extends JpaRepository<Watchlog, Long> {
 	List<Watchlog> findListWatchlogByProductId(long productId);
+	long countByProductId(long productId);
 	
 	@Query(value = "SELECT product_id, COUNT(PRODUCT_ID) cnt FROM watchlog WHERE PRODUCT_ID IN :IDS GROUP BY PRODUCT_ID", nativeQuery = true)
 	List<Map> countWatchlogByProductId(@Param("IDS") List<Long> ids);
