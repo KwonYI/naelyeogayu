@@ -10,16 +10,17 @@ pipeline {
             }
             options { skipDefaultCheckout(false) }
             steps {
-		dir("frontend"){
-			script{
+                script{
                     try {
                         mattermostSend (
                             color: "#2A42EE", 
                             message: "Build STARTED: ${env.JOB_NAME} #${env.BUILD_NUMBER} (<${env.BUILD_URL}|Link to build>)"
                         )
-                        sh 'npm -v'
-                        sh 'npm install'
-                        sh 'npm run build'
+                        dir("frontend"){
+                            sh 'npm -v'
+                            sh 'npm install'
+                            sh 'npm run build'
+                        }
                     } catch(e) {
                         currentBuild.result = "FAILURE"
                     } finally {
@@ -36,7 +37,7 @@ pipeline {
                         }                            
                     } 
                 }
-		    }
+            }
         }
         stage('Docker build') {
             agent any
