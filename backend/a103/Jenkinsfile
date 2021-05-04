@@ -18,7 +18,7 @@ pipeline {
                             message: "Build STARTED: ${env.JOB_NAME} #${env.BUILD_NUMBER} (<${env.BUILD_URL}|Link to build>)"
                         )                   
                         sh 'mvn -f backend/a103/pom.xml -B -DskipTests clean package'
-                        sh 'pwd'
+                        currentBuild.result != "SUCCESS"
                     } catch(e) {
                         currentBuild.result = "FAILURE"
                     } finally {
