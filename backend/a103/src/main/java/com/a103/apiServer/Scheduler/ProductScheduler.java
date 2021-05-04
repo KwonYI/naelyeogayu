@@ -22,14 +22,25 @@ private static final Logger logger = LoggerFactory.getLogger(ProductController.c
 	//매일 정각 마다 판매 상태 변경
 	@Scheduled(cron = "0 0 0 * * *")
 	public void StartSell() {
-		List<Product> list = productDao.findListProudctByStatusAndStartDate(1, LocalDate.now());
-		logger.info("change status of list : " + list);
-		
+		logger.info("change start_date");
+
 		try {
-			productDao.updateStartStatus(0, 1, LocalDate.now());			
+			productDao.updateStatusByDate(0, 1, LocalDate.now());			
 		} catch (Exception e) {
 			logger.error("message :" + e);
 		}		
+		
+	}
+	
+	@Scheduled(cron = "0 0 0 * * *")
+	public void EndSell() {
+		logger.info("change end_date");
+
+		try {
+			productDao.updateStatusUnderDate(3, 0, LocalDate.now());			
+		} catch (Exception e) {
+			logger.error("message :" + e);
+		}	
 		
 	}
 	

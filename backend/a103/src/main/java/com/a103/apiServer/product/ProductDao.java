@@ -49,5 +49,10 @@ public interface ProductDao extends JpaRepository<Product, Long> {
 	@Transactional
 	@Modifying
 	@Query(value="UPDATE product p SET p.status = :newStatus WHERE p.status = :oldStatus AND p.start_date = :startDate", nativeQuery = true)
-	int updateStartStatus(@Param("newStatus") int newStatus, @Param("oldStatus") int oldStatus, @Param("startDate") LocalDate startDate);
+	int updateStatusByDate(@Param("newStatus") int newStatus, @Param("oldStatus") int oldStatus, @Param("startDate") LocalDate startDate);
+	
+	@Transactional
+	@Modifying
+	@Query(value="UPDATE product p SET p.status = :newStatus WHERE p.status = :oldStatus AND p.end_date < :endDate", nativeQuery = true)
+	int updateStatusUnderDate(@Param("newStatus") int newStatus, @Param("oldStatus") int oldStatus, @Param("endDate") LocalDate endDate);
 }
