@@ -33,9 +33,9 @@ export default {
       product.sellerId = Number(this.getUserId);
       await this.$store.dispatch("productStore/upload", product);
       alert("등록 성공! 해당 카테고리로 이동합니다");
-      if (this.getCategory == 1) {
+      if (product.category == 1) {
         this.$router.push({ name: "Expire" });
-      } else if (this.getCategory == 2) {
+      } else if (product.category == 2) {
         this.$router.push({ name: "Uglyfood" });
       } else {
         this.$router.push({ name: "Refurb" });
@@ -45,9 +45,6 @@ export default {
   computed: {
     getUserId() {
       return this.$store.getters["userStore/id"];
-    },
-    getCategory() {
-      return this.$store.getters["productStore/getCategory"];
     },
   },
 };
