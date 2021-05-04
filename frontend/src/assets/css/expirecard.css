@@ -14,7 +14,7 @@
   }
   #title,
   #cur,
-  #rate {
+  #rate,#soldout,#end {
     font-family: "NEXON Lv1 Gothic OTF Bold";
   }
   #stock,
@@ -27,7 +27,13 @@
     width: 430px;
     display: inline-block;
   }
-  #card {
+  #endCard{
+    position: relative;
+    border: solid 1px rgb(179, 178, 178);
+    border-radius: 20px;
+    margin: 30px 60px;
+  }
+  #card{
     position: relative;
     border: solid 1px rgb(179, 178, 178);
     border-radius: 20px;
@@ -46,14 +52,13 @@
     transform: scale(1.15);
     transition: 0.3s;
   }
-  #img {
+  .v-img {
     border-radius: 20px 20px 0 0;
   }
   #info {
-    height: 110px;
+    height: 125px;
   }
-  #info p,
-  #watch {
+  #info p{
     position: absolute;
   }
   #dday {
@@ -73,17 +78,17 @@
     
   }
   #remain {
-    font-size: 12px;
-    margin: 0 7px;
+    font-size: 13px;
+    margin: 0 auto;
     color: white;
-    font-family: "NEXON Lv1 Gothic OTF";
+    width: 66px;
+    font-family: "NEXON Lv1 Gothic OTF Bold";
   }
   #day {
-    font-size: 17px;
-    margin-top: 5px;
-    margin-bottom: 5px;
+    font-size: 16px;
+    margin:0 auto;
+    width: 66px;
     color: white;
-    font-weight: bold;
     font-family: "NEXON Lv1 Gothic OTF Bold";
   }
   #title {
@@ -98,33 +103,49 @@
   }
   #stock {
     font-size: 15px;
-    bottom: 65px;
+    bottom: 85px;
     left: 20px;
   }
   #rate {
     color: red;
   }
-  #cur {
-    font-size: 20px;
-    bottom: 0px;
-    right: 20px;
-    margin-bottom: 10px;
+  #date {
+    width: 180px;
+    font-size: 15px;
+    left: 20px;
+    bottom: 60px;
   }
   #max {
     font-size: 17px;
     bottom: 0px;
     color: rgb(154, 150, 154);
-    bottom: 20px;
+    bottom: 50px;
     right: 20px;
     text-decoration: line-through;
   }
-  #date {
-    width: 180px;
-    font-size: 15px;
-    left: 20px;
-    bottom: 40px;
-  }
-  #watch {
-    bottom: 85px;
+  #cur {
+    font-size: 20px;
+    bottom: 30px;
     right: 20px;
+    margin-bottom: 10px;
+  }
+  #detail{
+    font-size:14px;
+    font-family: "NEXON Lv1 Gothic OTF";
+    width:180px;
+    border: 1px solid grey;
+    bottom: 10px;
+    left:64px;
+    text-align: center;
+    border-radius: 10px;
+    margin:0 auto;
+  }
+  #soldout,#end{
+    font-size: 14px;
+    color: white;
+    margin-top:10px;
+    width:66px;
+  }
+  #grey{
+    filter:brightness(60%);
   }

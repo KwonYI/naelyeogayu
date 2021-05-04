@@ -85,7 +85,7 @@
               <div class="kg">
                 <v-text-field
                   autocomplete="off"
-                  suffix="Kg"
+                  suffix="Kg/박스"
                   v-model="product.unit"
                   label="무게"
                 ></v-text-field>
@@ -94,7 +94,7 @@
               <div class="stock">
                 <v-text-field
                   autocomplete="off"
-                  suffix="개"
+                  suffix="박스"
                   v-model="product.stock"
                   :rules="stockRule"
                   label="수량"
@@ -208,6 +208,27 @@
                     ></v-text-field>
                   </template>
                   <v-date-picker
+                    v-if="product.category == 1"
+                    v-model="product.endDate"
+                    :min="product.startDate"
+                    :max="deadLine"
+                    no-title
+                    scrollable
+                  >
+                    <v-spacer></v-spacer>
+                    <v-btn text color="primary" @click="endDateMenu = false">
+                      Cancel
+                    </v-btn>
+                    <v-btn
+                      text
+                      color="primary"
+                      @click="$refs.endDateMenu.save(product.endDate)"
+                    >
+                      OK
+                    </v-btn>
+                  </v-date-picker>
+                  <v-date-picker
+                    v-else
                     v-model="product.endDate"
                     :min="product.startDate"
                     no-title
@@ -328,7 +349,7 @@ export default {
         endDate: moment().add(7, "days").format("YYYY-MM-DD"),
         releaseDate: moment().format("YYYY-MM-DD"),
         expirationDate: moment().format("YYYY-MM-DD"),
-        status: 0,
+        status: 1,
         sellerId: 0,
       },
       nameRule: [
@@ -376,6 +397,11 @@ export default {
       const start = moment(this.product.startDate, "YYYY-MM-DD");
       const end = moment(this.product.endDate, "YYYY-MM-DD");
       return (this.totalDiscount / end.diff(start, "days")).toFixed(2);
+    },
+    deadLine: function () {
+      return moment(this.product.expirationDate)
+        .subtract(7, "d")
+        .format("YYYY-MM-DD");
     },
   },
   methods: {
@@ -432,4 +458,4 @@ export default {
 };
 </script>
 
-<style src="@/assets/css/uploadform.css" scoped></style>
+<style src="@/assets/css/UploadForm.css" scoped></style>
