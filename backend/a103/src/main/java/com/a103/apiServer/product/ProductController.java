@@ -34,9 +34,7 @@ public class ProductController {
 	@Autowired
 	WatchLogDao watchLogDao;
 
-	private static final int LIMIT = 3;
-
-	private static final int STATUS = 1;
+	private static final int CONTENT_CNT = 6;
 
 	private static final Logger logger = LoggerFactory.getLogger(ProductController.class);
 
@@ -58,13 +56,39 @@ public class ProductController {
 		return entity;
 	}
 
+	@GetMapping(value = "/sell/{member_id}")
+	public ResponseEntity getSellList(@PathVariable(value = "member_id") int memberId) {
+		ResponseEntity entity = null;
+		Map result = new HashMap<>();
+
+		try {
+			List<Product> productList = productDao.findListProductBySellerId(memberId);
+
+			if (productList.size() != 0) {
+				result.put("success", "success");
+				result.put("data", productList);
+				entity = new ResponseEntity<>(result, HttpStatus.OK);
+			} else {
+				result.put("success", "fail");
+				entity = new ResponseEntity<>(result, HttpStatus.OK);
+			}
+
+		} catch (Exception e) {
+			logger.error("error", e);
+			result.put("success", "error");
+			entity = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+		}
+
+		return entity;
+	}
+
 	@GetMapping(value = "/size/{category}")
 	public ResponseEntity getProductSizeByCategory(@PathVariable(value = "category") int category) {
 		ResponseEntity entity = null;
 		Map result = new HashMap<>();
 
 		try {
-			long cnt = productDao.countByCategoryAndStatus(category, STATUS);
+			long cnt = productDao.countByCategory(category);
 
 			if (cnt != 0) {
 				result.put("success", "success");
@@ -84,13 +108,13 @@ public class ProductController {
 		return entity;
 	}
 
-	@GetMapping(value = "/expire")
-	public ResponseEntity getExpireProductList(@RequestHeader(value = "limit") int limit) {
+	@GetMapping(value = "/expire/{limit}")
+	public ResponseEntity getExpireProductList(@PathVariable(value = "limit") int limit) {
 		ResponseEntity entity = null;
 		Map result = new HashMap<>();
 
 		try {
-			List<Product> productList = productDao.findListProductByCategory(1, limit, LIMIT);
+			List<Product> productList = productDao.findListProductByCategory(1, limit, CONTENT_CNT);
 
 			if (productList.size() != 0) {
 				result.put("success", "success");
@@ -110,13 +134,13 @@ public class ProductController {
 		return entity;
 	}
 
-	@GetMapping(value = "/ugly")
-	public ResponseEntity getUglyProductList(@RequestHeader(value = "limit") int limit) {
+	@GetMapping(value = "/ugly/{limit}")
+	public ResponseEntity getUglyProductList(@PathVariable(value = "limit") int limit) {
 		ResponseEntity entity = null;
 		Map result = new HashMap<>();
 
 		try {
-			List<Product> productList = productDao.findListProductByCategory(2, limit, LIMIT);
+			List<Product> productList = productDao.findListProductByCategory(2, limit, CONTENT_CNT);
 
 			if (productList.size() != 0) {
 				result.put("success", "success");
@@ -136,13 +160,13 @@ public class ProductController {
 		return entity;
 	}
 
-	@GetMapping(value = "/refurb")
-	public ResponseEntity getRefurbProductList(@RequestHeader(value = "limit") int limit) {
+	@GetMapping(value = "/refurb/{limit}")
+	public ResponseEntity getRefurbProductList(@PathVariable(value = "limit") int limit) {
 		ResponseEntity entity = null;
 		Map result = new HashMap<>();
 
 		try {
-			List<Product> productList = productDao.findListProductByCategory(3, limit, LIMIT);
+			List<Product> productList = productDao.findListProductByCategory(3, limit, CONTENT_CNT);
 
 			if (productList.size() != 0) {
 				result.put("success", "success");
@@ -162,14 +186,13 @@ public class ProductController {
 		return entity;
 	}
 
-	@GetMapping(value = "/new")
-	public ResponseEntity getNewProductList(@RequestHeader(value = "limit") int limit) {
+	@GetMapping(value = "/new/{limit}")
+	public ResponseEntity getNewProductList(@PathVariable(value = "limit") int limit) {
 		ResponseEntity entity = null;
 		Map result = new HashMap<>();
 
 		try {
-			List<Product> productList = productDao.findListProductByStartDate(LocalDate.now().plusDays(1), limit,
-					LIMIT);
+			List<Product> productList = productDao.findListProductByStartDate(LocalDate.now().plusDays(1), limit, CONTENT_CNT);
 
 			if (productList.size() != 0) {
 				result.put("success", "success");
@@ -234,9 +257,9 @@ public class ProductController {
 		return entity;
 	}
 
-	@GetMapping(value="/search/{option}/{word}")
+	@GetMapping(value = "/search/{option}/{word}/{limit}")
 	public ResponseEntity getSearchProduct(@PathVariable("option") int option, @PathVariable("word") String word,
-			@RequestHeader(value = "limit") int limit) {
+			@PathVariable(value = "limit") int limit) {
 		ResponseEntity entity = null;
 		Map result = new HashMap<>();
 
@@ -244,10 +267,10 @@ public class ProductController {
 			List<Product> productList = new ArrayList<Product>();
 
 			if (option == 1) {
-				productList = productDao.findListProductByNameContaining("%" + word + "%", limit, LIMIT);
+				productList = productDao.findListProductByNameContaining("%" + word + "%", limit, CONTENT_CNT);
 			}
 			else if (option == 2) {
-				productList = productDao.findListProductByDescriptContaining("%" + word + "%", limit, LIMIT);
+				productList = productDao.findListProductByDescriptContaining("%" + word + "%", limit, CONTENT_CNT);
 			}
 
 			if (productList.size() != 0) {
@@ -294,14 +317,14 @@ public class ProductController {
 		return entity;
 	}
 
-	@GetMapping(value = "/sort/endAsc/{category}")
+	@GetMapping(value = "/sort/endAsc/{category}/{limit}")
 	public ResponseEntity sortByEndDateAsc(@PathVariable("category") int category,
-			@RequestHeader(value = "limit") int limit) {
+			@PathVariable(value = "limit") int limit) {
 		ResponseEntity entity = null;
 		Map result = new HashMap<>();
 
 		try {
-			List<Product> productList = productDao.findListProductByCategoryOrderByEndDateAsc(category, limit, LIMIT);
+			List<Product> productList = productDao.findListProductByCategoryOrderByEndDateAsc(category, limit, CONTENT_CNT);
 
 			if (productList.size() != 0) {
 				result.put("success", "success");
@@ -321,14 +344,14 @@ public class ProductController {
 		return entity;
 	}
 
-	@GetMapping(value = "/sort/endDesc/{category}")
+	@GetMapping(value = "/sort/endDesc/{category}/{limit}")
 	public ResponseEntity sortByEndDateDesc(@PathVariable("category") int category,
-			@RequestHeader(value = "limit") int limit) {
+			@PathVariable(value = "limit") int limit) {
 		ResponseEntity entity = null;
 		Map result = new HashMap<>();
 
 		try {
-			List<Product> productList = productDao.findListProductByCategoryOrderByEndDateDesc(category, limit, LIMIT);
+			List<Product> productList = productDao.findListProductByCategoryOrderByEndDateDesc(category, limit, CONTENT_CNT);
 
 			if (productList.size() != 0) {
 				result.put("success", "success");
@@ -356,13 +379,13 @@ public class ProductController {
 		return entity;
 	}
 
-	@GetMapping(value = "/sort/hot/{category}")
-	public ResponseEntity sortByHot(@PathVariable("category") int category, @RequestHeader(value = "limit") int limit) {
+	@GetMapping(value = "/sort/hot/{category}/{limit}")
+	public ResponseEntity sortByHot(@PathVariable("category") int category, @PathVariable(value = "limit") int limit) {
 		ResponseEntity entity = null;
 		Map result = new HashMap<>();
 
 		try {
-			List<Product> productList = productDao.findListProductByCategoryOrderByWatchCount(category, limit, LIMIT);
+			List<Product> productList = productDao.findListProductByCategoryOrderByWatchCount(category, limit, CONTENT_CNT);
 
 			if (productList.size() != 0) {
 				result.put("success", "success");
