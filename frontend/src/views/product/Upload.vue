@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import terms from "@/components/product/upload/terms.vue";
+import terms from "@/components/product/upload/Terms.vue";
 import forms from "@/components/product/upload/Uploadform.vue";
 export default {
   components: {
