@@ -5,9 +5,19 @@ import axios from "axios";
 const productStore = {
   namespaced: true,
 
-  state: {},
-  mutations: {},
-  getters: {},
+  state: {
+    size: 0,
+  },
+  mutations: {
+    setsize(state, payload) {
+      state.size = payload;
+    },
+  },
+  getters: {
+    getsize(state) {
+      return state.size;
+    },
+  },
   actions: {
     upload(context, product) {
       context.commit("setdefault");
@@ -17,6 +27,20 @@ const productStore = {
         data: product,
       })
         .then(() => {})
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    getListSize(context, category) {
+      axios({
+        method: "get",
+        url: `/product/size/${category}`,
+      })
+        .then((res) => {
+          if (res.data.success == "success") {
+            context.commit("setsize", res.data.data);
+          }
+        })
         .catch((error) => {
           console.log(error);
         });

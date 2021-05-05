@@ -1,9 +1,40 @@
 <template>
-  <div>못난이</div>
+  <div>
+    <div id="explain">
+      <p id="question">
+        이세상에 버려질
+        <span class="text" style="color: #42cd06">농산물</span>은 없다!
+      </p>
+      <div id="photo"></div>
+      <p id="listtitle">상품 목록</p>
+      <hr />
+      <Uglycard
+        v-for="(item, index) in list"
+        v-bind:key="item.id"
+        v-bind:item="list[index]"
+      />
+      <!-- <infinite-loading
+        @infinite="infiniteHandler"
+        spinner="circles"
+        ref="infiniteLoading"
+      >
+        <div slot="no-more" class="mb-12">목록의 끝입니다 :)</div>
+        <div slot="no-results" class="mb-12">목록이 비어있습니다 :(</div>
+      </infinite-loading> -->
+    </div>
+  </div>
 </template>
 
 <script>
-export default {};
+// import InfiniteLoading from "vue-infinite-loading";
+import Uglycard from "@/components/product/card/UglyCard.vue";
+// import axios from "axios";
+
+export default {
+  components: {
+    Uglycard,
+  },
+};
 </script>
 
-<style></style>
+<style src="@/assets/css/List.css" scoped></style>
