@@ -281,5 +281,27 @@ public class MemberController {
 
 		return entity;
 	}
+	
+	@PostMapping(value = "/charge")
+	public ResponseEntity chargingPoint(@RequestBody Map data) {
+		ResponseEntity entity = null;
+		Map result = new HashMap<>();
+		
+		try {
+			String email = (String) data.get("email");
+			int point = (int) data.get("point");
+			Member member = memberDao.findMemberByEmail(email);
+			member.setPoint(member.getPoint() + point);
+			memberDao.save(member);
+			result.put("success", "success");
+			entity = new ResponseEntity(result, HttpStatus.OK);
+		} catch (Exception e) {
+			logger.error("error", e);
+			result.put("success", "error");
+			entity = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+		}
+
+		return entity;
+	}
 
 }
