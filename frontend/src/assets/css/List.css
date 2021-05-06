@@ -16,12 +16,26 @@
     font-family: "NEXON Lv1 Gothic OTF Bold";
     color: rgb(57, 57, 57);
   }
-  #explain1 {
+  #expirephoto {
     margin: 0 auto;
     height: 170px;
     width: 1050px;
     border: solid 2px rgb(95, 95, 95);
-    background-image: url("../../assets/expire.png");
+    background-image: url("../../assets/banner/expire.png");
+  }
+  #uglypthoto{
+    margin: 0 auto;
+    height: 170px;
+    width: 1050px;
+    border: solid 2px rgb(95, 95, 95);
+    background-image: url("../../assets/banner/ugly.png");
+  }
+  #refurbphoto{
+    margin: 0 auto;
+    height: 170px;
+    width: 1050px;
+    border: solid 2px rgb(95, 95, 95);
+    background-image: url("../../assets/banner/refurb.png");  
   }
   #listtitle {
     text-align: center;

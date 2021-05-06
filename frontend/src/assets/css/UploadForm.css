@@ -1,0 +1,133 @@
+#productinfo,
+#categorys,
+#auctioninfo {
+  width: 1280px;
+  margin: 20px auto;
+  border: 2px solid #cac8c8;
+}
+#categorys h4,
+#productinfo h4,
+#auctioninfo h4 {
+  position: relative;
+  top: -10px;
+  left: 70px;
+}
+#auctioninfo h4 {
+  margin-bottom: 20px;
+}
+#auctioninfo {
+  padding-bottom: 20px;
+}
+div h4 {
+  display: inline-block;
+  width: 200px;
+  max-height: 18px;
+  font-size: 18px;
+  font-family: "NEXON Lv1 Gothic OTF";
+  background-color: white;
+  text-align: center;
+}
+#input {
+  position: absolute;
+  top: 50px;
+  right: 130px;
+  font-family: "NEXON Lv1 Gothic OTF";
+  font-size: 12px;
+  color: rgb(247, 96, 96);
+}
+.selected {
+  margin: 20px auto;
+}
+.v-text-field,
+.v-radio
+{
+  font-family: "NEXON Lv1 Gothic OTF";
+  font-size: 14px;
+  color: rgb(130, 128, 128);
+  text-align: center;
+}
+.v-btn {
+  font-family: "NEXON Lv1 Gothic OTF";
+  font-size: 14px;
+}
+
+#imagetitle,
+#discount span,
+#discount p {
+  font-family: "NEXON Lv1 Gothic OTF";
+  font-size: 16px;
+  color: rgb(130, 128, 128);
+  text-align: center;
+}
+#caution {
+  font-family: "NEXON Lv1 Gothic OTF";
+  margin-bottom: 0px;
+  font-size: 10px;
+  color: rgb(247, 96, 96);
+  text-align: right;
+}
+#radio .rdo {
+  width: 310px;
+  margin-right: 10px;
+}
+#file {
+  position: relative;
+  width: 500px;
+}
+#uploadimg img {
+  display: block;
+  position: absolute;
+  top: 10px;
+  left: 27%;
+}
+#uploadbtn {
+  display: block;
+  position: absolute;
+  top: 80%;
+  left: 27%;
+}
+#uploadbtn .v-btn {
+  height: 18px;
+}
+
+#name {
+  width: 500px;
+  margin-left: 120px;
+  margin-right: 130px;
+}
+#price,
+#date {
+  width: 250px;
+  margin-left: 120px;
+  margin-top: 20px;
+}
+#discount {
+  width: 400px;
+  margin-left: 120px;
+}
+#discount div {
+  margin-bottom: 15px;
+}
+#calendar {
+  width: 180px;
+}
+#submit {
+  text-align: center;
+  margin-bottom: 20px;
+}
+#submit .v-btn {
+  margin-left: 5px;
+  margin-right: 5px;
+}
+.kg,
+.stock,
+.unit {
+  width: 170px;
+}
+.kg,
+.unit {
+  margin-left: 10px;
+}
+.stock {
+  margin-left: 150px;
+}

@@ -4,7 +4,7 @@
       <div id="box" class="" v-if="item.product.status == 0">
         <img id="label" src="@/assets/label.png" alt="label" />
         <div id="dday">
-          <p id="remain">유통 임박</p>
+          <p id="remain">최대 할인</p>
           <p id="day">D-{{ item.dday }}</p>
         </div>
         <v-img
@@ -18,8 +18,8 @@
       <div id="box" v-if="item.product.status == 1">
         <img id="label" src="@/assets/label.png" alt="label" />
         <div id="dday">
-          <p id="remain">판매 대기</p>
-          <p id="day">D-{{ item.dday }}</p>
+          <p id="remain">최대 할인</p>
+          <p id="day">{{ maxrate }}%</p>
         </div>
         <v-img
           id="img"
@@ -58,14 +58,16 @@
       <p id="title">{{ item.product.name }}</p>
       <div id="info">
         <p id="date">마감일 : {{ item.product.expirationDate }}</p>
-        <p id="stock">수량 : {{ item.product.stock }}box</p>
-        <p id="unit">무게 : {{ item.product.stock }}kg</p>
+        <p id="stock">수량 : {{ item.product.stock }}개</p>
         <p id="max">{{ item.product.startPrice }}원</p>
         <p id="cur">
-          <span id="rate" v-if="item.discountRate != 0"
+          <span id="rate" v-if="item.product.status == 0"
             >{{ item.discountRate | fixed }}%</span
           >
-          {{ item.curPrice }}원/box
+          <span id="notrate" v-if="item.product.status == 1">판매 대기</span>
+          <span id="notrate" v-if="item.product.status == 2">품절</span>
+          <span id="notrate" v-if="item.product.status == 3">마감</span>
+          {{ item.curPrice }}원/개
         </p>
         <p id="detail">상세 보기</p>
       </div>
@@ -77,7 +79,6 @@
 import moment from "moment";
 import "moment/locale/ko";
 export default {
-  //0:판매중 , 1: 판매대기, 2:품절, 3:경매마감
   data: function () {
     return {};
   },
@@ -113,7 +114,14 @@ export default {
       }
     },
   },
+  computed: {
+    maxrate() {
+      var start = Number(this.item.product.startPrice);
+      var end = Number(this.item.product.minPrice);
+      return Math.floor(((start - end) / start) * 100);
+    },
+  },
 };
 </script>
 
-<style src="@/assets/css/ListCard.css" scoped></style>
+<style src="@/assets/css/ListCard.css"></style>

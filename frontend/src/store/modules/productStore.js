@@ -30,7 +30,6 @@ const productStore = {
   },
   actions: {
     upload(context, product) {
-      context.commit("setdefault");
       axios({
         method: "post",
         url: `/product`,
