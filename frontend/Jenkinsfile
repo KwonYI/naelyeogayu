@@ -19,6 +19,7 @@ pipeline {
                         dir("frontend"){
                             sh 'npm -v'
                             sh 'npm install'
+                            sh 'pwd'
                             sh 'npm run build'
                         }
                         currentBuild.result = "SUCCESS"
