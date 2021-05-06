@@ -15,6 +15,7 @@ import com.a103.apiServer.product.ProductDao;
 
 @Component
 public class ProductScheduler {
+	
 private static final Logger logger = LoggerFactory.getLogger(ProductController.class);
 	
 	@Autowired
@@ -22,7 +23,7 @@ private static final Logger logger = LoggerFactory.getLogger(ProductController.c
 	//매일 정각 마다 판매 상태 변경
 	@Scheduled(cron = "0 0 0 * * *")
 	public void StartSell() {
-		logger.info("change start_date");
+		logger.info("start sell");
 
 		try {
 			productDao.updateStatusByDate(0, 1, LocalDate.now());			
@@ -34,7 +35,7 @@ private static final Logger logger = LoggerFactory.getLogger(ProductController.c
 	
 	@Scheduled(cron = "0 0 0 * * *")
 	public void EndSell() {
-		logger.info("change end_date");
+		logger.info("end sell");
 
 		try {
 			productDao.updateStatusUnderDate(3, 0, LocalDate.now());			
