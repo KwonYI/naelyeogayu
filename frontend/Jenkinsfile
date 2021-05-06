@@ -19,7 +19,6 @@ pipeline {
                         dir("frontend"){
                             sh 'npm -v'
                             sh 'npm install'
-                            sh 'npm install -g yarn'
                             sh 'yarn --version'
                             sh 'yarn run build'
                         }
