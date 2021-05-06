@@ -9,6 +9,7 @@
         <v-text-field
           v-model="password"
           ref="password"
+          :rules="passwordRule"
           label="비밀번호"
           required
           :append-icon="showText ? 'mdi-eye' : 'mdi-eye-off'"
@@ -38,8 +39,7 @@ export default {
       showText: false,
       passwordRule: [
         (value) =>
-          /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$/.test(value) ||
-          "소문자(a-z)와 대문자(A-Z), 숫자(0-9)를 모두 포함하고, 8자 이상이어야 합니다.",
+          /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$/.test(value) || "",
       ],
     };
   },
@@ -55,7 +55,7 @@ export default {
         method: "DELETE",
         headers: { "x-access-token": localStorage.getItem("token") },
         data: {
-          email: this.user.email,
+          id: this.$store.getters["userStore/id"],
           password: this.password,
         },
       })
@@ -82,13 +82,9 @@ export default {
 </script>
 
 <style>
-.deleteUser {
-  margin-left: 25%;
-}
 .deleteUserTitle {
   font-weight: bold;
   font-size: 25px;
-  padding-top: 9px;
   border-bottom: solid 2px green;
   clear: both;
 }

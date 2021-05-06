@@ -9,7 +9,7 @@ const userStore = {
   state: {
     id: "",
     email: "",
-    name: "",
+    nickname: "",
     address: "",
     phone: "",
     point: 0,
@@ -19,7 +19,7 @@ const userStore = {
     SET_USER(state, user) {
       state.id = user.id;
       state.email = user.email;
-      state.name = user.name;
+      state.nickname = user.nickname;
       state.address = user.address;
       state.phone = user.phone;
       state.point = user.point;
@@ -28,7 +28,7 @@ const userStore = {
     FREE_USER(state) {
       state.id = "";
       state.email = "";
-      state.name = "";
+      state.nickname = "";
       state.address = "";
       state.phone = "";
       state.point = 0;
@@ -42,8 +42,8 @@ const userStore = {
     email: (state) => {
       return state.email;
     },
-    name: (state) => {
-      return state.name;
+    nickname: (state) => {
+      return state.nickname;
     },
     address: (state) => {
       return state.address;
@@ -61,7 +61,7 @@ const userStore = {
       const user = {
         id: state.id,
         email: state.email,
-        name: state.name,
+        nickname: state.nickname,
         address: state.address,
         phone: state.phone,
         point: state.point,

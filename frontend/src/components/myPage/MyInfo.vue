@@ -169,7 +169,6 @@ export default {
         this.$refs.phone.focus();
         return;
       }
-      console.log(localStorage.getItem("token"));
       this.$axios({
         url: "/member/modify",
         method: "PUT",
@@ -208,13 +207,9 @@ export default {
 </script>
 
 <style>
-.myInfo {
-  margin-left: 25%;
-}
 .myInfoTitle {
   font-weight: bold;
   font-size: 25px;
-  padding-top: 9px;
   border-bottom: solid 2px green;
 }
 .myInfoTable {

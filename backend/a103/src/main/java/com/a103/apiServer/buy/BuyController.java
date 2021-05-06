@@ -81,7 +81,7 @@ public class BuyController {
 			if (productStatus == 1 && productStock >= buyProductCount && memberPoint >= usePoint) {
 
 				if (productStock == buyProductCount) {
-					product.setStatus(0);
+					product.setStatus(2);
 				}
 
 				member.setPoint(memberPoint - usePoint);
