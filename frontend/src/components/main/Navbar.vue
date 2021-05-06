@@ -107,6 +107,7 @@ export default {
     logout: function () {
       localStorage.removeItem("token");
       this.$store.dispatch("userStore/logout");
+      window.location.reload();
     },
   },
 };
