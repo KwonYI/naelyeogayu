@@ -27,12 +27,6 @@
     width: 430px;
     display: inline-block;
   }
-  #endCard{
-    position: relative;
-    border: solid 1px rgb(179, 178, 178);
-    border-radius: 20px;
-    margin: 30px 60px;
-  }
   #card{
     position: relative;
     border: solid 1px rgb(179, 178, 178);
@@ -51,6 +45,14 @@
   #img:hover {
     transform: scale(1.15);
     transition: 0.3s;
+  }
+  #grey{
+      /* IE */
+  filter: progid:DXImageTransform.Microsoft.BasicImage(grayscale=1);
+  /* Chrome, Safari */
+  -webkit-filter: grayscale(1);
+  /* Firefox */
+  filter: grayscale(1);
   }
   .v-img {
     border-radius: 20px 20px 0 0;
@@ -145,7 +147,4 @@
     color: white;
     margin-top:10px;
     width:66px;
-  }
-  #grey{
-    filter:brightness(60%);
   }
