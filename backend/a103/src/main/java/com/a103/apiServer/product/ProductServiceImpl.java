@@ -30,12 +30,12 @@ public class ProductServiceImpl implements ProductService {
 		int timeDiff = (int) (ChronoUnit.HOURS.between(product.getStartDate().atStartOfDay(), now) / PRICE_UPDATE_TIME);
 		int dDay = (int) ChronoUnit.DAYS.between(now.toLocalDate(), product.getEndDate());
 
-		if (timeDiff < 0) {
+		if (product.getStatus() != 0 || timeDiff < 0) {
 			return new ProductDetail(product, product.getStartPrice(), 0, dDay);
 		}
 
 		int discountPrice = (int) (Math.round(discountPricePerHour * timeDiff));
-		long watchCnt = watchLogDao.countByProductId(product.getId());
+		long watchCnt = watchLogDao.countWatchLogIdByProductId(product.getId());
 
 		if (watchCnt != 0) {
 			long memberCnt = memberDao.count();
