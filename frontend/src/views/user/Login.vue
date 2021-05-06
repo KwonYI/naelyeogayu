@@ -107,7 +107,7 @@ export default {
         .then((response) => {
           if (response.data.success === "success") {
             localStorage.setItem("token", response.data["x-access-token"]);
-            localStorage.setItem("isSocial", false);
+            localStorage.setItem("isSocial", JSON.stringify(false));
             this.$store.dispatch(
               "userStore/login",
               response.data["x-access-token"]
@@ -149,7 +149,7 @@ export default {
             .then((response) => {
               if (response.data.success === "success") {
                 localStorage.setItem("token", response.data["x-access-token"]);
-                localStorage.setItem("isSocial", true);
+                localStorage.setItem("isSocial", JSON.stringify(true));
                 this.$store.dispatch(
                   "userStore/login",
                   response.data["x-access-token"]
@@ -198,7 +198,7 @@ export default {
                     "token",
                     response.data["x-access-token"]
                   );
-                  localStorage.setItem("isSocial", true);
+                  localStorage.setItem("isSocial", JSON.stringify(true));
                   this.$store.dispatch(
                     "userStore/login",
                     response.data["x-access-token"]
