@@ -2,7 +2,7 @@ FROM node:12.16.1-alpine as builder
 WORKDIR /frontend
 ADD . .
 RUN npm install
-RUN npm run build
+RUN yarn run build
 
 FROM nginx:stable-alpine as production
 COPY ./nginx/nginx.conf /etc/nginx/conf.d/default.conf
