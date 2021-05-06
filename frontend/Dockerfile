@@ -1,7 +1,7 @@
 FROM node:12.16.1-alpine as builder
 WORKDIR /frontend
 ADD . .
-RUN npm install
+RUN yarn install
 RUN yarn run build
 
 FROM nginx:stable-alpine as production
