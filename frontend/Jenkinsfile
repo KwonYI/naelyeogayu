@@ -19,8 +19,7 @@ pipeline {
                         dir("frontend"){
                             sh 'npm -v'
                             sh 'npm install'
-                            sh 'yarn --version'
-                            sh 'yarn run build'
+                            sh 'npm run build'
                         }
                         currentBuild.result = "SUCCESS"
                     } catch(e) {
