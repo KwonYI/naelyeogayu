@@ -20,7 +20,7 @@ public interface ReserveDao extends JpaRepository<Reserve, Long> {
 	Reserve findReserveByMemberIdAndProductId(long memberId, long productId);
 	List<Reserve> findListReserveByProductIdAndPriceLessThanEqualAndDueDateGreaterThanEqualOrderByPriceDescIdAsc(long productId, int price, LocalDate date);
 	
-	@Query(value = "SELECT * FROM resreve WHERE status = :status price DESC, id ASC", nativeQuery = true)
+	@Query(value = "SELECT * FROM reserve WHERE status = :status ORDER BY price DESC, id ASC", nativeQuery = true)
 	List<Reserve> findListReserveByStatusOrderBypriceDescIdAsc(@Param("status") int status);
 	
 	@Transactional

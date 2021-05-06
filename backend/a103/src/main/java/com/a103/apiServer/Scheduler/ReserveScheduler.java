@@ -11,6 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import com.a103.apiServer.buy.BuyDao;
+import com.a103.apiServer.buy.BuyService;
+import com.a103.apiServer.model.Buy;
 import com.a103.apiServer.model.Product;
 import com.a103.apiServer.model.ProductDetail;
 import com.a103.apiServer.model.Reserve;
@@ -29,9 +32,15 @@ public class ReserveScheduler {
 	
 	@Autowired
 	ProductDao productDao;
-		
+	
+	@Autowired
+	BuyDao buyDao;
+	
 	@Autowired
 	ProductService productService;
+	
+	@Autowired
+	BuyService BuyService;
 	
 	@Scheduled(cron = "0 0 0 * * *")
 	public void EndReserve() {
@@ -46,23 +55,31 @@ public class ReserveScheduler {
 
 	}
 	
-	@Scheduled(cron = "0 0 0 * * *")
+	@Scheduled(cron = "0 10 0/4 * * *")
 	public void executeReserve() {
 		logger.info("execute expire");
 		//예약중인 목록 검색
 		List<Reserve> waitingList= reserveDao.findListReserveByStatusOrderBypriceDescIdAsc(0);
+
 		for(Reserve waiting : waitingList) {
 			//상품 정보 가져오기
-			Product product = productDao.findProductById(waiting.getProduct().getId());
+			long productId = waiting.getProduct().getId();
+			Product product = productDao.findProductById(productId);
 			ProductDetail detail = productService.getProductDetail(product, LocalDateTime.now());
-			
+			logger.info("product : " + product + "waiting : " + waiting);
+
 			//예약 프로세스
 			if(detail.getCurPrice() <= waiting.getPrice()) {
 				
 				//재고 확인
 				if(detail.getProduct().getStock() >= waiting.getCount()) {
 					//구매
-					
+					Buy buy = new Buy();
+					buy.setCount(waiting.getCount());
+					buy.setMemberId(waiting.getMemberId());
+					buy.setPrice(detail.getCurPrice());
+					buy.setBuyDate(LocalDateTime.now());
+					reserveDao.updateStatus(BuyService.BuyProduct(productId, buy), waiting.getId());
 				}
 				else {
 					//재고 부족 구매 실패
@@ -70,12 +87,9 @@ public class ReserveScheduler {
 				}
 				
 			}
-			else {
-				//잔액 부족 구매 실패
-				reserveDao.updateStatus(4, waiting.getId());
-			}
 			
 		}
 
 	}
+	
 }
