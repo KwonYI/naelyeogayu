@@ -11,7 +11,7 @@
       <hr />
       <Expirecard
         v-for="(item, index) in list"
-        v-bind:key="item.id"
+        v-bind:key="index"
         v-bind:item="list[index]"
       />
       <infinite-loading
