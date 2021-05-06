@@ -53,10 +53,6 @@ export default {
       return true;
     },
   },
-  created() {
-    console.log(this.item);
-    console.log(this.isFinish);
-  },
 };
 </script>
 
