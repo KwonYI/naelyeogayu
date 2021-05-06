@@ -5,7 +5,7 @@
         <div id="box">
           <img id="label" src="@/assets/label.png" alt="label" />
           <div id="dday">
-            <p id="remain">유통 임박</p>
+            <p id="remain">마감 임박</p>
             <p id="day">D-{{ item.dday }}</p>
           </div>
           <v-img
@@ -20,12 +20,13 @@
           <p id="title">{{ item.product.name }}</p>
         </div>
         <div id="info">
-          <p id="date">유통기한 : {{ item.product.expirationDate }}</p>
-          <p id="stock">수량 : {{ item.product.stock }}개</p>
+          <p id="date">마감일 : {{ item.product.endDate }}</p>
+          <p id="stock">수량 : {{ item.product.stock }}box</p>
+          <p id="unit">무게 : {{ item.product.unit }}kg/box</p>
           <p id="max">{{ item.product.startPrice }}원</p>
           <p id="cur">
             <span id="rate">{{ item.discountRate | fixed }}%</span>
-            {{ item.curPrice }}원/개
+            {{ item.curPrice }}원/box
           </p>
           <p id="detail">상세 보기</p>
         </div>
@@ -51,12 +52,13 @@
           <p id="title">{{ item.product.name }}</p>
         </div>
         <div id="info">
-          <p id="date">유통기한 : {{ item.product.expirationDate }}</p>
-          <p id="stock">수량 : {{ item.product.stock }}개</p>
+          <p id="date">마감일 : {{ item.product.endDate }}</p>
+          <p id="stock">수량 : {{ item.product.stock }}box</p>
+          <p id="unit">무게 : {{ item.product.unit }}kg/box</p>
           <p id="max">{{ item.product.startPrice }}원</p>
           <p id="cur">
             <span id="rate">{{ item.discountRate | fixed }}%</span>
-            {{ item.curPrice }}원/개
+            {{ item.curPrice }}원/box
           </p>
           <p id="detail">상세 보기</p>
         </div>
@@ -82,12 +84,13 @@
           <p id="title">{{ item.product.name }}</p>
         </div>
         <div id="info">
-          <p id="date">유통기한 : {{ item.product.expirationDate }}</p>
-          <p id="stock">수량 : {{ item.product.stock }}개</p>
+          <p id="date">마감일 : {{ item.product.endDate }}</p>
+          <p id="stock">수량 : {{ item.product.stock }}box</p>
+          <p id="unit">무게 : {{ item.product.unit }}kg/box</p>
           <p id="max">{{ item.product.startPrice }}원</p>
           <p id="cur">
             <span id="rate">{{ item.discountRate | fixed }}%</span>
-            {{ item.curPrice }}원/개
+            {{ item.curPrice }}원/box
           </p>
           <p id="detail">상세 보기</p>
         </div>
@@ -113,12 +116,13 @@
           <p id="title">{{ item.product.name }}</p>
         </div>
         <div id="info">
-          <p id="date">유통기한 : {{ item.product.expirationDate }}</p>
-          <p id="stock">수량 : {{ item.product.stock }}개</p>
+          <p id="date">마감일 : {{ item.product.endDate }}</p>
+          <p id="stock">수량 : {{ item.product.stock }}box</p>
+          <p id="unit">무게 : {{ item.product.unit }}kg/box</p>
           <p id="max">{{ item.product.startPrice }}원</p>
           <p id="cur">
             <span id="rate">{{ item.discountRate | fixed }}%</span>
-            {{ item.curPrice }}원/개
+            {{ item.curPrice }}원/box
           </p>
           <p id="detail">상세 보기</p>
         </div>
