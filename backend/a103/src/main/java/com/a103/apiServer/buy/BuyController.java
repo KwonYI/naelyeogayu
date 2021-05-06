@@ -33,7 +33,7 @@ public class BuyController {
 	ProductDao productDao;
 
 	@Autowired
-	MemberDao memberDao;
+	BuyService buyService;
 
 	private static final Logger logger = LoggerFactory.getLogger(BuyController.class);
 
@@ -69,27 +69,8 @@ public class BuyController {
 		Map result = new HashMap<>();
 
 		try {
-			Product product = productDao.findProductById(productId);
-			Member member = memberDao.findMemberById(buy.getMemberId());
-			int buyProductCount = buy.getCount();
-			int buyProductprice = buy.getPrice();
-			int usePoint = buyProductCount * buyProductprice;
-			int productStock = product.getStock();
-			int productStatus = product.getStatus();
-			int memberPoint = member.getPoint();
-
-			if (productStatus == 1 && productStock >= buyProductCount && memberPoint >= usePoint) {
-
-				if (productStock == buyProductCount) {
-					product.setStatus(2);
-				}
-
-				member.setPoint(memberPoint - usePoint);
-				memberDao.save(member);
-				product.setStock(productStock - buyProductCount);
-				productDao.save(product);
-				buy.setProduct(product);
-				buyDao.save(buy);
+			
+			if (buyService.BuyProduct(productId, buy) == 1) {
 				result.put("success", "success");
 				entity = new ResponseEntity<>(result, HttpStatus.OK);
 			} else {

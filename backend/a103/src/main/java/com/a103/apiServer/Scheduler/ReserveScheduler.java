@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import com.a103.apiServer.buy.BuyDao;
 import com.a103.apiServer.model.Product;
 import com.a103.apiServer.model.ProductDetail;
 import com.a103.apiServer.model.Reserve;
@@ -30,10 +29,7 @@ public class ReserveScheduler {
 	
 	@Autowired
 	ProductDao productDao;
-	
-	@Autowired
-	BuyDao buyDao;
-	
+		
 	@Autowired
 	ProductService productService;
 	
