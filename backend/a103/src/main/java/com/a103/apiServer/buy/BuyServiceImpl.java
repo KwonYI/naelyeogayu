@@ -51,9 +51,9 @@ public class BuyServiceImpl implements BuyService{
 			return 3;
 		}else if(memberPoint < usePoint) {
 			return 4;
-		}else {
-			return 5;
 		}
+		
+		return 5;
 
 	}
 
