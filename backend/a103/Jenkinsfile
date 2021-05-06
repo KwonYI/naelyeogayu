@@ -48,7 +48,6 @@ pipeline {
             steps {
                 sh 'docker ps -f name=backend-server-container -q | xargs --no-run-if-empty docker container stop'
                 sh 'docker container ls -a -fname=backend-server-container -q | xargs -r docker container rm'
-	            sh 'docker rmi $(docker images -f "dangling=true" -q)'
 				sh 'docker run -d --name backend-server-container -p 9000:9000 backend-server-image:latest'
             }
         }
