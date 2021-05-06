@@ -69,12 +69,24 @@ public class BuyController {
 		Map result = new HashMap<>();
 
 		try {
-			
-			if (buyService.BuyProduct(productId, buy) == 1) {
+			int resultType = buyService.BuyProduct(productId, buy);
+			if (resultType == 1) {
 				result.put("success", "success");
 				entity = new ResponseEntity<>(result, HttpStatus.OK);
 			} else {
 				result.put("success", "fail");
+				
+				if(resultType == 3) {
+					result.put("message", "재고가 부족합니다.");
+					result.put("resultType", 3);
+				}else if(resultType == 4) {
+					result.put("message", "잔액이 부족합니다.");
+					result.put("resultType", 4);
+				}else {
+					result.put("message", "상품 구매 중 오류가 발생했습니다.");
+					result.put("resultType", 5);
+				}
+				
 				entity = new ResponseEntity<>(result, HttpStatus.OK);
 			}
 
