@@ -11,7 +11,7 @@
       <hr />
       <Expirecard
         v-for="(item, index) in list"
-        v-bind:key="item.id"
+        v-bind:key="index"
         v-bind:item="list[index]"
       />
       <infinite-loading
@@ -54,7 +54,7 @@ export default {
           if (this.getSize > this.limit) {
             let data = res.data.data;
             for (let key in data) {
-              this.list.push(data[key].product);
+              this.list.push(data[key]);
             }
             this.limit += 6;
             $state.loaded();
