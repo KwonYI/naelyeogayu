@@ -33,7 +33,7 @@ public class BuyController {
 	ProductDao productDao;
 
 	@Autowired
-	MemberDao memberDao;
+	BuyService buyService;
 
 	private static final Logger logger = LoggerFactory.getLogger(BuyController.class);
 
@@ -69,31 +69,24 @@ public class BuyController {
 		Map result = new HashMap<>();
 
 		try {
-			Product product = productDao.findProductById(productId);
-			Member member = memberDao.findMemberById(buy.getMemberId());
-			int buyProductCount = buy.getCount();
-			int buyProductprice = buy.getPrice();
-			int usePoint = buyProductCount * buyProductprice;
-			int productStock = product.getStock();
-			int productStatus = product.getStatus();
-			int memberPoint = member.getPoint();
-
-			if (productStatus == 1 && productStock >= buyProductCount && memberPoint >= usePoint) {
-
-				if (productStock == buyProductCount) {
-					product.setStatus(2);
-				}
-
-				member.setPoint(memberPoint - usePoint);
-				memberDao.save(member);
-				product.setStock(productStock - buyProductCount);
-				productDao.save(product);
-				buy.setProduct(product);
-				buyDao.save(buy);
+			int resultType = buyService.BuyProduct(productId, buy);
+			if (resultType == 1) {
 				result.put("success", "success");
 				entity = new ResponseEntity<>(result, HttpStatus.OK);
 			} else {
 				result.put("success", "fail");
+				
+				if(resultType == 3) {
+					result.put("message", "재고가 부족합니다.");
+					result.put("resultType", 3);
+				}else if(resultType == 4) {
+					result.put("message", "잔액이 부족합니다.");
+					result.put("resultType", 4);
+				}else {
+					result.put("message", "상품 구매 중 오류가 발생했습니다.");
+					result.put("resultType", 5);
+				}
+				
 				entity = new ResponseEntity<>(result, HttpStatus.OK);
 			}
 
