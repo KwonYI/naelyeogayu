@@ -47,16 +47,13 @@ public class BuyServiceImpl implements BuyService{
 			buy.setProduct(product);
 			buyDao.save(buy);
 			return 1;
-		} 
-		else if(productStock < buyProductCount){
+		}else if(productStock < buyProductCount){
 			return 3;
-		}
-		else if(memberPoint < usePoint) {
+		}else if(memberPoint < usePoint) {
 			return 4;
 		}
-		else {
-			return 5;
-		}
+		
+		return 5;
 
 	}
 

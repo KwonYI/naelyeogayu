@@ -55,7 +55,7 @@ public class ReserveScheduler {
 
 	}
 	
-	@Scheduled(cron = "0 10 0/4 * * *")
+	@Scheduled(cron = "5 0 0/4 * * *")
 	public void executeReserve() {
 		logger.info("execute expire");
 		//예약중인 목록 검색
@@ -80,8 +80,7 @@ public class ReserveScheduler {
 					buy.setPrice(detail.getCurPrice());
 					buy.setBuyDate(LocalDateTime.now());
 					reserveDao.updateStatus(BuyService.BuyProduct(productId, buy), waiting.getId());
-				}
-				else {
+				}else {
 					//재고 부족 구매 실패
 					reserveDao.updateStatus(3, waiting.getId());
 				}
