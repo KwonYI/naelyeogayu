@@ -36,7 +36,7 @@ public class ProductController {
 	@Autowired
 	private ProductService productService;
 
-	private static final int CONTENT_CNT  = 6;
+	private static final int CONTENT_CNT = 6;
 	
 	private static final Logger logger = LoggerFactory.getLogger(ProductController.class);
 
@@ -117,7 +117,7 @@ public class ProductController {
 		LocalDateTime now = LocalDateTime.now();
 
 		try {
-			List<Product> productList = productDao.findListProductByCategory(1, limit, CONTENT_CNT );
+			List<Product> productList = productDao.findListProductByCategory(1, limit, CONTENT_CNT);
 
 			if (productList.size() != 0) {
 				List<ProductDetail> data = new ArrayList<>();
@@ -148,7 +148,7 @@ public class ProductController {
 		LocalDateTime now = LocalDateTime.now();
 
 		try {
-			List<Product> productList = productDao.findListProductByCategory(2, limit, CONTENT_CNT );
+			List<Product> productList = productDao.findListProductByCategory(2, limit, CONTENT_CNT);
 
 			if (productList.size() != 0) {
 				List<ProductDetail> data = new ArrayList<>();
@@ -179,7 +179,7 @@ public class ProductController {
 		LocalDateTime now = LocalDateTime.now();
 
 		try {
-			List<Product> productList = productDao.findListProductByCategory(3, limit, CONTENT_CNT );
+			List<Product> productList = productDao.findListProductByCategory(3, limit, CONTENT_CNT);
 
 			if (productList.size() != 0) {
 				List<ProductDetail> data = new ArrayList<>();
@@ -210,7 +210,7 @@ public class ProductController {
 		LocalDateTime now = LocalDateTime.now();
 
 		try {
-			List<Product> productList = productDao.findListProductByStartDate(LocalDate.now().plusDays(1), limit, CONTENT_CNT );
+			List<Product> productList = productDao.findListProductByStartDate(LocalDate.now().plusDays(1), limit, CONTENT_CNT);
 
 			if (productList.size() != 0) {
 				List<ProductDetail> data = new ArrayList<>();
@@ -292,9 +292,9 @@ public class ProductController {
 			List<Product> productList = new ArrayList<Product>();
 
 			if (option == 1) {
-				productList = productDao.findListProductByNameContaining("%" + word + "%", limit, CONTENT_CNT );
+				productList = productDao.findListProductByNameContaining("%" + word + "%", limit, CONTENT_CNT);
 			} else if (option == 2) {
-				productList = productDao.findListProductByDescriptContaining("%" + word + "%", limit, CONTENT_CNT );
+				productList = productDao.findListProductByDescriptContaining("%" + word + "%", limit, CONTENT_CNT);
 			}
 
 			if (productList.size() != 0) {
@@ -361,9 +361,9 @@ public class ProductController {
 			List<Product> productList = new ArrayList<Product>();
 
 			if (option == 1) {
-				productList = productDao.findListProductByCategoryOrderByEndDateAsc(category, limit, CONTENT_CNT );
+				productList = productDao.findListProductByCategoryOrderByEndDateAsc(category, limit, CONTENT_CNT);
 			} else if (option == 2) {
-				productList = productDao.findListProductByCategoryOrderByEndDateDesc(category, limit, CONTENT_CNT );
+				productList = productDao.findListProductByCategoryOrderByEndDateDesc(category, limit, CONTENT_CNT);
 			}
 
 			if (productList.size() != 0) {
@@ -397,7 +397,7 @@ public class ProductController {
 
 		try {
 			int sortType = option == 1 ? 1 : -1;
-			List<Product> productList = productDao.findListProductByCategory(category, limit, CONTENT_CNT );
+			List<Product> productList = productDao.findListProductByCategory(category, limit, CONTENT_CNT);
 
 			if (productList.size() != 0) {
 				List<ProductDetail> data = new ArrayList<>();
@@ -442,7 +442,7 @@ public class ProductController {
 
 		try {
 			int sortType = option == 1 ? 1 : -1;
-			List<Product> productList = productDao.findListProductByCategory(category, limit, CONTENT_CNT );
+			List<Product> productList = productDao.findListProductByCategory(category, limit, CONTENT_CNT);
 
 			if (productList.size() != 0) {
 				List<ProductDetail> data = new ArrayList<>();
@@ -484,7 +484,7 @@ public class ProductController {
 		LocalDateTime now = LocalDateTime.now();
 
 		try {
-			List<Product> productList = productDao.findListProductByCategoryOrderByWatchCount(category, limit, CONTENT_CNT );
+			List<Product> productList = productDao.findListProductByCategoryOrderByWatchCount(category, limit, CONTENT_CNT);
 
 			if (productList.size() != 0) {
 				List<ProductDetail> data = new ArrayList<>();
