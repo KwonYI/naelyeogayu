@@ -454,7 +454,7 @@ public class ProductController {
 						int first = Integer.compare(o1.getProduct().getStatus(), o2.getProduct().getStatus());
 
 						if (first == 0) {
-							return sortType * Float.compare(o1.getCurPrice(), o2.getCurPrice());
+							return sortType * Integer.compare(o1.getCurPrice(), o2.getCurPrice());
 						} else {
 							return first;
 						}
@@ -491,6 +491,80 @@ public class ProductController {
 				for (Product product : productList) {
 					data.add(productService.getProductDetail(product, now));
 				}
+				result.put("data", data);
+				result.put("success", "success");
+				entity = new ResponseEntity<>(result, HttpStatus.OK);
+			} else {
+				result.put("success", "fail");
+				entity = new ResponseEntity<>(result, HttpStatus.OK);
+			}
+
+		} catch (Exception e) {
+			logger.error("error", e);
+			result.put("success", "error");
+			entity = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+		}
+
+		return entity;
+	}
+	
+	@GetMapping(value = "/sort/discount/onsale/{category}")
+	public ResponseEntity sortOnsaleByDiscount(@PathVariable("category") int category) {
+		ResponseEntity entity = null;
+		Map result = new HashMap<>();
+		LocalDateTime now = LocalDateTime.now();
+
+		try {
+			List<Product> productList = productDao.findListProductByStatusAndCategory(0, category);
+
+			if (productList.size() != 0) {
+				List<ProductDetail> data = new ArrayList<>();
+				for (Product product : productList) {
+					data.add(productService.getProductDetail(product, now));
+				}
+				Collections.sort(data, new Comparator<ProductDetail>() {
+					public int compare(ProductDetail o1, ProductDetail o2) {
+						return Float.compare(o2.getDiscountRate(), o1.getDiscountRate());
+					}
+				});
+				data = data.subList(0, Math.min(data.size(), 10));
+				result.put("data", data);
+				result.put("success", "success");
+				entity = new ResponseEntity<>(result, HttpStatus.OK);
+			} else {
+				result.put("success", "fail");
+				entity = new ResponseEntity<>(result, HttpStatus.OK);
+			}
+
+		} catch (Exception e) {
+			logger.error("error", e);
+			result.put("success", "error");
+			entity = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+		}
+
+		return entity;
+	}
+
+	@GetMapping(value = "/sort/price/onsale/{category}")
+	public ResponseEntity sortOnsaleByPrice(@PathVariable("category") int category) {
+		ResponseEntity entity = null;
+		Map result = new HashMap<>();
+		LocalDateTime now = LocalDateTime.now();
+
+		try {
+			List<Product> productList = productDao.findListProductByStatusAndCategory(0, category);
+
+			if (productList.size() != 0) {
+				List<ProductDetail> data = new ArrayList<>();
+				for (Product product : productList) {
+					data.add(productService.getProductDetail(product, now));
+				}
+				Collections.sort(data, new Comparator<ProductDetail>() {
+					public int compare(ProductDetail o1, ProductDetail o2) {
+						return Integer.compare(o1.getCurPrice(), o2.getCurPrice());
+					}
+				});
+				data = data.subList(0, Math.min(data.size(), 10));
 				result.put("data", data);
 				result.put("success", "success");
 				entity = new ResponseEntity<>(result, HttpStatus.OK);
