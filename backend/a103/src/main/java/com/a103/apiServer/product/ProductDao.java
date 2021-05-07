@@ -46,6 +46,9 @@ public interface ProductDao extends JpaRepository<Product, Long> {
 	@Query(value = "SELECT P.* FROM product P LEFT JOIN watchlog W ON P.ID = W.PRODUCT_ID WHERE CATEGORY = :category GROUP BY P.ID ORDER BY STATUS, COUNT(P.ID) DESC LIMIT :limit, :CONTENT_CNT", nativeQuery = true)
 	List<Product> findListProductByCategoryOrderByWatchCount(@Param("category") int category, @Param("limit") int limit, @Param("CONTENT_CNT") int contentCnt);
 	
+	@Query(value = "SELECT * FROM product WHERE STATUS = 0 AND CATEGORY = :category LIMIT :limit, :CONTENT_CNT", nativeQuery = true)
+	List<Product> findListProductByCategoryAndStatus(@Param("category") int category, @Param("limit") int limit, @Param("CONTENT_CNT") int contentCnt);
+	
 	@Transactional
 	@Modifying
 	@Query(value="UPDATE product p SET p.status = :newStatus WHERE p.status = :oldStatus AND p.start_date = :startDate", nativeQuery = true)
