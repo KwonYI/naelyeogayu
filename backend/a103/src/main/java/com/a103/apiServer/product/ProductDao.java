@@ -21,6 +21,7 @@ public interface ProductDao extends JpaRepository<Product, Long> {
 	long countByCategoryAndStatus(int category, int status);
 	List<Product> findListProductBySellerId(int memberId);
 	List<Product> findListProudctByStatusAndStartDate(int status, LocalDate startDate);
+	List<Product> findListProductByStatusAndCategory(int status, int category);
 
 	@Query(value = "SELECT * FROM product WHERE CATEGORY = :category ORDER BY STATUS LIMIT :limit, :CONTENT_CNT", nativeQuery = true)
 	List<Product> findListProductByCategory(@Param("category") int category, @Param("limit") int limit, @Param("CONTENT_CNT") int contentCnt);
@@ -45,9 +46,6 @@ public interface ProductDao extends JpaRepository<Product, Long> {
 
 	@Query(value = "SELECT P.* FROM product P LEFT JOIN watchlog W ON P.ID = W.PRODUCT_ID WHERE CATEGORY = :category GROUP BY P.ID ORDER BY STATUS, COUNT(P.ID) DESC LIMIT :limit, :CONTENT_CNT", nativeQuery = true)
 	List<Product> findListProductByCategoryOrderByWatchCount(@Param("category") int category, @Param("limit") int limit, @Param("CONTENT_CNT") int contentCnt);
-	
-	@Query(value = "SELECT * FROM product WHERE STATUS = 0 AND CATEGORY = :category LIMIT :limit, :CONTENT_CNT", nativeQuery = true)
-	List<Product> findListProductByCategoryAndStatus(@Param("category") int category, @Param("limit") int limit, @Param("CONTENT_CNT") int contentCnt);
 	
 	@Transactional
 	@Modifying
