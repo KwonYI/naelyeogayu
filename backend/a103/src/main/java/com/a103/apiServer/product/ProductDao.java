@@ -21,6 +21,7 @@ public interface ProductDao extends JpaRepository<Product, Long> {
 	long countByCategoryAndStatus(int category, int status);
 	List<Product> findListProductBySellerId(int memberId);
 	List<Product> findListProudctByStatusAndStartDate(int status, LocalDate startDate);
+	List<Product> findListProductByStatusAndCategory(int status, int category);
 
 	@Query(value = "SELECT * FROM product WHERE CATEGORY = :category ORDER BY STATUS LIMIT :limit, :CONTENT_CNT", nativeQuery = true)
 	List<Product> findListProductByCategory(@Param("category") int category, @Param("limit") int limit, @Param("CONTENT_CNT") int contentCnt);
