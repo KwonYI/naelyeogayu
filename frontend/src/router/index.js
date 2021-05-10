@@ -10,6 +10,7 @@ import SocialJoin from "../views/user/SocialJoin.vue";
 import Expire from "../views/product/Expirelist.vue";
 import Ugly from "../views/product/Uglyfoodlist.vue";
 import Refurb from "../views/product/Refurblist.vue";
+import Detail from "../views/product/Detail.vue";
 
 Vue.use(VueRouter);
 
@@ -80,6 +81,11 @@ const routes = [
     path: "/refurb",
     name: "Refurb",
     component: Refurb,
+  },
+  {
+    path: "/detail",
+    name: "Detail",
+    component: Detail,
   },
 ];
 
