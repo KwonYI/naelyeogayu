@@ -11,7 +11,7 @@
 
 <script>
 import terms from "@/components/product/upload/Terms.vue";
-import forms from "@/components/product/upload/Uploadform.vue";
+import forms from "@/components/product/upload/UploadForm.vue";
 export default {
   components: {
     terms,

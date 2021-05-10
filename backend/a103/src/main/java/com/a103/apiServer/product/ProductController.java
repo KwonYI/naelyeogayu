@@ -2,7 +2,6 @@ package com.a103.apiServer.product;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -24,10 +23,8 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.a103.apiServer.member.MemberDao;
 import com.a103.apiServer.model.Product;
 import com.a103.apiServer.model.ProductDetail;
-import com.a103.apiServer.watchlog.WatchLogDao;
 
 @RestController
 @RequestMapping("/product")
@@ -37,13 +34,10 @@ public class ProductController {
 	ProductDao productDao;
 
 	@Autowired
-	WatchLogDao watchLogDao;
-
-	@Autowired
-	MemberDao memberDao;
+	private ProductService productService;
 
 	private static final int CONTENT_CNT = 6;
-
+	
 	private static final Logger logger = LoggerFactory.getLogger(ProductController.class);
 
 	@PostMapping
@@ -128,7 +122,7 @@ public class ProductController {
 			if (productList.size() != 0) {
 				List<ProductDetail> data = new ArrayList<>();
 				for (Product product : productList) {
-					data.add(getProductDetail(product, now));
+					data.add(productService.getProductDetail(product, now));
 				}
 				result.put("success", "success");
 				result.put("data", data);
@@ -159,7 +153,7 @@ public class ProductController {
 			if (productList.size() != 0) {
 				List<ProductDetail> data = new ArrayList<>();
 				for (Product product : productList) {
-					data.add(getProductDetail(product, now));
+					data.add(productService.getProductDetail(product, now));
 				}
 				result.put("success", "success");
 				result.put("data", data);
@@ -190,7 +184,7 @@ public class ProductController {
 			if (productList.size() != 0) {
 				List<ProductDetail> data = new ArrayList<>();
 				for (Product product : productList) {
-					data.add(getProductDetail(product, now));
+					data.add(productService.getProductDetail(product, now));
 				}
 				result.put("success", "success");
 				result.put("data", data);
@@ -221,7 +215,7 @@ public class ProductController {
 			if (productList.size() != 0) {
 				List<ProductDetail> data = new ArrayList<>();
 				for (Product product : productList) {
-					data.add(getProductDetail(product, now));
+					data.add(productService.getProductDetail(product, now));
 				}
 				result.put("success", "success");
 				result.put("data", data);
@@ -269,7 +263,7 @@ public class ProductController {
 			Product product = productDao.findProductById(productId);
 
 			if (product != null) {
-				ProductDetail data = getProductDetail(product, now);
+				ProductDetail data = productService.getProductDetail(product, now);
 				result.put("data", data);
 				result.put("success", "success");
 				entity = new ResponseEntity<>(result, HttpStatus.OK);
@@ -306,7 +300,7 @@ public class ProductController {
 			if (productList.size() != 0) {
 				List<ProductDetail> data = new ArrayList<>();
 				for (Product product : productList) {
-					data.add(getProductDetail(product, now));
+					data.add(productService.getProductDetail(product, now));
 				}
 				result.put("data", data);
 				result.put("success", "success");
@@ -337,7 +331,7 @@ public class ProductController {
 			if (productList.size() != 0) {
 				List<ProductDetail> data = new ArrayList<>();
 				for (Product product : productList) {
-					data.add(getProductDetail(product, now));
+					data.add(productService.getProductDetail(product, now));
 				}
 				result.put("data", data);
 				result.put("success", "success");
@@ -375,7 +369,7 @@ public class ProductController {
 			if (productList.size() != 0) {
 				List<ProductDetail> data = new ArrayList<>();
 				for (Product product : productList) {
-					data.add(getProductDetail(product, now));
+					data.add(productService.getProductDetail(product, now));
 				}
 				result.put("data", data);
 				result.put("success", "success");
@@ -408,7 +402,7 @@ public class ProductController {
 			if (productList.size() != 0) {
 				List<ProductDetail> data = new ArrayList<>();
 				for (Product product : productList) {
-					data.add(getProductDetail(product, now));
+					data.add(productService.getProductDetail(product, now));
 				}
 				Collections.sort(data, new Comparator<ProductDetail>() {
 					public int compare(ProductDetail o1, ProductDetail o2) {
@@ -453,14 +447,14 @@ public class ProductController {
 			if (productList.size() != 0) {
 				List<ProductDetail> data = new ArrayList<>();
 				for (Product product : productList) {
-					data.add(getProductDetail(product, now));
+					data.add(productService.getProductDetail(product, now));
 				}
 				Collections.sort(data, new Comparator<ProductDetail>() {
 					public int compare(ProductDetail o1, ProductDetail o2) {
 						int first = Integer.compare(o1.getProduct().getStatus(), o2.getProduct().getStatus());
 
 						if (first == 0) {
-							return sortType * Float.compare(o1.getCurPrice(), o2.getCurPrice());
+							return sortType * Integer.compare(o1.getCurPrice(), o2.getCurPrice());
 						} else {
 							return first;
 						}
@@ -495,7 +489,7 @@ public class ProductController {
 			if (productList.size() != 0) {
 				List<ProductDetail> data = new ArrayList<>();
 				for (Product product : productList) {
-					data.add(getProductDetail(product, now));
+					data.add(productService.getProductDetail(product, now));
 				}
 				result.put("data", data);
 				result.put("success", "success");
@@ -513,29 +507,79 @@ public class ProductController {
 
 		return entity;
 	}
+	
+	@GetMapping(value = "/sort/discount/onsale/{category}")
+	public ResponseEntity sortOnsaleByDiscount(@PathVariable("category") int category) {
+		ResponseEntity entity = null;
+		Map result = new HashMap<>();
+		LocalDateTime now = LocalDateTime.now();
 
-	public ProductDetail getProductDetail(Product product, LocalDateTime now) {
-		int priceDiff = product.getStartPrice() - product.getMinPrice();
-		int dayDiff = (int) (ChronoUnit.DAYS.between(now.toLocalDate(), product.getEndDate()));
-		float discountPricePerHour = (float) (priceDiff / (dayDiff * 24));
-		int timeDiff = (int) (ChronoUnit.HOURS.between(product.getStartDate().atStartOfDay(), now));
-		int dDay = (int) ChronoUnit.DAYS.between(now.toLocalDate(), product.getEndDate());
+		try {
+			List<Product> productList = productDao.findListProductByStatusAndCategory(0, category);
 
-		if (timeDiff < 0) {
-			return new ProductDetail(product, product.getStartPrice(), 0, dDay);
+			if (productList.size() != 0) {
+				List<ProductDetail> data = new ArrayList<>();
+				for (Product product : productList) {
+					data.add(productService.getProductDetail(product, now));
+				}
+				Collections.sort(data, new Comparator<ProductDetail>() {
+					public int compare(ProductDetail o1, ProductDetail o2) {
+						return Float.compare(o2.getDiscountRate(), o1.getDiscountRate());
+					}
+				});
+				data = data.subList(0, Math.min(data.size(), 10));
+				result.put("data", data);
+				result.put("success", "success");
+				entity = new ResponseEntity<>(result, HttpStatus.OK);
+			} else {
+				result.put("success", "fail");
+				entity = new ResponseEntity<>(result, HttpStatus.OK);
+			}
+
+		} catch (Exception e) {
+			logger.error("error", e);
+			result.put("success", "error");
+			entity = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
 		}
 
-		int discountPrice = (int) (Math.round(discountPricePerHour * timeDiff));
-		long watchCnt = watchLogDao.countByProductId(product.getId());
-
-		if (watchCnt != 0) {
-			long memberCnt = memberDao.count();
-			double watchRate = 1 - Math.round((double) watchCnt / memberCnt * 100) / 100.0;
-			discountPrice = (int) (discountPrice * watchRate);
-		}
-
-		int curPrice = product.getStartPrice() - discountPrice;
-		float discountRate = (float) discountPrice / product.getStartPrice() * 100;
-		return new ProductDetail(product, curPrice, discountRate, dDay);
+		return entity;
 	}
+
+	@GetMapping(value = "/sort/price/onsale/{category}")
+	public ResponseEntity sortOnsaleByPrice(@PathVariable("category") int category) {
+		ResponseEntity entity = null;
+		Map result = new HashMap<>();
+		LocalDateTime now = LocalDateTime.now();
+
+		try {
+			List<Product> productList = productDao.findListProductByStatusAndCategory(0, category);
+
+			if (productList.size() != 0) {
+				List<ProductDetail> data = new ArrayList<>();
+				for (Product product : productList) {
+					data.add(productService.getProductDetail(product, now));
+				}
+				Collections.sort(data, new Comparator<ProductDetail>() {
+					public int compare(ProductDetail o1, ProductDetail o2) {
+						return Integer.compare(o1.getCurPrice(), o2.getCurPrice());
+					}
+				});
+				data = data.subList(0, Math.min(data.size(), 10));
+				result.put("data", data);
+				result.put("success", "success");
+				entity = new ResponseEntity<>(result, HttpStatus.OK);
+			} else {
+				result.put("success", "fail");
+				entity = new ResponseEntity<>(result, HttpStatus.OK);
+			}
+
+		} catch (Exception e) {
+			logger.error("error", e);
+			result.put("success", "error");
+			entity = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+		}
+
+		return entity;
+	}
+
 }

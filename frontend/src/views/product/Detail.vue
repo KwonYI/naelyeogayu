@@ -7,18 +7,18 @@
         category
       }}</a>
     </div>
-    <div class="productDetailTop" v-if="item.length !== 0">
-      <DetailInfo :item="item" />
+    <div class="productDetailTop" v-if="this.getDetailInfo">
+      <DetailInfo :item="this.getDetailInfo" />
     </div>
-    <div class="productDetailBottom" v-if="item.length !== 0">
-      <DetailTap :item="item" />
+    <div class="productDetailBottom" v-if="this.getDetailInfo">
+      <DetailTap :item="this.getDetailInfo" />
     </div>
-  </div>
 </template>
 
 <script>
 import DetailInfo from "@/components/product/detail/DetailInfo.vue";
 import DetailTap from "@/components/product/detail/DetailTap.vue";
+import { mapGetters } from "vuex";
 
 export default {
   components: {
@@ -32,7 +32,13 @@ export default {
     };
   },
   created() {
-    this.getInfo();
+    this.getDetail();
+  },
+  computed: {
+    ...mapGetters({
+      getDetailInfo: "productStore/getDetailInfo",
+      //   getUserId: "userStore/getUserId"
+    }),
   },
   methods: {
     goMain() {
@@ -46,32 +52,11 @@ export default {
       }
       this.$router.push({ name: "Refurb" });
     },
-    async getInfo() {
-      await this.$axios({
-        url: "/product/detail/" + this.$route.params.item.product.id,
-        method: "GET",
-        headers: { "x-access-token": localStorage.getItem("token") },
-      })
-        .then((response) => {
-          if (response.data.success === "success") {
-            console.log(response.data.data);
-            this.item = response.data.data;
-            if (this.item.product.category == 1) {
-              this.category = "유통임박 상품";
-            } else if (this.item.product.category == 2) {
-              this.category = "못난이 농산물";
-            } else {
-              this.category = "리퍼브 상품";
-            }
-          } else {
-            alert("존재하지 않는 상품입니다.");
-            this.$router.push({ name: "HOME" });
-          }
-        })
-        .catch((error) => {
-          console.error(error);
-          alert("입력 정보를 다시 확인해주세요.");
-        });
+    getDetail() {
+      this.$store.dispatch(
+        "productStore/productDetail",
+        this.$route.params.productId
+      );
     },
   },
 };

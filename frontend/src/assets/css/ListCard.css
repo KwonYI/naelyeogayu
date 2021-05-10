@@ -17,7 +17,7 @@
   #rate,#soldout,#end {
     font-family: "NEXON Lv1 Gothic OTF Bold";
   }
-  #stock,
+  #stock,#unit,
   #max,
   #date,
   #watch {
@@ -26,12 +26,6 @@
   #cardview {
     width: 430px;
     display: inline-block;
-  }
-  #endCard{
-    position: relative;
-    border: solid 1px rgb(179, 178, 178);
-    border-radius: 20px;
-    margin: 30px 60px;
   }
   #card{
     position: relative;
@@ -51,6 +45,14 @@
   #img:hover {
     transform: scale(1.15);
     transition: 0.3s;
+  }
+  #grey{
+      /* IE */
+  filter: progid:DXImageTransform.Microsoft.BasicImage(grayscale=1);
+  /* Chrome, Safari */
+  -webkit-filter: grayscale(1);
+  /* Firefox */
+  filter: grayscale(1) brightness(65%);
   }
   .v-img {
     border-radius: 20px 20px 0 0;
@@ -109,6 +111,10 @@
   #rate {
     color: red;
   }
+  #notrate{
+    color:red;
+    font-size: 16px;
+  }
   #date {
     width: 180px;
     font-size: 15px;
@@ -146,6 +152,8 @@
     margin-top:10px;
     width:66px;
   }
-  #grey{
-    filter:brightness(60%);
+  #unit{
+    font-size: 15px;
+    bottom: 85px;
+    right: 20px;
   }

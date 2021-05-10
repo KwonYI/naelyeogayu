@@ -7,9 +7,9 @@ import MyPage from "../views/user/MyPage.vue";
 import About from "../views/About.vue";
 import Upload from "../views/product/Upload.vue";
 import SocialJoin from "../views/user/SocialJoin.vue";
-import Expire from "../views/product/Expirelist.vue";
-import Ugly from "../views/product/Uglyfoodlist.vue";
-import Refurb from "../views/product/Refurblist.vue";
+import Expire from "../views/product/ExpireList.vue";
+import Ugly from "../views/product/UglyFoodList.vue";
+import Refurb from "../views/product/RefurbList.vue";
 import Detail from "../views/product/Detail.vue";
 
 Vue.use(VueRouter);
@@ -83,7 +83,7 @@ const routes = [
     component: Refurb,
   },
   {
-    path: "/detail",
+    path: "/detail/:productId",
     name: "Detail",
     component: Detail,
   },

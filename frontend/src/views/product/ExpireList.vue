@@ -4,14 +4,15 @@
       <p id="question">
         식품에는
         <span class="text" style="color: rgb(250, 98, 98)">유통기한</span>과
-        <span class="text">소비기한</span>이 있다는 사실, 알고 계셨나요?
+        <span class="text" style="color: rgb(250, 98, 98)">소비기한</span>이
+        있다는 사실, 알고 계셨나요?
       </p>
-      <div id="explain1"></div>
+      <div id="expirephoto"></div>
       <p id="listtitle">상품 목록</p>
       <hr />
       <Expirecard
         v-for="(item, index) in list"
-        v-bind:key="item.id"
+        v-bind:key="index"
         v-bind:item="list[index]"
       />
       <infinite-loading
@@ -54,7 +55,7 @@ export default {
           if (this.getSize > this.limit) {
             let data = res.data.data;
             for (let key in data) {
-              this.list.push(data[key].product);
+              this.list.push(data[key]);
             }
             this.limit += 6;
             $state.loaded();
