@@ -100,7 +100,7 @@ public class BuyController {
 	}
 	
 	@GetMapping(value = "verify/{member_id}/{product_id}")
-	public ResponseEntity VerifyBuy(@PathVariable("member_id") int memberId, @PathVariable("product_id") int productId) {
+	public ResponseEntity BuyVerify(@PathVariable("member_id") int memberId, @PathVariable("product_id") int productId) {
 		ResponseEntity entity = null;
 		Map result = new HashMap<>();
 
