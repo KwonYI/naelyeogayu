@@ -68,7 +68,7 @@ public class EchoHandler extends TextWebSocketHandler {
 
 	private String getEmail(WebSocketSession session) {
 		Map<String, Object> httpSession = session.getAttributes();
-		Member loginUser = (Member) httpSession.get("loginUser");// 왜 memDTO일까
+		Member loginUser = (Member) httpSession.get("loginUser");
 
 		if (loginUser == null) {
 			return session.getId();
