@@ -1,14 +1,14 @@
 <template>
   <div>
     <div class="reserveCardView">
-      <div class="reserveCard">
+      <div class="reserveCard" @click="goDetail">
         <div class="reserveBox">
           <div class="reserveDday">
             <p class="reserveRemain">{{ category }}</p>
             <p class="reserveDay">D-10</p>
           </div>
           <v-img
-            class="reserveImg"
+            :class="[isFinish ? 'reserveImgGrayScale' : 'reserveImg']"
             :src="item.product.imageUrl"
             height="270px"
             max-height="270px"
@@ -39,7 +39,7 @@ export default {
     item: Object,
   },
   computed: {
-    category: function () {
+    category() {
       if (this.item.product.category == 1) {
         return "유통임박 상품";
       } else if (this.item.product.category == 2) {
@@ -47,11 +47,16 @@ export default {
       }
       return "리퍼브 상품";
     },
-    isFinish: function () {
+    isFinish() {
       if (this.item.product.status == 0) {
         return false;
       }
       return true;
+    },
+  },
+  methods: {
+    goDetail() {
+      this.$router.push({ name: "Detail", params: { item: this.item } });
     },
   },
 };
@@ -105,6 +110,10 @@ export default {
   filter: grayscale(1);
 }
 .reserveImg:hover {
+  transform: scale(1.15);
+  transition: 0.3s;
+}
+.reserveImgGrayScale:hover {
   transform: scale(1.15);
   transition: 0.3s;
 }
