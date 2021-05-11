@@ -1,6 +1,8 @@
 package com.a103.apiServer.reserve;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,8 +22,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.a103.apiServer.model.Product;
+import com.a103.apiServer.model.ProductDetail;
 import com.a103.apiServer.model.Reserve;
 import com.a103.apiServer.product.ProductDao;
+import com.a103.apiServer.product.ProductService;
 
 @RestController
 @RequestMapping("/reserve")
@@ -32,20 +36,32 @@ public class ReserveController {
 
 	@Autowired
 	ProductDao productDao;
+	
+	@Autowired
+	private ProductService productService;
 
 	private static final Logger logger = LoggerFactory.getLogger(ReserveController.class);
 
-	@GetMapping(value = "list/{member_id}")
+	@GetMapping(value = "/list/{member_id}")
 	public ResponseEntity getReserveList(@PathVariable("member_id") int memberId) {
 		ResponseEntity entity = null;
 		Map result = new HashMap<>();
+		LocalDateTime now = LocalDateTime.now();
 
 		try {
 			List<Reserve> reserveList = reserveDao.findListReserveByMemberId(memberId);
 			
 			if (reserveList.size() != 0) {
+				List<Map> data = new ArrayList<>();
+				for (Reserve reserve : reserveList) {
+					Map info = new HashMap<>();
+					ProductDetail product = productService.getProductDetail(reserve.getProduct(), now);
+					info.put("reserve", reserve);
+					info.put("product", product);
+					data.add(info);
+				}
 				result.put("success", "success");
-				result.put("data", reserveList);
+				result.put("data", data);
 				entity = new ResponseEntity<>(result, HttpStatus.OK);
 			} else {
 				result.put("success", "fail");
@@ -111,7 +127,7 @@ public class ReserveController {
 		return entity;
 	}
 
-	@GetMapping(value = "check/{product_id}/{price}")
+	@GetMapping(value = "/check/{product_id}/{price}")
 	public ResponseEntity checkReserve(@PathVariable(value = "product_id") long productId,
 			@PathVariable(value = "price") int price) {
 		ResponseEntity entity = null;
