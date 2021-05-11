@@ -3,7 +3,7 @@
     <div class="productDetailHeader">
       <a @click="goMain" style="color: black; text-decoration: none">홈</a>
       <v-icon>mdi-chevron-right</v-icon>
-      <a @click="goPage" style="color: black; text-decoration: none">{{
+      <a @click="goCategory" style="color: black; text-decoration: none">{{
         category
       }}</a>
     </div>
@@ -13,6 +13,7 @@
     <div class="productDetailBottom" v-if="this.getDetailInfo">
       <DetailTap :item="this.getDetailInfo" />
     </div>
+  </div>
 </template>
 
 <script>
@@ -28,7 +29,6 @@ export default {
   data() {
     return {
       item: [],
-      category: "",
     };
   },
   created() {
@@ -39,15 +39,26 @@ export default {
       getDetailInfo: "productStore/getDetailInfo",
       //   getUserId: "userStore/getUserId"
     }),
+    category() {
+      if (this.getDetailInfo) {
+        if (this.getDetailInfo.product.category == 1) {
+          return "유통임박 상품";
+        } else if (this.getDetailInfo.product.category == 2) {
+          return "못난이 농산물";
+        }
+        return "리퍼브 상품";
+      }
+      return "";
+    },
   },
   methods: {
     goMain() {
       this.$router.push({ name: "Home" });
     },
-    goPage() {
-      if (this.category == "유통임박 상품") {
+    goCategory() {
+      if (this.getDetailInfo.product.category == 1) {
         this.$router.push({ name: "Expire" });
-      } else if (this.category == "못난이 농산물") {
+      } else if (this.getDetailInfo.product.category == 2) {
         this.$router.push({ name: "Uglyfood" });
       }
       this.$router.push({ name: "Refurb" });

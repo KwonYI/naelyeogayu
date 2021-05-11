@@ -29,7 +29,7 @@ export default {
   methods: {
     async getSell() {
       await this.$axios({
-        url: "/reserve/list/" + this.$store.getters["userStore/id"],
+        url: "/product/sell/" + this.$store.getters["userStore/id"],
         method: "GET",
       })
         .then((response) => {
