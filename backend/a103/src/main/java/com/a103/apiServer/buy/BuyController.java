@@ -98,5 +98,30 @@ public class BuyController {
 
 		return entity;
 	}
+	
+	@GetMapping(value = "verify/{member_id}/{product_id}")
+	public ResponseEntity BuyVerify(@PathVariable("member_id") int memberId, @PathVariable("product_id") int productId) {
+		ResponseEntity entity = null;
+		Map result = new HashMap<>();
+
+		try {
+			Buy buy = buyDao.findBuyByMemberIdAndProductId(memberId, productId);
+
+			if (buy != null) {
+				result.put("success", "success");
+				entity = new ResponseEntity<>(result, HttpStatus.OK);
+			} else {
+				result.put("success", "fail");
+				entity = new ResponseEntity<>(result, HttpStatus.OK);
+			}
+
+		} catch (Exception e) {
+			logger.error("error", e);
+			result.put("success", "error");
+			entity = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+		}
+
+		return entity;
+	}
 
 }
