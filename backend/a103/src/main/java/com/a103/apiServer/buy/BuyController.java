@@ -16,10 +16,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.a103.apiServer.Jwt.JwtService;
 import com.a103.apiServer.member.MemberDao;
 import com.a103.apiServer.model.Buy;
 import com.a103.apiServer.model.Member;
-import com.a103.apiServer.model.Product;
 import com.a103.apiServer.product.ProductDao;
 
 @RestController
@@ -28,12 +28,18 @@ public class BuyController {
 
 	@Autowired
 	BuyDao buyDao;
+	
+	@Autowired
+	MemberDao memberDao;
 
 	@Autowired
 	ProductDao productDao;
 
 	@Autowired
 	BuyService buyService;
+	
+	@Autowired
+	JwtService jwtService;
 
 	private static final Logger logger = LoggerFactory.getLogger(BuyController.class);
 
@@ -70,8 +76,13 @@ public class BuyController {
 
 		try {
 			int resultType = buyService.BuyProduct(productId, buy);
+			
 			if (resultType == 1) {
+				Member member = memberDao.findMemberById(buy.getMemberId());
+				String token = jwtService.create(member);
+				logger.trace("token", token);
 				result.put("success", "success");
+				result.put("x-access-token", token);
 				entity = new ResponseEntity<>(result, HttpStatus.OK);
 			} else {
 				result.put("success", "fail");
