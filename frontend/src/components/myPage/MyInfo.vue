@@ -82,14 +82,15 @@
             <div class="myInfoItem">포인트</div>
           </div>
           <div class="myInfoCell col2">
-            <div class="myInfoInfo">{{ user.point }} 포인트</div>
+            <span class="myInfoInfo">{{ user.point }} 포인트</span>
+            <v-btn class="myInfoPointCharge" color="#fced14">충전</v-btn>
           </div>
         </div>
       </div>
     </v-form>
     <v-btn
       class="modifyButton"
-      @click="isModify = !isModify"
+      @click="changeModify"
       v-if="!isModify"
       color="#abf200"
       >수정</v-btn
@@ -120,7 +121,6 @@ export default {
       address: "",
       addressDetail: "",
       phone: "",
-      point: "",
       nameRule: [
         (value) =>
           /^[가-핳a-zA-Z]{3,8}$/.test(value) ||
@@ -150,7 +150,13 @@ export default {
     },
   },
   methods: {
-    modify: function () {
+    changeModify() {
+      this.isModify = true;
+      this.nickname = this.user.nickname;
+      this.address = this.user.address;
+      this.phone = this.user.phone;
+    },
+    modify() {
       const nameRegex = /^[가-핳a-zA-Z]{3,8}$/;
       const phoneRegex = /^\d{3}-\d{3,4}-\d{4}$/;
 
@@ -191,7 +197,7 @@ export default {
           alert("입력 정보를 다시 확인해주세요.");
         });
     },
-    findAddress: function () {
+    findAddress() {
       new window.daum.Postcode({
         onComplete: (data) => {
           if (data.userSelectedType === "R") {
@@ -230,6 +236,10 @@ export default {
 }
 .myInfoInfo {
   font-size: 20px;
+}
+.myInfoPointCharge {
+  margin-left: 5%;
+  margin-bottom: 1.5%;
 }
 .col1 {
   width: 20%;

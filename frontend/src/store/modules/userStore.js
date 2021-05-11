@@ -1,4 +1,4 @@
-// import axios from "axios";
+import axios from "axios";
 import jwtDecode from "jwt-decode";
 
 // const SERVER_URL = process.env.VUE_APP_SERVER_URL;
@@ -33,6 +33,9 @@ const userStore = {
       state.phone = "";
       state.point = 0;
       state.isLogined = false;
+    },
+    LOSE_POINT(state, price) {
+      state.point = state.point - price;
     },
   },
   getters: {
@@ -74,8 +77,31 @@ const userStore = {
       const user = jwtDecode(token).user;
       return commit("SET_USER", user);
     },
+    getUserInfo({ commit }, token) {
+      const user = jwtDecode(token).user;
+      var newUser = [];
+      axios({
+        url: "/member/profile/" + user.email,
+        method: "GET",
+        headers: { "x-access-token": localStorage.getItem("token") },
+      })
+        .then((response) => {
+          if (response.data.success === "success") {
+            newUser = response.data.data;
+          } else {
+            return commit("SET_USER", user);
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+      return commit("SET_USER", newUser);
+    },
     logout({ commit }) {
       return commit("FREE_USER");
+    },
+    buy({ commit }, price) {
+      return commit("LOSE_POINT", price);
     },
   },
 };
