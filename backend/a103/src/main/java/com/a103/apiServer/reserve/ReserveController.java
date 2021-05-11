@@ -57,7 +57,9 @@ public class ReserveController {
 					Map info = new HashMap<>();
 					ProductDetail product = productService.getProductDetail(reserve.getProduct(), now);
 					info.put("reserve", reserve);
-					info.put("product", product);
+					info.put("productCurPrice ", product.getCurPrice());
+					info.put("productCurDiscountRate  ", product.getDiscountRate());
+					info.put("productCurDday  ", product.getDDay());
 					data.add(info);
 				}
 				result.put("success", "success");
