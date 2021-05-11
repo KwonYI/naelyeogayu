@@ -134,9 +134,17 @@ public class BookmarkController {
 		Map result = new HashMap();
 
 		try {
-			bookmarkDao.deleteById(bookmark.getId());
-			result.put("success", "success");
-			entity = new ResponseEntity(result, HttpStatus.OK);
+			Bookmark findBookmark = bookmarkDao.findBookmarkByMemberIdAndProductId(bookmark.getMemberId(), bookmark.getProductId());
+			
+			if(findBookmark != null) {
+				bookmarkDao.deleteById(findBookmark.getId());
+				result.put("success", "success");
+				entity = new ResponseEntity(result, HttpStatus.OK);
+			}else {
+				result.put("success", "fail");
+				entity = new ResponseEntity(result, HttpStatus.BAD_REQUEST);
+			}
+			
 		} catch (Exception e) {
 			logger.error("error", e);
 			result.put("success", "error");
