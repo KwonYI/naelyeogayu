@@ -158,9 +158,6 @@ public class MemberController {
 			modifyUser.setNickname(member.getNickname());
 			modifyUser.setPhone(member.getPhone());
 			memberDao.save(modifyUser);
-			String token = jwtService.create(modifyUser);
-			logger.trace("token", token);
-			result.put("x-access-token", token);
 			result.put("success", "success");
 			entity = new ResponseEntity(result, HttpStatus.OK);
 		} catch (Exception e) {
