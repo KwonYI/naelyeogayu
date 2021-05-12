@@ -83,7 +83,12 @@
           </div>
           <div class="myInfoCell col2">
             <span class="myInfoInfo">{{ user.point }} 포인트</span>
-            <v-btn class="myInfoPointCharge" color="#fced14">충전</v-btn>
+            <v-btn
+              class="myInfoPointCharge"
+              @click="chargePoint"
+              color="#fced14"
+              >충전</v-btn
+            >
           </div>
         </div>
       </div>
@@ -207,6 +212,24 @@ export default {
           }
         },
       }).open();
+    },
+    chargePoint() {
+      console.log("ASD");
+      this.$axios({
+        url: "member/charge",
+        method: "POST",
+        headers: { "x-access-token": localStorage.getItem("token") },
+        data: {
+          email: this.user.email,
+          point: 5000,
+        },
+      })
+        .then((response) => {
+          location.href = response.data.path;
+        })
+        .catch((error) => {
+          console.error(error);
+        });
     },
   },
 };

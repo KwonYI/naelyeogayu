@@ -34,6 +34,9 @@ public class MemberController {
 
 	@Autowired
 	private PasswordEncoder passwordEncoder;
+	
+	@Autowired
+	private KakaoPayService kakaoPayService;
 
 	private static final Logger logger = LoggerFactory.getLogger(MemberController.class);
 
@@ -294,11 +297,16 @@ public class MemberController {
 			String email = (String) data.get("email");
 			int point = (int) data.get("point");
 			Member member = memberDao.findMemberByEmail(email);
+			
+			String paySuccess = kakaoPayService.kakaoPayReady(point);
+			
+			System.out.println(paySuccess);
 
-			if (member != null) {
-				member.setPoint(member.getPoint() + point);
-				memberDao.save(member);
+			if (!paySuccess.equals("error")) {
+//				member.setPoint(member.getPoint() + point);
+//				memberDao.save(member);
 				result.put("success", "success");
+				result.put("path", paySuccess);
 				entity = new ResponseEntity(result, HttpStatus.OK);
 			} else {
 				result.put("success", "fail");
