@@ -53,6 +53,7 @@ public class ReserveController {
 			
 			if (reserveList.size() != 0) {
 				List<Map> data = new ArrayList<>();
+				
 				for (Reserve reserve : reserveList) {
 					Map info = new HashMap<>();
 					ProductDetail product = productService.getProductDetail(reserve.getProduct(), now);
@@ -62,6 +63,7 @@ public class ReserveController {
 					info.put("productCurDday", product.getDDay());
 					data.add(info);
 				}
+				
 				result.put("success", "success");
 				result.put("data", data);
 				entity = new ResponseEntity<>(result, HttpStatus.OK);
