@@ -1,4 +1,4 @@
-package com.a103.apiServer.model;
+package com.a103.apiServer.model.kakaopay;
 
 import java.util.Date;
 

@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.a103.apiServer.Jwt.JwtService;
+import com.a103.apiServer.kakaopay.KakaoPayService;
 import com.a103.apiServer.model.Member;
 
 @RestController
@@ -288,25 +289,17 @@ public class MemberController {
 		return entity;
 	}
 	
-	@PostMapping(value = "/charge")
-	public ResponseEntity chargingPoint(@RequestBody Map data) {
+	@PostMapping(value = "/ready")
+	public ResponseEntity paymentReady(@RequestBody Map<String, Integer> data) {
 		ResponseEntity entity = null;
 		Map result = new HashMap<>();
 
 		try {
-			String email = (String) data.get("email");
-			int point = (int) data.get("point");
-			Member member = memberDao.findMemberByEmail(email);
-			
-			String paySuccess = kakaoPayService.kakaoPayReady(point);
-			
-			System.out.println(paySuccess);
+			String nextUrl = kakaoPayService.kakaoPayReady(data.get("point"));
 
-			if (!paySuccess.equals("error")) {
-//				member.setPoint(member.getPoint() + point);
-//				memberDao.save(member);
+			if (!nextUrl.equals("error")) {
 				result.put("success", "success");
-				result.put("path", paySuccess);
+				result.put("path", nextUrl);
 				entity = new ResponseEntity(result, HttpStatus.OK);
 			} else {
 				result.put("success", "fail");
@@ -318,6 +311,33 @@ public class MemberController {
 			result.put("success", "error");
 			entity = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
 		}
+
+		return entity;
+	}
+	
+	@PostMapping(value = "/approve")
+	public ResponseEntity paymentApprove(@RequestBody Map<String, String> data) {
+		ResponseEntity entity = null;
+		Map result = new HashMap<>();
+		
+		String email = data.get("email");
+		String pg_token = data.get("pg_token");
+		
+		System.out.println(email);
+		System.out.println(pg_token);
+
+//		try {
+//			String email = data.get("email");
+//			String pg_token = data.get("pg_token");
+//			String paySuccess = kakaoPayService.kakaoPayApprove(pg_token, email);
+//			
+//			System.out.println();
+//
+//		} catch (Exception e) {
+//			logger.error("error", e);
+//			result.put("success", "error");
+//			entity = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+//		}
 
 		return entity;
 	}

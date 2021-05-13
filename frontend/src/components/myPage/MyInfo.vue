@@ -214,13 +214,11 @@ export default {
       }).open();
     },
     chargePoint() {
-      console.log("ASD");
       this.$axios({
-        url: "member/charge",
+        url: "/member/ready",
         method: "POST",
         headers: { "x-access-token": localStorage.getItem("token") },
         data: {
-          email: this.user.email,
           point: 5000,
         },
       })
@@ -228,9 +226,30 @@ export default {
           location.href = response.data.path;
         })
         .catch((error) => {
-          console.error(error);
+          console.log(error);
         });
     },
+  },
+  mounted() {
+    let pg_token = this.$route.query.pg_token;
+    if (typeof pg_token !== "undefined") {
+      this.$axios({
+        url: "/member/approve",
+        method: "POST",
+        headers: { "x-access-token": localStorage.getItem("token") },
+        data: {
+          email: this.user.email,
+          tid: this.tid,
+          pg_token: pg_token,
+        },
+      })
+        .then((response) => {
+          location.href = response.data.path;
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
   },
 };
 </script>
