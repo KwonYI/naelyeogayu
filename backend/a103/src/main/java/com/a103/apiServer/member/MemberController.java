@@ -5,7 +5,6 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.a103.apiServer.Jwt.JwtService;
+import com.a103.apiServer.kakaopay.KakaoPayApprovalVO;
 import com.a103.apiServer.kakaopay.KakaoPayService;
 import com.a103.apiServer.model.Member;
 
@@ -35,7 +35,7 @@ public class MemberController {
 
 	@Autowired
 	private PasswordEncoder passwordEncoder;
-	
+
 	@Autowired
 	private KakaoPayService kakaoPayService;
 
@@ -246,12 +246,12 @@ public class MemberController {
 					entity = new ResponseEntity(result, HttpStatus.OK);
 				} else {
 					result.put("success", "fail");
-					entity = new ResponseEntity(result, HttpStatus.BAD_REQUEST);
+					entity = new ResponseEntity(result, HttpStatus.OK);
 				}
 
 			} else {
 				result.put("success", "fail");
-				entity = new ResponseEntity(result, HttpStatus.BAD_REQUEST);
+				entity = new ResponseEntity(result, HttpStatus.OK);
 			}
 
 		} catch (Exception e) {
@@ -288,19 +288,29 @@ public class MemberController {
 
 		return entity;
 	}
-	
+
 	@PostMapping(value = "/ready")
-	public ResponseEntity paymentReady(@RequestBody Map<String, Integer> data) {
+	public ResponseEntity paymentReady(@RequestBody Map<String, String> data) {
 		ResponseEntity entity = null;
 		Map result = new HashMap<>();
 
 		try {
-			String nextUrl = kakaoPayService.kakaoPayReady(data.get("point"));
+			int point = Integer.valueOf(data.get("point"));
+			String email = data.get("email");
+			Member member = memberDao.findMemberByEmail(email);
 
-			if (!nextUrl.equals("error")) {
-				result.put("success", "success");
-				result.put("path", nextUrl);
-				entity = new ResponseEntity(result, HttpStatus.OK);
+			if (member != null) {
+				String nextUrl = kakaoPayService.kakaoPayReady(point, member.getId());
+
+				if (!nextUrl.equals("error")) {
+					result.put("success", "success");
+					result.put("path", nextUrl);
+					entity = new ResponseEntity(result, HttpStatus.OK);
+				} else {
+					result.put("success", "fail");
+					entity = new ResponseEntity<>(result, HttpStatus.OK);
+				}
+
 			} else {
 				result.put("success", "fail");
 				entity = new ResponseEntity<>(result, HttpStatus.OK);
@@ -314,32 +324,45 @@ public class MemberController {
 
 		return entity;
 	}
-	
+
 	@PostMapping(value = "/approve")
 	public ResponseEntity paymentApprove(@RequestBody Map<String, String> data) {
 		ResponseEntity entity = null;
 		Map result = new HashMap<>();
-		
-		String email = data.get("email");
-		String pg_token = data.get("pg_token");
-		
-		System.out.println(email);
-		System.out.println(pg_token);
 
-//		try {
-//			String email = data.get("email");
-//			String pg_token = data.get("pg_token");
-//			String paySuccess = kakaoPayService.kakaoPayApprove(pg_token, email);
-//			
-//			System.out.println();
-//
-//		} catch (Exception e) {
-//			logger.error("error", e);
-//			result.put("success", "error");
-//			entity = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
-//		}
+		try {
+			String pg_token = data.get("pg_token");
+			String email = data.get("email");
+			KakaoPayApprovalVO paySuccess = kakaoPayService.kakaoPayApprove(pg_token);
+
+			if (paySuccess != null) {
+				int point = paySuccess.getAmount().getTotal();
+				Member member = memberDao.findMemberByEmail(email);
+				
+				if(member != null) {
+					member.setPoint(member.getPoint() + point);
+					memberDao.save(member);
+					String token = jwtService.create(member);
+					logger.trace("token", token);
+					result.put("success", "success");
+					result.put("x-access-token", token);
+					entity = new ResponseEntity<>(result, HttpStatus.OK);
+				}else {
+					result.put("success", "fail");
+					entity = new ResponseEntity<>(result, HttpStatus.OK);
+				}
+				
+			} else {
+				result.put("success", "fail");
+				entity = new ResponseEntity<>(result, HttpStatus.OK);
+			}
+
+		} catch (Exception e) {
+			logger.error("error", e);
+			result.put("success", "error");
+			entity = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+		}
 
 		return entity;
 	}
-	
 }

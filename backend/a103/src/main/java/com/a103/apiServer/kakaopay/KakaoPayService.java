@@ -1,7 +1,7 @@
 package com.a103.apiServer.kakaopay;
 
 public interface KakaoPayService {
-	public String kakaoPayReady(int point);
+	public String kakaoPayReady(int point, long memberId);
 
-	public String kakaoPayApprove(String pg_token, String email);
+	public KakaoPayApprovalVO kakaoPayApprove(String pg_token);
 }

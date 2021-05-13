@@ -1,4 +1,4 @@
-package com.a103.apiServer.model.kakaopay;
+package com.a103.apiServer.kakaopay;
 
 import java.util.Date;
 
@@ -11,5 +11,4 @@ public class KakaoPayReadyVO {
     private String next_redirect_pc_url;
     
     private Date created_at;
-    
 }

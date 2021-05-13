@@ -219,6 +219,7 @@ export default {
         method: "POST",
         headers: { "x-access-token": localStorage.getItem("token") },
         data: {
+          email: this.user.email,
           point: 5000,
         },
       })
@@ -232,19 +233,34 @@ export default {
   },
   mounted() {
     let pg_token = this.$route.query.pg_token;
-    if (typeof pg_token !== "undefined") {
+    if (pg_token === "fail") {
+      alert("결제에 실패하셨습니다!");
+      this.$router.push("/myPage");
+    } else if (pg_token === "cancel") {
+      alert("결제를 취소하셨습니다!");
+      this.$router.push("/myPage");
+    } else if (typeof pg_token !== "undefined") {
       this.$axios({
         url: "/member/approve",
         method: "POST",
         headers: { "x-access-token": localStorage.getItem("token") },
         data: {
           email: this.user.email,
-          tid: this.tid,
           pg_token: pg_token,
         },
       })
         .then((response) => {
-          location.href = response.data.path;
+          if (response.data.success === "success") {
+            localStorage.setItem("token", response.data["x-access-token"]);
+            this.$store.dispatch(
+              "userStore/login",
+              response.data["x-access-token"]
+            );
+            this.$router.push("/myPage");
+          } else {
+            alert("결제에 실패하셨습니다!");
+            this.$router.push("/myPage");
+          }
         })
         .catch((error) => {
           console.log(error);
