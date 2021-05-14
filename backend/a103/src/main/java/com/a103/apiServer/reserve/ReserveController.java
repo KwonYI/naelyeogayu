@@ -156,5 +156,31 @@ public class ReserveController {
 
 		return entity;
 	}
+	
+	@GetMapping(value = "/my/{member_id}/{product_id}")
+	public ResponseEntity checkMyReserve(@PathVariable(value = "member_id") long memberId,
+			@PathVariable(value = "product_id") long productId) {
+		ResponseEntity entity = null;
+		Map result = new HashMap<>();
+
+		try {
+			Reserve reserved = reserveDao.findReserveByMemberIdAndProductId(memberId, productId);
+			
+			if (reserved != null) {
+				result.put("success", "success");
+				entity = new ResponseEntity<>(result, HttpStatus.OK);
+			} else {
+				result.put("success", "fail");
+				entity = new ResponseEntity<>(result, HttpStatus.OK);
+			}
+			
+		} catch (Exception e) {
+			logger.error("error", e);
+			result.put("success", "error");
+			entity = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+		}
+
+		return entity;
+	}
 
 }
