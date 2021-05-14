@@ -11,6 +11,7 @@
           v-show="checkStatus == false && number == 2"
           @complete="complete"
         />
+        <Like v-show="number == 0 || number == 7" />
         <Reserved v-show="number == 0 || number == 3" />
         <Buy v-show="number == 0 || number == 4" />
         <Sell v-show="number == 0 || number == 5" />
@@ -29,6 +30,7 @@ import Sell from "@/components/myPage/Sell.vue";
 import Delete from "@/components/myPage/Delete.vue";
 import PasswordCheck from "@/components/myPage/PasswordCheck.vue";
 import PasswordChange from "@/components/myPage/PasswordChange.vue";
+import Like from "@/components/myPage/Like.vue";
 
 export default {
   components: {
@@ -40,6 +42,7 @@ export default {
     Sell,
     PasswordCheck,
     PasswordChange,
+    Like,
   },
   data() {
     return {
@@ -85,6 +88,7 @@ export default {
 }
 .myPageContents > * {
   padding-left: 1%;
-  padding-top: 0.6%;
+  padding-top: 1%;
+  padding-bottom: 7%;
 }
 </style>

@@ -1,15 +1,15 @@
 <template>
-  <div class="sellInfo">
+  <div class="sellInfoForm">
     <div class="sellInfoTitle">판매 목록</div>
     <div class="sellGrid" v-if="hasSell">
       <SellCard
         v-for="(item, index) in items"
-        :item="item"
-        :key="index"
+        v-bind:item="item"
+        v-bind:key="index"
       ></SellCard>
     </div>
-    <div class="reserveBody" v-else>
-      <div class="reserveText">판매 기록이 없습니다.</div>
+    <div class="sellBody" v-else>
+      <div class="sellText">판매 기록이 없습니다.</div>
     </div>
   </div>
 </template>
