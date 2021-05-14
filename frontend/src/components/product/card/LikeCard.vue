@@ -1,80 +1,78 @@
 <template>
   <div>
-    <div class="buyCardView">
-      <div class="buyCard" @click="goDetail(item.product.status)">
-        <div class="buyBox" v-if="item.product.status == 0">
-          <img class="buyLabel" src="@/assets/label.png" alt="label" />
-          <div class="buyDday">
-            <p class="buyRemain">{{ category }}</p>
-            <p class="buyDay">{{ dday }}</p>
+    <div class="likeCardView">
+      <div class="likeCard" @click="goDetail(item.product.status)">
+        <div class="likeBox" v-if="item.product.status == 0">
+          <img class="likeLabel" src="@/assets/label.png" alt="label" />
+          <div class="likeDday">
+            <p class="likeRemain">{{ category }}</p>
+            <p class="likeDay">{{ dday }}</p>
           </div>
           <v-img
-            class="buyImg"
+            class="likeImg"
             :src="item.product.imageUrl"
             height="270px"
             max-height="270px"
             :aspect-ratio="1 / 1"
           />
         </div>
-        <div class="buyBox" v-if="item.product.status == 1">
-          <img class="buyLabel" src="@/assets/label.png" alt="label" />
-          <div class="buyDday">
-            <p class="buyRemain">판매 대기</p>
-            <p class="buyDay">{{ dday }}</p>
+        <div class="likeBox" v-if="item.product.status == 1">
+          <img class="likeLabel" src="@/assets/label.png" alt="label" />
+          <div class="likeDday">
+            <p class="likeRemain">판매 대기</p>
+            <p class="likeDay">{{ dday }}</p>
           </div>
           <v-img
-            class="buyImgGrayScale"
+            class="likeImgGrayScale"
             :src="item.product.imageUrl"
             height="270px"
             max-height="270px"
             :aspect-ratio="1 / 1"
           />
         </div>
-        <div class="buyBox" v-if="item.product.status == 2">
-          <img class="buyLabel" src="@/assets/label.png" alt="label" />
-          <div class="buyDday">
-            <p class="buyRemain">품절</p>
+        <div class="likeBox" v-if="item.product.status == 2">
+          <img class="likeLabel" src="@/assets/endlabel.png" alt="label" />
+          <div class="likeDday">
+            <p class="likeSoldout">품절</p>
           </div>
           <v-img
-            class="buyImgGrayScale"
+            class="likeImgGrayScale"
             :src="item.product.imageUrl"
             height="270px"
             max-height="270px"
             :aspect-ratio="1 / 1"
           />
         </div>
-        <div class="buyBox" v-if="item.product.status == 3">
-          <img class="buyLabel" src="@/assets/label.png" alt="label" />
-          <div class="buyDday">
-            <p class="buyRemain">경매 마감</p>
+        <div class="likeBox" v-if="item.product.status == 3">
+          <img class="likeLabel" src="@/assets/endlabel.png" alt="label" />
+          <div class="likeDday">
+            <p class="likeEnd">경매 마감</p>
           </div>
           <v-img
-            class="buyImgGrayScale"
+            class="likeImgGrayScale"
             :src="item.product.imageUrl"
             height="270px"
             max-height="270px"
             :aspect-ratio="1 / 1"
           />
         </div>
-        <p class="buyTitle">{{ item.product.name }}</p>
-        <div class="buyInfo">
-          <p class="buyUnit" v-if="this.item.product.category == 2">
-            무게 : {{ item.product.unit }}kg
+        <p class="likeTitle">{{ item.product.name }}</p>
+        <div class="likeInfo">
+          <p class="likeDate">마감일 : {{ item.product.endDate }}</p>
+          <p class="likeStock">수량 : {{ item.product.stock }}{{ unit }}</p>
+          <p class="likeUnit" v-if="item.product.category == 2">
+            무게 : {{ item.product.stock }}kg
           </p>
-          <p class="buyStock">수량 : {{ item.product.stock }}{{ unit }}</p>
-          <p class="buyCount">구매 수량 : {{ item.count }}</p>
-          <p class="buyDate">구매일 : {{ item.buyDate | subString }}</p>
-          <p class="buyGoal">구매 : {{ item.price }}원</p>
-          <p class="buyMax" v-if="item.product.status == 0">
+          <p class="likeMax" v-if="item.product.status == 0">
             {{ item.product.startPrice }}원
           </p>
-          <p class="buyCur">
-            <span class="buyRate" v-if="item.product.status == 0"
-              >{{ item.productCurDiscountRate | fixed }}%</span
+          <p class="likeCur">
+            <span class="likeRate" v-if="item.product.status == 0"
+              >{{ item.discountRate | fixed }}%</span
             >
-            {{ item.productCurPrice }}원/{{ unit }}
+            {{ item.curPrice }}원/{{ unit }}
           </p>
-          <p class="buyDetail">상세 보기</p>
+          <p class="likeDetail">상세 보기</p>
         </div>
       </div>
     </div>
@@ -82,12 +80,14 @@
 </template>
 
 <script>
+import moment from "moment";
+import "moment/locale/ko";
 export default {
   props: {
     item: Object,
   },
   computed: {
-    category: function () {
+    category() {
       if (this.item.product.category == 1) {
         return "유통 임박";
       } else if (this.item.product.category == 2) {
@@ -96,24 +96,27 @@ export default {
       return "최대 할인";
     },
     dday() {
-      if (this.item.productCurDday >= 0) {
-        return "D-" + this.item.productCurDday;
+      if (this.item.dday >= 0) {
+        return "D-" + this.item.dday;
       }
       return "";
     },
     unit() {
       if (this.item.product.category == 2) {
-        return "box";
+        return "Box";
       }
       return "개";
     },
   },
   filters: {
+    calculate(date) {
+      return moment(date, "YYYY-MM-DD").diff(
+        moment().format("YYYY-MM-DD"),
+        "days"
+      );
+    },
     fixed(rate) {
       return rate.toFixed(2);
-    },
-    subString(string) {
-      return string.substring(0, string.indexOf("T"));
     },
   },
   methods: {
@@ -134,6 +137,9 @@ export default {
       }
     },
   },
+  created() {
+    console.log(this.item);
+  },
 };
 </script>
 
@@ -152,156 +158,131 @@ export default {
   font-weight: normal;
   font-style: normal;
 }
-.buyTitle,
-.buyCur {
+.likeTitle,
+.likeCur,
+.likeRate,
+.likeSoldout,
+.likeEnd {
   font-family: "NEXON Lv1 Gothic OTF Bold";
 }
-.buyStock,
-.buyMax,
-.buyDate,
-.buyRate,
-.buyGoal,
-.buyCount,
-.buyUnit {
+.likeStock,
+.likeUnit,
+.likeMax,
+.likeDate,
+.likeWatch {
   font-family: "NEXON Lv1 Gothic OTF";
 }
-.buyCardView {
+.likeCardView {
   width: 300px;
   display: inline-block;
 }
-.buyCard {
+.likeCard {
   position: relative;
   border: solid 1px rgb(179, 178, 178);
   border-radius: 20px;
   cursor: pointer;
 }
-.buyCard:hover {
+.likeCard:hover {
   box-shadow: 2px 2px rgb(179, 178, 178);
   transition: 0.4s;
 }
-.buyBox {
+.likeBox {
   overflow: hidden;
   border-radius: 20px 20px 0 0;
 }
-.buyImgGrayScale {
+.likeImg:hover {
+  transform: scale(1.15);
+  transition: 0.3s;
+}
+.likeImgGrayScale {
   /* IE */
   filter: progid:DXImageTransform.Microsoft.BasicImage(grayscale=1);
   /* Chrome, Safari */
   -webkit-filter: grayscale(1);
   /* Firefox */
-  filter: grayscale(1);
-}
-.buyImg:hover {
-  transform: scale(1.15);
-  transition: 0.3s;
-}
-.buyImgGrayScale:hover {
-  transform: scale(1.15);
-  transition: 0.3s;
+  filter: grayscale(1) brightness(65%);
 }
 .v-img {
   border-radius: 20px 20px 0 0;
 }
-.buyInfo {
-  height: 150px;
+.likeInfo {
+  height: 125px;
 }
-.buyInfo p {
+.likeInfo p {
   position: absolute;
 }
-.buyDday {
+.likeDday {
   z-index: 1000;
   display: inline-block;
   position: absolute;
   top: 0;
   right: 20px;
-  width: 66px;
-  height: 68px;
   text-align: center;
 }
-.buyLabel {
+.likeLabel {
   z-index: 1000;
   display: inline-block;
   position: absolute;
   top: 0;
   right: 20px;
 }
-.buyRemain {
+.likeRemain {
   font-size: 13px;
   margin: 0 auto;
   color: white;
   width: 66px;
-  font-family: "NEXON Lv1 Gothic OTF";
+  font-family: "NEXON Lv1 Gothic OTF Bold";
 }
-.buyDay {
+.likeDay {
   font-size: 16px;
   margin: 0 auto;
   width: 66px;
   color: white;
   font-family: "NEXON Lv1 Gothic OTF Bold";
 }
-.buyTitle {
+.likeTitle {
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
   text-align: center;
   font-size: 20px;
   padding-top: 15px;
-  width: 100%;
+  width: 200px;
   margin: 0 auto;
 }
-.buyStock {
+.likeStock {
   font-size: 15px;
-  bottom: 80px;
-  right: 20px;
-}
-.buyCount {
-  font-size: 15px;
-  bottom: 100px;
+  bottom: 85px;
   left: 20px;
 }
-.buyCur {
+.likeRate {
+  color: red;
+}
+.likeNotrate {
+  color: red;
+  font-size: 16px;
+}
+.likeDate {
+  width: 180px;
+  font-size: 15px;
+  left: 20px;
+  bottom: 60px;
+}
+.likeMax {
+  font-size: 17px;
+  bottom: 0px;
+  color: rgb(154, 150, 154);
+  bottom: 50px;
+  right: 20px;
+  text-decoration: line-through;
+}
+.likeCur {
   font-size: 20px;
   bottom: 30px;
   right: 20px;
   margin-bottom: 10px;
 }
-.buyGoal {
-  font-size: 15px;
-  bottom: 80px;
-  left: 20px;
-}
-.buyMax {
-  font-size: 17px;
-  bottom: 50px;
-  color: rgb(154, 150, 154);
-  right: 20px;
-  text-decoration: line-through;
-}
-.buyRate {
-  font-size: 15px;
-  bottom: 85px;
-  right: 20px;
-}
-.buyNotrate {
-  color: red;
-  font-size: 16px;
-}
-.buyDate {
-  font-size: 15px;
-  left: 20px;
-  bottom: 60px;
-}
-.buyUnit {
-  font-size: 15px;
-  right: 20px;
-  bottom: 100px;
-}
-.buySub {
-  font-size: 20px;
-  bottom: 20px;
-  left: 20px;
-}
-.buyDetail {
+.likeDetail {
   font-size: 14px;
   font-family: "NEXON Lv1 Gothic OTF";
   width: 180px;
@@ -312,11 +293,16 @@ export default {
   border-radius: 10px;
   margin: 0 auto;
 }
-.buySoldout,
-.buyEnd {
+.likeSoldout,
+.likeEnd {
   font-size: 14px;
   color: white;
   margin-top: 10px;
   width: 66px;
+}
+.likeUnit {
+  font-size: 15px;
+  bottom: 85px;
+  right: 20px;
 }
 </style>

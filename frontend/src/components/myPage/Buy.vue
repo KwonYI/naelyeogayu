@@ -1,11 +1,11 @@
 <template>
-  <div class="buyInfo">
+  <div class="buyInfoForm">
     <div class="buyInfoTitle">구매 목록</div>
     <div class="buyGrid" v-if="hasBuy">
       <BuyCard
         v-for="(item, index) in items"
-        :item="item"
-        :key="index"
+        v-bind:item="item"
+        v-bind:key="index"
       ></BuyCard>
     </div>
     <div class="buyBody" v-else>

@@ -20,7 +20,12 @@
         </tr>
       </thead>
       <tbody>
-        <tr class="tableRow" v-for="n in 10" :key="n" @click="goDetail(n)">
+        <tr
+          class="tableRow"
+          v-for="n in 10"
+          v-bind:key="n"
+          @click="goDetail(n)"
+        >
           <td class="tableData">
             <img
               class="tableImg"
