@@ -2,24 +2,32 @@ package com.a103.apiServer.product;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.a103.apiServer.buy.BuyDao;
 import com.a103.apiServer.member.MemberDao;
+import com.a103.apiServer.model.Buy;
 import com.a103.apiServer.model.Product;
 import com.a103.apiServer.model.ProductDetail;
 import com.a103.apiServer.watchlog.WatchLogDao;
 
 @Service
 public class ProductServiceImpl implements ProductService {
-	
+
 	@Autowired
 	WatchLogDao watchLogDao;
 
 	@Autowired
 	MemberDao memberDao;
-	
+
+	@Autowired
+	BuyDao buydaDao;
+
 	private static final int PRICE_UPDATE_TIME = 4;
 
 	@Override
@@ -46,5 +54,29 @@ public class ProductServiceImpl implements ProductService {
 		int curPrice = product.getStartPrice() - discountPrice;
 		float discountRate = (float) discountPrice / product.getStartPrice() * 100;
 		return new ProductDetail(product, curPrice, discountRate, dDay);
+	}
+
+	@Override
+	public Map getSalesRecord(Product product) {
+		int total_cnt = 0;
+		int total_price = 0;
+		Map result = new HashMap<>();
+		List<Buy> saleRecords = buydaDao.findListBuyByProductId(product.getId());
+		
+		if(saleRecords.size() != 0) {
+			
+			for (Buy buy : saleRecords) {
+				int cnt = buy.getCount();
+				total_cnt += cnt;
+				total_price += (buy.getPrice() * cnt);
+			}
+			
+		}
+		
+		result.put("product", product);
+		result.put("total_cnt", total_cnt);
+		result.put("total_price", total_price);
+		
+		return result;
 	}
 }
