@@ -235,7 +235,6 @@ export default {
         })
         .catch((error) => {
           console.error(error);
-          console.log(this.user.email, this.nickname, this.address, this.phone);
           alert("입력 정보를 다시 확인해주세요.");
         });
     },
