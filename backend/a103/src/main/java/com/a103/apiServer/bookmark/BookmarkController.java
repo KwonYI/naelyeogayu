@@ -116,7 +116,7 @@ public class BookmarkController {
 				entity = new ResponseEntity(result, HttpStatus.OK);
 			} else {
 				result.put("success", "fail");
-				entity = new ResponseEntity(result, HttpStatus.BAD_REQUEST);
+				entity = new ResponseEntity(result, HttpStatus.OK);
 			}
 
 		} catch (Exception e) {
@@ -142,7 +142,7 @@ public class BookmarkController {
 				entity = new ResponseEntity(result, HttpStatus.OK);
 			}else {
 				result.put("success", "fail");
-				entity = new ResponseEntity(result, HttpStatus.BAD_REQUEST);
+				entity = new ResponseEntity(result, HttpStatus.OK);
 			}
 			
 		} catch (Exception e) {

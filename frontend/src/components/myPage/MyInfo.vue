@@ -83,7 +83,12 @@
           </div>
           <div class="myInfoCell col2">
             <span class="myInfoInfo">{{ user.point }} 포인트</span>
-            <v-btn class="myInfoPointCharge" color="#fced14">충전</v-btn>
+            <v-btn
+              class="myInfoPointCharge"
+              @click="chargePoint"
+              color="#fced14"
+              >충전</v-btn
+            >
           </div>
         </div>
       </div>
@@ -208,6 +213,59 @@ export default {
         },
       }).open();
     },
+    chargePoint() {
+      this.$axios({
+        url: "/member/ready",
+        method: "POST",
+        headers: { "x-access-token": localStorage.getItem("token") },
+        data: {
+          email: this.user.email,
+          point: 5000,
+        },
+      })
+        .then((response) => {
+          location.href = response.data.path;
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+  },
+  mounted() {
+    let pg_token = this.$route.query.pg_token;
+    if (pg_token === "fail") {
+      alert("결제에 실패하셨습니다!");
+      this.$router.push("/myPage");
+    } else if (pg_token === "cancel") {
+      alert("결제를 취소하셨습니다!");
+      this.$router.push("/myPage");
+    } else if (typeof pg_token !== "undefined") {
+      this.$axios({
+        url: "/member/approve",
+        method: "POST",
+        headers: { "x-access-token": localStorage.getItem("token") },
+        data: {
+          email: this.user.email,
+          pg_token: pg_token,
+        },
+      })
+        .then((response) => {
+          if (response.data.success === "success") {
+            localStorage.setItem("token", response.data["x-access-token"]);
+            this.$store.dispatch(
+              "userStore/login",
+              response.data["x-access-token"]
+            );
+            this.$router.push("/myPage");
+          } else {
+            alert("결제에 실패하셨습니다!");
+            this.$router.push("/myPage");
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
   },
 };
 </script>
