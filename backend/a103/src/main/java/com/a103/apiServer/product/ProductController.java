@@ -68,11 +68,11 @@ public class ProductController {
 			List<Product> productList = productDao.findListProductBySellerId(memberId);
 
 			if (productList.size() != 0) {
-				List<ProductDetail> data = new ArrayList<>();
+				List<Map> data = new ArrayList<>();
 				
 				for (Product product  : productList) {
-					ProductDetail detail = productService.getProductDetail(product, now);
-					data.add(detail);
+					Map productDetail = productService.getSalesRecord(product);
+					data.add(productDetail);
 				}
 				
 				result.put("success", "success");
@@ -289,21 +289,15 @@ public class ProductController {
 		return entity;
 	}
 
-	@GetMapping(value = "/search/{option}/{word}/{limit}")
-	public ResponseEntity getSearchProduct(@PathVariable("option") int option, @PathVariable("word") String word,
+	@GetMapping(value = "/search/{category}/{word}/{limit}")
+	public ResponseEntity getSearchProduct(@PathVariable("category") int category, @PathVariable("word") String word,
 			@PathVariable(value = "limit") int limit) {
 		ResponseEntity entity = null;
 		Map result = new HashMap<>();
 		LocalDateTime now = LocalDateTime.now();
 
 		try {
-			List<Product> productList = new ArrayList<Product>();
-
-			if (option == 1) {
-				productList = productDao.findListProductByNameContaining("%" + word + "%", limit, CONTENT_CNT);
-			} else if (option == 2) {
-				productList = productDao.findListProductByDescriptContaining("%" + word + "%", limit, CONTENT_CNT);
-			}
+			List<Product> productList = productDao.findListProductByCategoryNameContaining(category, "%" + word + "%", limit, CONTENT_CNT);
 
 			if (productList.size() != 0) {
 				List<ProductDetail> data = new ArrayList<>();

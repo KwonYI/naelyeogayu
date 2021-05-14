@@ -26,13 +26,14 @@ public class BuyServiceImpl implements BuyService{
 	@Override
 	public int BuyProduct(long productId, Buy buy) {
 		Product product = productDao.findProductById(productId);
-		Member member = memberDao.findMemberById(buy.getMemberId());
+		Member buyer = memberDao.findMemberById(buy.getMemberId());
+		Member seller = memberDao.findMemberById(product.getSellerId());
 		int buyProductCount = buy.getCount();
 		int buyProductprice = buy.getPrice();
 		int usePoint = buyProductCount * buyProductprice;
 		int productStock = product.getStock();
 		int productStatus = product.getStatus();
-		int memberPoint = member.getPoint();
+		int memberPoint = buyer.getPoint();
 		
 		if (productStatus == 0 && productStock >= buyProductCount && memberPoint >= usePoint) {
 
@@ -40,8 +41,10 @@ public class BuyServiceImpl implements BuyService{
 				product.setStatus(2);
 			}
 
-			member.setPoint(memberPoint - usePoint);
-			memberDao.save(member);
+			buyer.setPoint(memberPoint - usePoint);
+			memberDao.save(buyer);
+			seller.setPoint(seller.getPoint() + usePoint);
+			memberDao.save(seller);
 			product.setStock(productStock - buyProductCount);
 			productDao.save(product);
 			buy.setProduct(product);
