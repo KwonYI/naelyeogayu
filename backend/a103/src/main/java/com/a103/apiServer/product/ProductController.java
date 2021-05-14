@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.a103.apiServer.model.Product;
 import com.a103.apiServer.model.ProductDetail;
+import com.a103.apiServer.model.Reserve;
 
 @RestController
 @RequestMapping("/product")
@@ -62,13 +63,21 @@ public class ProductController {
 	public ResponseEntity getSellList(@PathVariable(value = "member_id") int memberId) {
 		ResponseEntity entity = null;
 		Map result = new HashMap<>();
+		LocalDateTime now = LocalDateTime.now();
 
 		try {
 			List<Product> productList = productDao.findListProductBySellerId(memberId);
 
 			if (productList.size() != 0) {
+				List<ProductDetail> data = new ArrayList<>();
+				
+				for (Product product  : productList) {
+					ProductDetail detail = productService.getProductDetail(product, now);
+					data.add(detail);
+				}
+				
 				result.put("success", "success");
-				result.put("data", productList);
+				result.put("data", data);
 				entity = new ResponseEntity<>(result, HttpStatus.OK);
 			} else {
 				result.put("success", "fail");
