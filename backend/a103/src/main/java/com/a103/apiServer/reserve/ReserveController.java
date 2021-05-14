@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -111,9 +110,9 @@ public class ReserveController {
 		return entity;
 	}
 
-	@DeleteMapping
-	public ResponseEntity deleteReserve(@RequestHeader(value = "member_id") long memberId,
-			@RequestHeader(value = "product_id") long productId) {
+	@DeleteMapping(value = "{member_id}/{product_id}")
+	public ResponseEntity deleteReserve(@PathVariable(value = "member_id") long memberId,
+			@PathVariable(value = "product_id") long productId) {
 		ResponseEntity entity = null;
 		Map result = new HashMap<>();
 

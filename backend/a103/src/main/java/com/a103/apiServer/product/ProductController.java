@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -243,8 +242,8 @@ public class ProductController {
 		return entity;
 	}
 
-	@DeleteMapping
-	public ResponseEntity deleteProduct(@RequestHeader(value = "product_id") long productId) {
+	@DeleteMapping(value = "{product_id}")
+	public ResponseEntity deleteProduct(@PathVariable(value = "product_id") long productId) {
 		ResponseEntity entity = null;
 		Map result = new HashMap<>();
 
