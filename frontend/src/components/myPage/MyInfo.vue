@@ -82,14 +82,20 @@
             <div class="myInfoItem">포인트</div>
           </div>
           <div class="myInfoCell col2">
-            <div class="myInfoInfo">{{ user.point }} 포인트</div>
+            <span class="myInfoInfo">{{ user.point }} 포인트</span>
+            <v-btn
+              class="myInfoPointCharge"
+              @click="chargePoint"
+              color="#fced14"
+              >충전</v-btn
+            >
           </div>
         </div>
       </div>
     </v-form>
     <v-btn
       class="modifyButton"
-      @click="isModify = !isModify"
+      @click="changeModify"
       v-if="!isModify"
       color="#abf200"
       >수정</v-btn
@@ -120,7 +126,6 @@ export default {
       address: "",
       addressDetail: "",
       phone: "",
-      point: "",
       nameRule: [
         (value) =>
           /^[가-핳a-zA-Z]{3,8}$/.test(value) ||
@@ -150,7 +155,13 @@ export default {
     },
   },
   methods: {
-    modify: function () {
+    changeModify() {
+      this.isModify = true;
+      this.nickname = this.user.nickname;
+      this.address = this.user.address;
+      this.phone = this.user.phone;
+    },
+    modify() {
       const nameRegex = /^[가-핳a-zA-Z]{3,8}$/;
       const phoneRegex = /^\d{3}-\d{3,4}-\d{4}$/;
 
@@ -191,7 +202,7 @@ export default {
           alert("입력 정보를 다시 확인해주세요.");
         });
     },
-    findAddress: function () {
+    findAddress() {
       new window.daum.Postcode({
         onComplete: (data) => {
           if (data.userSelectedType === "R") {
@@ -202,6 +213,59 @@ export default {
         },
       }).open();
     },
+    chargePoint() {
+      this.$axios({
+        url: "/member/ready",
+        method: "POST",
+        headers: { "x-access-token": localStorage.getItem("token") },
+        data: {
+          email: this.user.email,
+          point: 5000,
+        },
+      })
+        .then((response) => {
+          location.href = response.data.path;
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+  },
+  mounted() {
+    let pg_token = this.$route.query.pg_token;
+    if (pg_token === "fail") {
+      alert("결제에 실패하셨습니다!");
+      this.$router.push("/myPage");
+    } else if (pg_token === "cancel") {
+      alert("결제를 취소하셨습니다!");
+      this.$router.push("/myPage");
+    } else if (typeof pg_token !== "undefined") {
+      this.$axios({
+        url: "/member/approve",
+        method: "POST",
+        headers: { "x-access-token": localStorage.getItem("token") },
+        data: {
+          email: this.user.email,
+          pg_token: pg_token,
+        },
+      })
+        .then((response) => {
+          if (response.data.success === "success") {
+            localStorage.setItem("token", response.data["x-access-token"]);
+            this.$store.dispatch(
+              "userStore/login",
+              response.data["x-access-token"]
+            );
+            this.$router.push("/myPage");
+          } else {
+            alert("결제에 실패하셨습니다!");
+            this.$router.push("/myPage");
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
   },
 };
 </script>
@@ -230,6 +294,10 @@ export default {
 }
 .myInfoInfo {
   font-size: 20px;
+}
+.myInfoPointCharge {
+  margin-left: 5%;
+  margin-bottom: 1.5%;
 }
 .col1 {
   width: 20%;

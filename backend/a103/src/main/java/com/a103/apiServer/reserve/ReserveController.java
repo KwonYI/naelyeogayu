@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -53,6 +52,7 @@ public class ReserveController {
 			
 			if (reserveList.size() != 0) {
 				List<Map> data = new ArrayList<>();
+				
 				for (Reserve reserve : reserveList) {
 					Map info = new HashMap<>();
 					ProductDetail product = productService.getProductDetail(reserve.getProduct(), now);
@@ -62,6 +62,7 @@ public class ReserveController {
 					info.put("productCurDday", product.getDDay());
 					data.add(info);
 				}
+				
 				result.put("success", "success");
 				result.put("data", data);
 				entity = new ResponseEntity<>(result, HttpStatus.OK);
@@ -109,9 +110,9 @@ public class ReserveController {
 		return entity;
 	}
 
-	@DeleteMapping
-	public ResponseEntity deleteReserve(@RequestHeader(value = "member_id") long memberId,
-			@RequestHeader(value = "product_id") long productId) {
+	@DeleteMapping(value = "{member_id}/{product_id}")
+	public ResponseEntity deleteReserve(@PathVariable(value = "member_id") long memberId,
+			@PathVariable(value = "product_id") long productId) {
 		ResponseEntity entity = null;
 		Map result = new HashMap<>();
 

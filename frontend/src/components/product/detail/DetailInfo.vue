@@ -1,20 +1,44 @@
 <template>
   <div class="productDetailInfo">
     <div class="productDetailInfoImg">
-      <v-img :src="item.product.imageUrl"></v-img>
+      <v-img :src="item.product.imageUrl" max-height="650px"></v-img>
     </div>
     <div class="productDetailInfoBody">
       <div class="productDetailInfoHeader">
-        <span>{{ category }}</span>
-        <v-divider vertical></v-divider>
-        <v-btn text><v-icon left>mdi-home-outline</v-icon></v-btn>
+        <span class="productDetailInfoCategory" @click="goCategory">
+          {{ category }}
+        </span>
+        <span class="productDetailInfoSearch" @click="goMain">
+          <v-icon>mdi-home-outline</v-icon>
+          {{ item.product.name }}
+        </span>
+        <span class="productDetailEndDate"
+          >종료일: {{ item.product.endDate }}</span
+        >
       </div>
-      <div class="productDetailTitle">{{ item.product.name }}</div>
+      <div class="productDetailDday">{{ dday }}</div>
+      <div class="productDetailTitle">
+        {{ item.product.name }}
+        <span class="productLikeCheck">
+          <v-hover v-slot="{ hover }">
+            <v-icon
+              x-large
+              :color="hover ? 'green' : 'gray'"
+              v-if="!isLike"
+              @click="likeCheck"
+              >mdi-star-outline</v-icon
+            >
+          </v-hover>
+          <v-icon x-large v-if="isLike" color="green" @click="disLikeCheck"
+            >mdi-star</v-icon
+          >
+        </span>
+      </div>
       <div class="productDetailRemain">
         남은 수량 {{ item.product.stock }}개
       </div>
       <div class="productPriceDetail">
-        <span class="productDetailRate">{{ item.discountRate }}%</span>
+        <span class="productDetailRate">{{ item.discountRate }}% </span>
         <span class="productPriceDetailInfo">
           <div class="productDetailMax">
             {{ item.product.startPrice | comma }}원
@@ -36,7 +60,7 @@
       <div class="productDetailPrice">{{ price | comma }}원</div>
       <div class="productDetailButton">
         <div class="productDetailReserveButton">예약하기</div>
-        <div class="productDetailBuyButton">입찰하기</div>
+        <div class="productDetailBuyButton" @click="buy">입찰하기</div>
       </div>
     </div>
   </div>
@@ -50,6 +74,7 @@ export default {
   data() {
     return {
       count: 0,
+      isLike: false,
     };
   },
   computed: {
@@ -64,6 +89,13 @@ export default {
       }
       return "리퍼브 상품";
     },
+    dday() {
+      if (this.item.dday >= 0) {
+        return "D-" + this.item.dday;
+      } else {
+        return "경매가 마감되었습니다.";
+      }
+    },
   },
   filters: {
     comma(val) {
@@ -71,19 +103,96 @@ export default {
     },
   },
   methods: {
+    goCategory() {
+      if (this.item.product.category == 1) {
+        this.$router.push({ name: "Expire" });
+      } else if (this.item.product.category == 2) {
+        this.$router.push({ name: "Uglyfood" });
+      }
+      this.$router.push({ name: "Refurb" });
+    },
+    goMain() {
+      this.$router.push({ name: "Home" });
+    },
     reserve() {},
-    buy() {},
+    buy() {
+      if (this.count == 0 || this.item.product.status != 0) return;
+      this.$axios({
+        url: "/buy/" + this.item.product.id,
+        method: "POST",
+        headers: { "x-access-token": localStorage.getItem("token") },
+        data: {
+          price: this.price,
+          count: this.count,
+          memberId: this.$store.getters["userStore/id"],
+          product: this.item.product,
+        },
+      })
+        .then((response) => {
+          if (response.data.success === "success") {
+            this.$store.dispatch("userStore/buy", this.price);
+            alert("구매에 성공하셨습니다.");
+          } else {
+            alert(response.data.message);
+          }
+          window.location.reload();
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    },
     addCount() {
+      if (this.item.product.status != 0) return;
       if (this.count == this.item.product.stock) return;
       this.count += 1;
     },
     subCount() {
+      if (this.item.product.status != 0) return;
       if (this.count == 0) return;
       this.count -= 1;
     },
-  },
-  created() {
-    console.log("detailInfo : ", this.item);
+    likeCheck() {
+      this.$axios({
+        url: "/bookmark",
+        method: "POST",
+        headers: { "x-access-token": localStorage.getItem("token") },
+        data: {
+          memberId: this.$store.getters["userStore/id"],
+          productId: this.item.product.id,
+        },
+      })
+        .then((response) => {
+          if (response.data.success === "success") {
+            this.isLike = true;
+          } else {
+            window.location.reload();
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    },
+    disLikeCheck() {
+      this.$axios({
+        url: "/bookmark",
+        method: "DELETE",
+        headers: { "x-access-token": localStorage.getItem("token") },
+        data: {
+          memberId: this.$store.getters["userStore/id"],
+          productId: this.item.product.id,
+        },
+      })
+        .then((response) => {
+          if (response.data.success === "success") {
+            this.isLike = false;
+          } else {
+            window.location.reload();
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    },
   },
 };
 </script>
@@ -92,7 +201,8 @@ export default {
 .productDetailTitle,
 .productDetailRate,
 .productDetailCur,
-.productDetailPrice {
+.productDetailPrice,
+.productDetailDday {
   font-family: "NEXON Lv1 Gothic OTF Bold";
 }
 .productDetailInfoHeader,
@@ -100,7 +210,8 @@ export default {
 .productDetailCountName,
 .productDetailCount,
 .productDetailRemain,
-.productDetailPriceName {
+.productDetailPriceName,
+.productDetailEndDate {
   font-family: "NEXON Lv1 Gothic OTF";
 }
 .productDetailInfo {
@@ -112,19 +223,36 @@ export default {
   float: left;
   width: 60%;
   padding-top: 3%;
+  object-fit: cover;
 }
 .productDetailInfoBody {
   margin-left: 5%;
-  width: 30%;
+  width: 40%;
 }
 .productDetailInfoHeader {
   font-size: 13px;
   border-bottom: solid 1px lightgray;
-  margin-bottom: 15%;
+  margin-bottom: 5%;
+}
+.productDetailInfoCategory {
+  padding-right: 2%;
+  border-right: 1px solid gray;
+  cursor: pointer;
+}
+.productDetailInfoSearch {
+  padding-left: 1%;
+  cursor: pointer;
+}
+.productDetailEndDate {
+  float: right;
+}
+.productDetailDday {
+  font-size: 38px;
+  color: red;
 }
 .productDetailTitle {
   font-size: 30px;
-  margin-top: 5%;
+  margin-top: 1%;
 }
 .productDetailRemain {
   font-size: 15px;
@@ -145,6 +273,10 @@ export default {
   color: gray;
   text-decoration: line-through;
 }
+.productLikeCheck {
+  float: right;
+  cursor: pointer;
+}
 .productDetailCur {
   font-size: 30px;
   padding-bottom: 10px;
@@ -158,7 +290,7 @@ export default {
   margin-bottom: 10%;
   align-items: center;
   float: right;
-  width: 170px;
+  width: 40%;
 }
 .countButtonLeft {
   float: left;
@@ -169,6 +301,7 @@ export default {
 .countNumber {
   font-size: 25px;
   text-align: center;
+  padding-left: 9%;
 }
 .productDetailPriceName {
   clear: both;
