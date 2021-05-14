@@ -35,7 +35,7 @@ public class KakaoPayServiceImpl implements KakaoPayService {
 	private String ADMIN_KEY;
 
 	@Autowired
-	private KakaopayDao kakaopayDao;
+	private KakaoPayDao kakaopayDao;
 
 	public String kakaoPayReady(int point, long memberId) {
 		String path = null;
