@@ -1,6 +1,6 @@
 <template>
   <div id="grid">
-    <card v-for="n in 20" :key="n"></card>
+    <card v-for="n in 20" v-bind:key="n"></card>
   </div>
 </template>
 

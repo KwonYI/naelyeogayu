@@ -83,12 +83,40 @@
           </div>
           <div class="myInfoCell col2">
             <span class="myInfoInfo">{{ user.point }} 포인트</span>
-            <v-btn
-              class="myInfoPointCharge"
-              @click="chargePoint"
-              color="#fced14"
-              >충전</v-btn
-            >
+            <v-dialog v-model="chargeModal" max-width="600px">
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn
+                  class="myInfoPointCharge"
+                  color="#fced14"
+                  v-bind="attrs"
+                  v-on="on"
+                  >충전</v-btn
+                >
+              </template>
+              <v-card>
+                <v-card-title>
+                  <span class="modalHeader">포인트 충전</span>
+                </v-card-title>
+                <v-card-text>
+                  <v-container class="modalForm">
+                    <div class="modalInput">
+                      <v-select
+                        :items="chargePointSelect"
+                        v-model="chargePointCount"
+                        label="포인트"
+                      ></v-select>
+                    </div>
+                  </v-container>
+                </v-card-text>
+                <v-card-actions>
+                  <v-spacer></v-spacer>
+                  <div class="modalButton cancel" @click="chargeModal = false">
+                    취소
+                  </div>
+                  <div class="modalButton pass" @click="chargePoint">충전</div>
+                </v-card-actions>
+              </v-card>
+            </v-dialog>
           </div>
         </div>
       </div>
@@ -126,6 +154,8 @@ export default {
       address: "",
       addressDetail: "",
       phone: "",
+      chargeModal: false,
+      chargePointCount: 0,
       nameRule: [
         (value) =>
           /^[가-핳a-zA-Z]{3,8}$/.test(value) ||
@@ -144,6 +174,7 @@ export default {
           /^\d{3}-\d{3,4}-\d{4}$/.test(value) ||
           "휴대폰 번호는 01x-xxxx-xxxx형태로 입력해주셔야 합니다.",
       ],
+      chargePointSelect: [1000, 2000, 5000, 10000, 20000, 30000, 50000, 100000],
     };
   },
   computed: {
@@ -194,6 +225,11 @@ export default {
         .then((response) => {
           if (response.data.success === "success") {
             alert("개인정보를 변경했습니다.");
+            localStorage.setItem("token", response.data["x-access-token"]);
+            this.$store.dispatch(
+              "userStore/login",
+              response.data["x-access-token"]
+            );
             this.isModify = false;
           }
         })

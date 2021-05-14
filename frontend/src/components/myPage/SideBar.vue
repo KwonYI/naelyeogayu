@@ -33,6 +33,14 @@
             <v-list-item-title>비밀번호 변경</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
+        <v-list-item link @click="move(7)">
+          <v-list-item-icon>
+            <v-icon>mdi-star</v-icon>
+          </v-list-item-icon>
+          <v-list-item-content>
+            <v-list-item-title>내가 찜한 목록</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
         <v-list-item link @click="move(3)">
           <v-list-item-icon>
             <v-icon>mdi-cart</v-icon>

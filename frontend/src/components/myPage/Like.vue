@@ -1,35 +1,35 @@
 <template>
-  <div class="reserveInfoForm">
-    <div class="reserveInfoTitle">예약한 목록</div>
-    <div class="reserveGrid" v-if="hasReserved">
-      <ReserveCard
+  <div class="likeInfoForm">
+    <div class="likeInfoTitle">찜한 목록</div>
+    <div class="likeGrid" v-if="hasLiked">
+      <Like
         v-for="(item, index) in items"
         v-bind:item="item"
         v-bind:key="index"
-      ></ReserveCard>
+      />
     </div>
-    <div class="reserveBody" v-else>
-      <div class="reserveText">예약한 상품이 없습니다.</div>
+    <div class="likeBody" v-else>
+      <div class="likeText">예약한 상품이 없습니다.</div>
     </div>
   </div>
 </template>
 
 <script>
-import ReserveCard from "@/components/product/card/ReserveCard.vue";
+import Like from "@/components/product/card/LikeCard.vue";
 export default {
   components: {
-    ReserveCard,
+    Like,
   },
   data() {
     return {
       items: [],
-      hasReserved: true,
+      hasLiked: true,
     };
   },
   methods: {
-    async getReserve() {
+    async getLike() {
       await this.$axios({
-        url: "/reserve/list/" + this.$store.getters["userStore/id"],
+        url: "/bookmark/list/" + this.$store.getters["userStore/id"],
         method: "GET",
       })
         .then((response) => {
@@ -41,24 +41,24 @@ export default {
         })
         .catch((error) => {
           console.error(error);
-          alert("예약 정보를 받아오는 중 에러가 발생했습니다.");
+          alert("찜한 정보를 받아오는 중 에러가 발생했습니다.");
         });
     },
   },
   created() {
-    this.getReserve();
+    this.getLike();
   },
 };
 </script>
 
 <style>
-.reserveInfoTitle {
+.likeInfoTitle {
   clear: both;
   font-weight: bold;
   font-size: 25px;
   border-bottom: solid 2px green;
 }
-.reserveGrid {
+.likeGrid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 0.5%;
@@ -66,14 +66,14 @@ export default {
   margin-top: 15px;
   align-items: center;
 }
-.reserveBody {
+.likeBody {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   overflow: hidden;
 }
-.reserveText {
+.likeText {
   padding-top: 5%;
   padding-bottom: 2%;
   font-size: 24px;

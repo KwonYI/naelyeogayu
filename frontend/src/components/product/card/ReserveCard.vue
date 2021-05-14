@@ -65,12 +65,10 @@
           <p class="reserveGoal">예약 : {{ item.reserve.price }}원</p>
           <p class="reserveMax">{{ item.reserve.product.startPrice }}원</p>
           <p class="reserveCur">
-            <span
-              class="reserveRate"
-              v-if="item['productCurDiscountRate  '] != ''"
-              >{{ item["productCurDiscountRate  "] }}%</span
+            <span class="reserveRate" v-if="item.productCurDiscountRate != ''"
+              >{{ item.productCurDiscountRate | fixed }}%</span
             >
-            {{ item["productCurPrice "] }}원/개
+            {{ item.productCurPrice }}원/개
           </p>
           <p class="reserveDetail">상세 보기</p>
         </div>
@@ -91,9 +89,9 @@ export default {
       if (this.item.reserve.product.category == 1) {
         return "유통 임박";
       } else if (this.item.reserve.product.category == 2) {
-        return "못난이 농산물";
+        return "판매중";
       }
-      return "리퍼브 상품";
+      return "최대 할인";
     },
     dday() {
       if (this.item.productCurDday >= 0) {
@@ -125,7 +123,7 @@ export default {
         this.$router.go(
           this.$router.push({
             name: "Detail",
-            params: { productId: this.item.product.id },
+            params: { productId: this.item.reserve.product.id },
           })
         );
       }
@@ -262,9 +260,9 @@ export default {
   margin-bottom: 10px;
 }
 .reserveGoal {
-  font-size: 20px;
-  bottom: 50px;
-  left: 19px;
+  font-size: 15px;
+  bottom: 60px;
+  left: 20px;
 }
 .reserveMax {
   font-size: 17px;

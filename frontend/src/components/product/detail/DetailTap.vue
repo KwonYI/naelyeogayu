@@ -1,9 +1,9 @@
 <template>
-  <div class="DetailTap">
-    <div class="DetailTapHeader">
+  <div class="detailTap">
+    <div class="detailTapHeader">
       <div
         :class="[
-          leftActive ? 'DetailTapHeaderLeftIsActive' : 'DetailTapHeaderLeft',
+          leftActive ? 'detailTapHeaderLeftIsActive' : 'detailTapHeaderLeft',
         ]"
         @click="leftActive = true"
       >
@@ -11,18 +11,20 @@
       </div>
       <div
         :class="[
-          leftActive ? 'DetailTapHeaderRight' : 'DetailTapHeaderRightIsActive',
+          leftActive ? 'detailTapHeaderRight' : 'detailTapHeaderRightIsActive',
         ]"
         @click="leftActive = false"
       >
         구매후기
       </div>
     </div>
-    <div v-if="leftActive">
-      <Descript :item="item"></Descript>
-    </div>
-    <div v-else>
-      <Review :item="item"></Review>
+    <div class="detailTapBody">
+      <div v-if="leftActive">
+        <Descript :item="item"></Descript>
+      </div>
+      <div v-else>
+        <Review :item="item"></Review>
+      </div>
     </div>
   </div>
 </template>
@@ -47,14 +49,14 @@ export default {
 </script>
 
 <style>
-.DetailTapHeaderRight,
-.DetailTapHeaderLeft {
+.detailTapHeaderRight,
+.detailTapHeaderLeft {
   font-family: "NEXON Lv1 Gothic OTF Bold";
 }
-.DetailTapHeader {
+.detailTapHeader {
   width: 100%;
 }
-.DetailTapHeaderLeft {
+.detailTapHeaderLeft {
   float: left;
   border-top: 1px solid gray;
   border-bottom: 1px solid gray;
@@ -65,7 +67,7 @@ export default {
   font-family: "SDSamliphopangche_Outline";
   width: 50%;
 }
-.DetailTapHeaderLeftIsActive {
+.detailTapHeaderLeftIsActive {
   float: left;
   border-top: 1px solid gray;
   border-bottom: 1px solid gray;
@@ -77,7 +79,7 @@ export default {
   cursor: pointer;
   background: linear-gradient(#ffffff 80%, #abf200 20%);
 }
-.DetailTapHeaderRight {
+.detailTapHeaderRight {
   float: right;
   border-top: 1px solid gray;
   border-bottom: 1px solid gray;
@@ -88,7 +90,7 @@ export default {
   font-family: "SDSamliphopangche_Outline";
   cursor: pointer;
 }
-.DetailTapHeaderRightIsActive {
+.detailTapHeaderRightIsActive {
   float: right;
   border-top: 1px solid gray;
   border-bottom: 1px solid gray;
@@ -99,5 +101,8 @@ export default {
   font-family: "SDSamliphopangche_Outline";
   cursor: pointer;
   background: linear-gradient(#ffffff 80%, #abf200 20%);
+}
+.detailTapBody {
+  clear: both;
 }
 </style>
