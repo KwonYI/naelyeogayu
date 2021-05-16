@@ -33,9 +33,6 @@ public class Review {
 
 	@Column(length = 500)
 	private String descript;
-
-	@Column(length = 100)
-	private String title;
 	
 	@PrePersist
 	public void date() {
