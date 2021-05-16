@@ -6,71 +6,73 @@
         <span class="text" style="color: #42cd06">농산물</span>은 없다!
       </p>
       <div id="uglypthoto"></div>
-      <p id="listtitle">상품 목록</p>
+    </div>
+    <pricegrid :category="2" />
+    <div id="title">
+      <p id="listtitle" @click="getList()">상품 목록</p>
+      <div id="searchBar">
+        <input
+          class="input"
+          type="text"
+          placeholder="검색"
+          v-model="item.word"
+          @keyup.enter="getSearch()"
+        />
+        <img
+          src="@/assets/label/search.png"
+          alt="icon"
+          id="icon"
+          @click="getSearch()"
+        />
+      </div>
       <hr />
-      <Uglycard
-        v-for="(item, index) in list"
-        v-bind:key="index"
-        v-bind:item="list[index]"
-      />
-      <infinite-loading
-        @infinite="infiniteHandler"
-        spinner="circles"
-        ref="infiniteLoading"
-      >
-        <div slot="no-more" class="mb-12">목록의 끝입니다 :)</div>
-        <div slot="no-results" class="mb-12">목록이 비어있습니다 :(</div>
-      </infinite-loading>
+      <component v-if="this.search" v-bind:is="selected"></component>
+      <component v-else v-bind:is="selected" :name="selected"></component>
     </div>
   </div>
 </template>
 
 <script>
-import InfiniteLoading from "vue-infinite-loading";
-import Uglycard from "@/components/product/card/UglyCard.vue";
-import axios from "axios";
+import pricegrid from "@/components/product/sort/PriceGrid";
+import ugly from "@/components/product/list/ProductList.vue";
+import searchResult from "@/components/product/list/SearchResultList.vue";
 
 export default {
   components: {
-    Uglycard,
-    InfiniteLoading,
-  },
-  created() {
-    this.sizeCheck();
+    ugly,
+    searchResult,
+    pricegrid,
   },
   data: function () {
     return {
-      list: [],
-      limit: 0,
+      selected: "ugly",
+      item: {
+        word: "",
+        category: 2,
+      },
+      search: false,
     };
   },
   methods: {
-    infiniteHandler($state) {
-      axios({
-        method: "get",
-        url: `/product/ugly/${this.limit}`,
-      }).then((res) => {
-        setTimeout(() => {
-          if (this.getSize > this.limit) {
-            let data = res.data.data;
-            for (let key in data) {
-              this.list.push(data[key]);
-            }
-            this.limit += 6;
-            $state.loaded();
-          } else {
-            $state.complete();
-          }
-        }, 700);
-      });
+    getList() {
+      this.selected = "ugly";
+      this.item.word = "";
+      this.search = false;
     },
-    async sizeCheck() {
-      await this.$store.dispatch("productStore/getListSize", 2);
+    getSearch() {
+      if (this.item.word.length > 0) {
+        this.$store.dispatch("productStore/getSearchResult", this.item);
+        this.search = true;
+      } else {
+        this.getList();
+      }
     },
   },
-  computed: {
-    getSize() {
-      return this.$store.getters["productStore/getsize"];
+  watch: {
+    search: function () {
+      if (this.search) {
+        this.selected = "searchResult";
+      }
     },
   },
 };
