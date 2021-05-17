@@ -206,7 +206,7 @@ export default {
           },
         })
           .then((response) => {
-            if (response.data.success) {
+            if (response.data.success === "success") {
               this.$router.go(this.$router.currentRoute);
             } else {
               alert("수정에 실패했습니다.");
