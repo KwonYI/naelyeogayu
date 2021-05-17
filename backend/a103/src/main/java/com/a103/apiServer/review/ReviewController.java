@@ -22,6 +22,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.a103.apiServer.member.MemberDao;
+import com.a103.apiServer.model.Member;
 import com.a103.apiServer.model.Review;
 
 @RestController
@@ -31,14 +33,19 @@ public class ReviewController {
 	@Autowired
 	private ReviewDao reviewDao;
 
+	@Autowired
+	private MemberDao memberDao;
+	
 	private static final Logger logger = LoggerFactory.getLogger(ReviewController.class);
 
-	@PostMapping(value = "")
-	public ResponseEntity createReview(@RequestBody Review review) {
+	@PostMapping(value = "/{member_id}")
+	public ResponseEntity createReview(@PathVariable(value = "member_id") long memberId, @RequestBody Review review) {
 		ResponseEntity entity = null;
 		Map result = new HashMap();
 
 		try {
+			Member member = memberDao.findMemberById(memberId);
+			review.setMember(member);
 			reviewDao.save(review);
 			result.put("success", "success");
 			entity = new ResponseEntity(result, HttpStatus.OK);
@@ -111,7 +118,6 @@ public class ReviewController {
 		try {
 			// 변경 가능한 값 => title, descript
 			Review modifyReview = reviewDao.getOne(review.getId());
-			modifyReview.setTitle(review.getTitle());
 			modifyReview.setDescript(review.getDescript());
 			reviewDao.save(modifyReview);
 			result.put("success", "success");
