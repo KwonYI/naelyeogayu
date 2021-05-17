@@ -54,7 +54,7 @@ public class BuyServiceImpl implements BuyService{
 			buy.setProduct(product);
 			buyDao.save(buy);
 			emailService.sendMessage(1, buy);
-			emailService.sendMessage(1, buy);
+			emailService.sendMessage(2, buy);
 			return 1;
 		}else if(productStock < buyProductCount){
 			return 3;
