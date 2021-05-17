@@ -136,8 +136,6 @@ export default {
           if (response.data.success === "success") {
             this.list = response.data.data;
             this.checkWrite();
-          } else {
-            console.log("empty review");
           }
         })
         .catch((error) => {
