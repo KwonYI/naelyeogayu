@@ -1,13 +1,12 @@
 import axios from "axios";
 
-// const SERVER_URL = process.env.VUE_APP_SERVER_URL;
-
 const productStore = {
   namespaced: true,
 
   state: {
     size: 0,
     detailInfo: "",
+    searchList: [],
   },
   mutations: {
     setsize(state, payload) {
@@ -19,6 +18,15 @@ const productStore = {
     setDetailDefault(state) {
       state.detailInfo = "";
     },
+    setSearchResult(state, payload) {
+      for (let key in payload) {
+        state.searchList.push(payload[key]);
+      }
+      console.log(state.searchList);
+    },
+    setListDefault(state) {
+      state.searchList = [];
+    },
   },
   getters: {
     getsize(state) {
@@ -26,6 +34,9 @@ const productStore = {
     },
     getDetailInfo(state) {
       return state.detailInfo;
+    },
+    getResultList(state) {
+      return state.searchList;
     },
   },
   actions: {
@@ -66,6 +77,15 @@ const productStore = {
         .catch((error) => {
           console.log(error);
         });
+    },
+    getSearchResult(context, item) {
+      context.commit("setListDefault");
+      axios({
+        method: "get",
+        url: `/product/search/${item.category}/${item.word}/0`,
+      }).then((res) => {
+        context.commit("setSearchResult", res.data.data);
+      });
     },
   },
 };

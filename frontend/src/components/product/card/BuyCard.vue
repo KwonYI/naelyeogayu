@@ -3,7 +3,7 @@
     <div class="buyCardView">
       <div class="buyCard" @click="goDetail(item.product.status)">
         <div class="buyBox" v-if="item.product.status == 0">
-          <img class="buyLabel" src="@/assets/label.png" alt="label" />
+          <img class="buyLabel" src="@/assets/label/label.png" alt="label" />
           <div class="buyDday">
             <p class="buyRemain">{{ category }}</p>
             <p class="buyDay">{{ dday }}</p>
@@ -17,7 +17,7 @@
           />
         </div>
         <div class="buyBox" v-if="item.product.status == 1">
-          <img class="buyLabel" src="@/assets/label.png" alt="label" />
+          <img class="buyLabel" src="@/assets/label/label.png" alt="label" />
           <div class="buyDday">
             <p class="buyRemain">판매 대기</p>
             <p class="buyDay">{{ dday }}</p>
@@ -31,7 +31,7 @@
           />
         </div>
         <div class="buyBox" v-if="item.product.status == 2">
-          <img class="buyLabel" src="@/assets/label.png" alt="label" />
+          <img class="buyLabel" src="@/assets/label/label.png" alt="label" />
           <div class="buyDday">
             <p class="buyRemain">품절</p>
           </div>
@@ -44,7 +44,7 @@
           />
         </div>
         <div class="buyBox" v-if="item.product.status == 3">
-          <img class="buyLabel" src="@/assets/label.png" alt="label" />
+          <img class="buyLabel" src="@/assets/label/label.png" alt="label" />
           <div class="buyDday">
             <p class="buyRemain">경매 마감</p>
           </div>
