@@ -21,6 +21,7 @@ public interface ProductDao extends JpaRepository<Product, Long> {
 	long countByCategoryAndStatus(int category, int status);
 	List<Product> findListProductBySellerId(int memberId);
 	List<Product> findListProudctByStatusAndStartDate(int status, LocalDate startDate);
+	List<Product> findListProductByStatusAndCategory(int status, int category);
 
 	@Query(value = "SELECT * FROM product WHERE CATEGORY = :category ORDER BY STATUS LIMIT :limit, :CONTENT_CNT", nativeQuery = true)
 	List<Product> findListProductByCategory(@Param("category") int category, @Param("limit") int limit, @Param("CONTENT_CNT") int contentCnt);
@@ -28,11 +29,8 @@ public interface ProductDao extends JpaRepository<Product, Long> {
 	@Query(value = "SELECT * FROM product WHERE START_DATE >= :date ORDER BY STATUS LIMIT :limit, :CONTENT_CNT", nativeQuery = true)
 	List<Product> findListProductByStartDate(@Param("date") LocalDate date, @Param("limit") int limit, @Param("CONTENT_CNT") int contentCnt);
 
-	@Query(value = "SELECT * FROM product WHERE NAME Like :word ORDER BY STATUS LIMIT :limit, :CONTENT_CNT", nativeQuery = true)
-	List<Product> findListProductByNameContaining(@Param("word") String word, @Param("limit") int limit, @Param("CONTENT_CNT") int contentCnt);
-
-	@Query(value = "SELECT * FROM product WHERE DESCRIPT Like :word ORDER BY STATUS LIMIT :limit, :CONTENT_CNT", nativeQuery = true)
-	List<Product> findListProductByDescriptContaining(@Param("word") String word, @Param("limit") int limit, @Param("CONTENT_CNT") int contentCnt);
+	@Query(value = "SELECT * FROM product WHERE CATEGORY = :category AND NAME Like :word ORDER BY STATUS LIMIT :limit, :CONTENT_CNT", nativeQuery = true)
+	List<Product> findListProductByCategoryNameContaining(@Param("category") int category, @Param("word") String word, @Param("limit") int limit, @Param("CONTENT_CNT") int contentCnt);
 
 	@Query(value = "SELECT P.* FROM product P LEFT JOIN watchlog W ON P.ID = W.PRODUCT_ID WHERE STATUS = 0 GROUP BY P.ID HAVING COUNT(W.ID) > 0 ORDER BY COUNT(P.ID) DESC", nativeQuery = true)
 	List<Product> findListProductOrderByWatchCount();

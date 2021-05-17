@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -126,8 +125,8 @@ public class ReviewController {
 		return entity;
 	}
 
-	@DeleteMapping(value = "")
-	public ResponseEntity deleteReview(@RequestHeader(value = "id") long reviewId) {
+	@DeleteMapping(value = "{review_id}")
+	public ResponseEntity deleteReview(@PathVariable("review_id") long reviewId) {
 		ResponseEntity entity = null;
 		Map result = new HashMap();
 

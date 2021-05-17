@@ -19,12 +19,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.a103.apiServer.model.Product;
 import com.a103.apiServer.model.ProductDetail;
+import com.a103.apiServer.model.Reserve;
 
 @RestController
 @RequestMapping("/product")
@@ -62,13 +62,21 @@ public class ProductController {
 	public ResponseEntity getSellList(@PathVariable(value = "member_id") int memberId) {
 		ResponseEntity entity = null;
 		Map result = new HashMap<>();
+		LocalDateTime now = LocalDateTime.now();
 
 		try {
 			List<Product> productList = productDao.findListProductBySellerId(memberId);
 
 			if (productList.size() != 0) {
+				List<Map> data = new ArrayList<>();
+				
+				for (Product product  : productList) {
+					Map productDetail = productService.getSalesRecord(product);
+					data.add(productDetail);
+				}
+				
 				result.put("success", "success");
-				result.put("data", productList);
+				result.put("data", data);
 				entity = new ResponseEntity<>(result, HttpStatus.OK);
 			} else {
 				result.put("success", "fail");
@@ -234,8 +242,8 @@ public class ProductController {
 		return entity;
 	}
 
-	@DeleteMapping
-	public ResponseEntity deleteProduct(@RequestHeader(value = "product_id") long productId) {
+	@DeleteMapping(value = "{product_id}")
+	public ResponseEntity deleteProduct(@PathVariable(value = "product_id") long productId) {
 		ResponseEntity entity = null;
 		Map result = new HashMap<>();
 
@@ -281,21 +289,15 @@ public class ProductController {
 		return entity;
 	}
 
-	@GetMapping(value = "/search/{option}/{word}/{limit}")
-	public ResponseEntity getSearchProduct(@PathVariable("option") int option, @PathVariable("word") String word,
+	@GetMapping(value = "/search/{category}/{word}/{limit}")
+	public ResponseEntity getSearchProduct(@PathVariable("category") int category, @PathVariable("word") String word,
 			@PathVariable(value = "limit") int limit) {
 		ResponseEntity entity = null;
 		Map result = new HashMap<>();
 		LocalDateTime now = LocalDateTime.now();
 
 		try {
-			List<Product> productList = new ArrayList<Product>();
-
-			if (option == 1) {
-				productList = productDao.findListProductByNameContaining("%" + word + "%", limit, CONTENT_CNT);
-			} else if (option == 2) {
-				productList = productDao.findListProductByDescriptContaining("%" + word + "%", limit, CONTENT_CNT);
-			}
+			List<Product> productList = productDao.findListProductByCategoryNameContaining(category, "%" + word + "%", limit, CONTENT_CNT);
 
 			if (productList.size() != 0) {
 				List<ProductDetail> data = new ArrayList<>();
@@ -454,7 +456,7 @@ public class ProductController {
 						int first = Integer.compare(o1.getProduct().getStatus(), o2.getProduct().getStatus());
 
 						if (first == 0) {
-							return sortType * Float.compare(o1.getCurPrice(), o2.getCurPrice());
+							return sortType * Integer.compare(o1.getCurPrice(), o2.getCurPrice());
 						} else {
 							return first;
 						}
@@ -491,6 +493,80 @@ public class ProductController {
 				for (Product product : productList) {
 					data.add(productService.getProductDetail(product, now));
 				}
+				result.put("data", data);
+				result.put("success", "success");
+				entity = new ResponseEntity<>(result, HttpStatus.OK);
+			} else {
+				result.put("success", "fail");
+				entity = new ResponseEntity<>(result, HttpStatus.OK);
+			}
+
+		} catch (Exception e) {
+			logger.error("error", e);
+			result.put("success", "error");
+			entity = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+		}
+
+		return entity;
+	}
+	
+	@GetMapping(value = "/sort/discount/onsale/{category}")
+	public ResponseEntity sortOnsaleByDiscount(@PathVariable("category") int category) {
+		ResponseEntity entity = null;
+		Map result = new HashMap<>();
+		LocalDateTime now = LocalDateTime.now();
+
+		try {
+			List<Product> productList = productDao.findListProductByStatusAndCategory(0, category);
+
+			if (productList.size() != 0) {
+				List<ProductDetail> data = new ArrayList<>();
+				for (Product product : productList) {
+					data.add(productService.getProductDetail(product, now));
+				}
+				Collections.sort(data, new Comparator<ProductDetail>() {
+					public int compare(ProductDetail o1, ProductDetail o2) {
+						return Float.compare(o2.getDiscountRate(), o1.getDiscountRate());
+					}
+				});
+				data = data.subList(0, Math.min(data.size(), 10));
+				result.put("data", data);
+				result.put("success", "success");
+				entity = new ResponseEntity<>(result, HttpStatus.OK);
+			} else {
+				result.put("success", "fail");
+				entity = new ResponseEntity<>(result, HttpStatus.OK);
+			}
+
+		} catch (Exception e) {
+			logger.error("error", e);
+			result.put("success", "error");
+			entity = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+		}
+
+		return entity;
+	}
+
+	@GetMapping(value = "/sort/price/onsale/{category}")
+	public ResponseEntity sortOnsaleByPrice(@PathVariable("category") int category) {
+		ResponseEntity entity = null;
+		Map result = new HashMap<>();
+		LocalDateTime now = LocalDateTime.now();
+
+		try {
+			List<Product> productList = productDao.findListProductByStatusAndCategory(0, category);
+
+			if (productList.size() != 0) {
+				List<ProductDetail> data = new ArrayList<>();
+				for (Product product : productList) {
+					data.add(productService.getProductDetail(product, now));
+				}
+				Collections.sort(data, new Comparator<ProductDetail>() {
+					public int compare(ProductDetail o1, ProductDetail o2) {
+						return Integer.compare(o1.getCurPrice(), o2.getCurPrice());
+					}
+				});
+				data = data.subList(0, Math.min(data.size(), 10));
 				result.put("data", data);
 				result.put("success", "success");
 				entity = new ResponseEntity<>(result, HttpStatus.OK);
