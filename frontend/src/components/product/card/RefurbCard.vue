@@ -2,10 +2,10 @@
   <div id="cardview">
     <div id="card" @click="goDetail(item.product.status)">
       <div id="box" class="" v-if="item.product.status == 0">
-        <img id="label" src="@/assets/label.png" alt="label" />
+        <img id="label" src="@/assets/label/label.png" alt="label" />
         <div id="dday">
           <p id="remain">최대 할인</p>
-          <p id="day">D-{{ item.dday }}</p>
+          <p id="day">{{ maxrate }}%</p>
         </div>
         <v-img
           id="img"
@@ -16,7 +16,7 @@
         />
       </div>
       <div id="box" v-if="item.product.status == 1">
-        <img id="label" src="@/assets/label.png" alt="label" />
+        <img id="label" src="@/assets/label/label.png" alt="label" />
         <div id="dday">
           <p id="remain">최대 할인</p>
           <p id="day">{{ maxrate }}%</p>
@@ -30,7 +30,7 @@
         />
       </div>
       <div id="box" v-if="item.product.status == 2">
-        <img id="label" src="@/assets/endlabel.png" alt="label" />
+        <img id="label" src="@/assets/label/endlabel.png" alt="label" />
         <div id="dday">
           <p id="soldout">품절</p>
         </div>
@@ -43,7 +43,7 @@
         />
       </div>
       <div id="box" v-if="item.product.status == 3">
-        <img id="label" src="@/assets/endlabel.png" alt="label" />
+        <img id="label" src="@/assets/label/endlabel.png" alt="label" />
         <div id="dday">
           <p id="end">경매 마감</p>
         </div>
@@ -124,4 +124,4 @@ export default {
 };
 </script>
 
-<style src="@/assets/css/ListCard.css"></style>
+<style src="@/assets/css/ListCard.css" scoped></style>

@@ -8,70 +8,73 @@
         있다는 사실, 알고 계셨나요?
       </p>
       <div id="expirephoto"></div>
-      <p id="listtitle">상품 목록</p>
+    </div>
+    <pricegrid :category="1" />
+    <div id="title">
+      <p id="listtitle" @click="getList()">상품 목록</p>
+      <div id="searchBar">
+        <input
+          class="input"
+          type="text"
+          placeholder="검색"
+          v-model="item.word"
+          @keyup.enter="getSearch()"
+        />
+        <img
+          src="@/assets/label/search.png"
+          alt="icon"
+          id="icon"
+          @click="getSearch()"
+        />
+      </div>
       <hr />
-      <Expirecard
-        v-for="(item, index) in list"
-        v-bind:key="index"
-        v-bind:item="list[index]"
-      />
-      <infinite-loading
-        @infinite="infiniteHandler"
-        spinner="circles"
-        ref="infiniteLoading"
-      >
-        <div slot="no-more" class="mb-12">목록의 끝입니다 :)</div>
-        <div slot="no-results" class="mb-12">목록이 비어있습니다 :(</div>
-      </infinite-loading>
+      <component v-if="this.search" v-bind:is="selected"></component>
+      <component v-else v-bind:is="selected" :name="selected"></component>
     </div>
   </div>
 </template>
 
 <script>
-import InfiniteLoading from "vue-infinite-loading";
-import Expirecard from "@/components/product/card/ExpireCard.vue";
-import axios from "axios";
+import pricegrid from "@/components/product/sort/PriceGrid";
+import expire from "@/components/product/list/ProductList.vue";
+import searchResult from "@/components/product/list/SearchResultList.vue";
+
 export default {
   components: {
-    InfiniteLoading,
-    Expirecard,
-  },
-  created() {
-    this.sizeCheck();
+    pricegrid,
+    expire,
+    searchResult,
   },
   data: function () {
     return {
-      list: [],
-      limit: 0,
+      selected: "expire",
+      item: {
+        word: "",
+        category: 1,
+      },
+      search: false,
     };
   },
   methods: {
-    infiniteHandler($state) {
-      axios({
-        method: "get",
-        url: `/product/expire/${this.limit}`,
-      }).then((res) => {
-        setTimeout(() => {
-          if (this.getSize > this.limit) {
-            let data = res.data.data;
-            for (let key in data) {
-              this.list.push(data[key]);
-            }
-            this.limit += 6;
-            $state.loaded();
-          } else {
-            $state.complete();
-          }
-        }, 700);
-      });
+    getList() {
+      this.selected = "expire";
+      this.item.word = "";
+      this.search = false;
     },
-    async sizeCheck() {
-      await this.$store.dispatch("productStore/getListSize", 1);
+    getSearch() {
+      if (this.item.word.length > 0) {
+        this.$store.dispatch("productStore/getSearchResult", this.item);
+        this.search = true;
+      } else {
+        this.getList();
+      }
     },
   },
-  computed: {
-    getSize() {
-      return this.$store.getters["productStore/getsize"];
+  watch: {
+    search: function () {
+      if (this.search) {
+        this.selected = "searchResult";
+      }
     },
   },
 };
