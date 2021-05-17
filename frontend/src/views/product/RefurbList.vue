@@ -5,70 +5,73 @@
         <span class="text" style="color: #5752f3">리퍼브 상품</span>이란?
       </p>
       <div id="refurbphoto"></div>
-      <p id="listtitle">상품 목록</p>
+    </div>
+    <pricegrid :category="3" />
+    <div id="title">
+      <p id="listtitle" @click="getList()">상품 목록</p>
+      <div id="searchBar">
+        <input
+          class="input"
+          type="text"
+          placeholder="검색"
+          v-model="item.word"
+          @keyup.enter="getSearch()"
+        />
+        <img
+          src="@/assets/label/search.png"
+          alt="icon"
+          id="icon"
+          @click="getSearch()"
+        />
+      </div>
       <hr />
-      <Refurbcard
-        v-for="(item, index) in list"
-        v-bind:key="index"
-        v-bind:item="list[index]"
-      />
-      <infinite-loading
-        @infinite="infiniteHandler"
-        spinner="circles"
-        ref="infiniteLoading"
-      >
-        <div slot="no-more" class="mb-12">목록의 끝입니다 :)</div>
-        <div slot="no-results" class="mb-12">목록이 비어있습니다 :(</div>
-      </infinite-loading>
+      <component v-if="this.search" v-bind:is="selected"></component>
+      <component v-else v-bind:is="selected" :name="selected"></component>
     </div>
   </div>
 </template>
 
 <script>
-import InfiniteLoading from "vue-infinite-loading";
-import Refurbcard from "@/components/product/card/RefurbCard.vue";
-import axios from "axios";
+import pricegrid from "@/components/product/sort/PriceGrid";
+import refurb from "@/components/product/list/ProductList.vue";
+import searchResult from "@/components/product/list/SearchResultList.vue";
+
 export default {
   components: {
-    InfiniteLoading,
-    Refurbcard,
+    searchResult,
+    refurb,
+    pricegrid,
   },
-  created() {
-    this.sizeCheck();
-  },
-  data() {
+  data: function () {
     return {
-      list: [],
-      limit: 0,
+      selected: "refurb",
+      item: {
+        word: "",
+        category: 3,
+      },
+      search: false,
     };
   },
   methods: {
-    infiniteHandler($state) {
-      axios({
-        method: "get",
-        url: `/product/refurb/${this.limit}`,
-      }).then((res) => {
-        setTimeout(() => {
-          if (this.getSize > this.limit) {
-            let data = res.data.data;
-            for (let key in data) {
-              this.list.push(data[key]);
-            }
-            this.limit += 6;
-            $state.loaded();
-          } else {
-            $state.complete();
-          }
-        }, 700);
-      });
+    getList() {
+      this.selected = "refurb";
+      this.item.word = "";
+      this.search = false;
     },
-    async sizeCheck() {
-      await this.$store.dispatch("productStore/getListSize", 3);
+    getSearch() {
+      if (this.item.word.length > 0) {
+        this.$store.dispatch("productStore/getSearchResult", this.item);
+        this.search = true;
+      } else {
+        this.getList();
+      }
     },
   },
-  computed: {
-    getSize() {
-      return this.$store.getters["productStore/getsize"];
+  watch: {
+    search: function () {
+      if (this.search) {
+        this.selected = "searchResult";
+      }
     },
   },
 };

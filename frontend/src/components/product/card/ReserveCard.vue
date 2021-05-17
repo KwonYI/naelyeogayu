@@ -3,7 +3,11 @@
     <div class="reserveCardView">
       <div class="reserveCard" @click="goDetail(item.reserve.product.status)">
         <div class="reserveBox" v-if="item.reserve.product.status == 0">
-          <img class="reserveLabel" src="@/assets/label.png" alt="label" />
+          <img
+            class="reserveLabel"
+            src="@/assets/label/label.png"
+            alt="label"
+          />
           <div class="reserveDday">
             <p class="reserveRemain">{{ category }}</p>
             <p class="reserveDay">{{ dday }}</p>
@@ -17,7 +21,11 @@
           />
         </div>
         <div class="reserveBox" v-if="item.reserve.product.status == 1">
-          <img class="reserveLabel" src="@/assets/label.png" alt="label" />
+          <img
+            class="reserveLabel"
+            src="@/assets/label/label.png"
+            alt="label"
+          />
           <div class="reserveDday">
             <p class="reserveRemain">판매 대기</p>
             <p class="reserveDay">{{ dday }}</p>
@@ -31,7 +39,11 @@
           />
         </div>
         <div class="reserveBox" v-if="item.reserve.product.status == 2">
-          <img class="reserveLabel" src="@/assets/endlabel.png" alt="label" />
+          <img
+            class="reserveLabel"
+            src="@/assets/label/endlabel.png"
+            alt="label"
+          />
           <div class="reserveDday">
             <p class="reserveSoldout">품절</p>
           </div>
@@ -44,7 +56,11 @@
           />
         </div>
         <div class="reserveBox" v-if="item.reserve.product.status == 3">
-          <img class="reserveLabel" src="@/assets/endlabel.png" alt="label" />
+          <img
+            class="reserveLabel"
+            src="@/assets/label/endlabel.png"
+            alt="label"
+          />
           <div class="reserveDday">
             <p class="reserveEnd">경매 마감</p>
           </div>

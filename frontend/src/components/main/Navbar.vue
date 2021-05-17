@@ -37,7 +37,7 @@
         <ul>
           <li>
             <img
-              src="@/assets/alarm.png"
+              src="@/assets/main/alarm.png"
               alt="logo"
               width="17px"
               height="17px"
@@ -50,7 +50,7 @@
           </li>
           <li>
             <img
-              src="@/assets/harvest.png"
+              src="@/assets/main/harvest.png"
               alt="logo"
               width="17px"
               height="17px"
@@ -63,7 +63,7 @@
           </li>
           <li>
             <img
-              src="@/assets/desktop.png"
+              src="@/assets/main/desktop.png"
               alt="logo"
               width="17px"
               height="17px"
@@ -76,7 +76,7 @@
           </li>
           <li>
             <img
-              src="@/assets/product.png"
+              src="@/assets/main/product.png"
               alt="logo"
               width="17px"
               height="17px"
@@ -114,22 +114,6 @@ export default {
 </script>
 
 <style>
-@font-face {
-  font-family: "SDSamliphopangche_Outline";
-  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts-20-12@1.0/SDSamliphopangche_Outline.woff")
-    format("woff");
-  font-weight: normal;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: "NEXON Lv1 Gothic OTF";
-  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@2.1/NEXON Lv1 Gothic OTF.woff")
-    format("woff");
-  font-weight: normal;
-  font-style: normal;
-}
-
 #header {
   position: relative;
   z-index: 4000;
@@ -147,7 +131,14 @@ export default {
 #logo {
   text-align: center;
 }
-
+#search {
+  position: absolute;
+  top: 50%;
+  bottom: 0;
+  right: 300px;
+  font-size: 14px;
+  font-family: "NEXON Lv1 Gothic OTF";
+}
 #login {
   position: absolute;
   top: 50%;

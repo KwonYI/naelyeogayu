@@ -3,7 +3,7 @@
     <div class="likeCardView">
       <div class="likeCard" @click="goDetail(item.product.status)">
         <div class="likeBox" v-if="item.product.status == 0">
-          <img class="likeLabel" src="@/assets/label.png" alt="label" />
+          <img class="likeLabel" src="@/assets/label/label.png" alt="label" />
           <div class="likeDday">
             <p class="likeRemain">{{ category }}</p>
             <p class="likeDay">{{ dday }}</p>
@@ -17,7 +17,7 @@
           />
         </div>
         <div class="likeBox" v-if="item.product.status == 1">
-          <img class="likeLabel" src="@/assets/label.png" alt="label" />
+          <img class="likeLabel" src="@/assets/label/label.png" alt="label" />
           <div class="likeDday">
             <p class="likeRemain">판매 대기</p>
             <p class="likeDay">{{ dday }}</p>
@@ -31,7 +31,11 @@
           />
         </div>
         <div class="likeBox" v-if="item.product.status == 2">
-          <img class="likeLabel" src="@/assets/endlabel.png" alt="label" />
+          <img
+            class="likeLabel"
+            src="@/assets/label/endlabel.png"
+            alt="label"
+          />
           <div class="likeDday">
             <p class="likeSoldout">품절</p>
           </div>
@@ -44,7 +48,11 @@
           />
         </div>
         <div class="likeBox" v-if="item.product.status == 3">
-          <img class="likeLabel" src="@/assets/endlabel.png" alt="label" />
+          <img
+            class="likeLabel"
+            src="@/assets/label/endlabel.png"
+            alt="label"
+          />
           <div class="likeDday">
             <p class="likeEnd">경매 마감</p>
           </div>

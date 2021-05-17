@@ -1,0 +1,125 @@
+#hotcard {
+    display: inline-block;
+    width: 240px;
+    border-radius: 10px;
+    height: 220px;
+    position: relative;
+    overflow: hidden;
+    color: white;
+  }
+  #label {
+    position: absolute;
+    z-index: 2;
+    display: inline-block;
+    top: 0px;
+    right: 10px;
+  }
+  #rate {
+    position: absolute;
+    z-index: 2;
+    display: inline-block;
+    text-align: center;
+    width: 53px;
+    top: 10px;
+    right: 10px;
+    font-size: 17px;
+    font-family: "NEXON Lv1 Gothic OTF Bold";
+  }
+  figure * {
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    -webkit-transition: all 0.35s ease;
+    transition: all 0.35s ease;
+  }
+  figure:after,
+  figure figcaption {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+  }
+  figure:after {
+    content: "";
+    z-index: 3;
+    background-color: rgba(0, 0, 0, 0.65);
+    -webkit-transition: all 0.35s ease;
+    transition: all 0.35s ease;
+    opacity: 0;
+  }
+  figure figcaption {
+    z-index: 4;
+    padding: 30px;
+  }
+  figure #name {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    width: 150px;
+    font-size: 17px;
+    font-family: "NEXON Lv1 Gothic OTF Bold";
+  }
+  figure #descript {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    word-wrap: break-word;
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+    width: 170px;
+    height: 54px;
+    max-height: 54px;
+    font-family: "NEXON Lv1 Gothic OTF";
+  }
+  #endDate,
+  #stock,
+  #price {
+    text-align: end;
+    width: 170px;
+    margin-bottom: 5px;
+    font-family: "NEXON Lv1 Gothic OTF";
+  }
+  figcaption p {
+    font-size: 13px;
+    letter-spacing: 1px;
+    line-height: 1.1em;
+    opacity: 0;
+    top: 50%;
+    font-family: "NEXON Lv1 Gothic OTF";
+    -webkit-transform: translateY(40px);
+    transform: translateY(40px);
+  }
+  figcaption #arrow{
+    position: absolute;
+    opacity: 0;
+    top: 20px;
+    right: 20px;
+    -webkit-transform: translateY(40px);
+    transform: translateY(40px);
+    height: 40px;
+  }
+  figure:hover {
+    cursor: pointer;
+  }
+  figure:hover #img {
+    transform: scale(1.15);
+    transition: 0.3s ease;
+    -webkit-opacity: 0.8;
+    opacity: 0.8;
+  }
+  figure:hover:after {
+    opacity: 1;
+    position: absolute;
+    top: 10px;
+    bottom: 10px;
+    left: 10px;
+    right: 10px;
+  }
+  figcaption:hover p,
+  figcaption.hover p,
+  figcaption:hover #arrow,
+  figcaption.hover #arrow {
+    -webkit-transform: translate(0px, 0px);
+    transform: translate(0px, 0px);
+    opacity: 1;
+  }
