@@ -198,6 +198,7 @@ export default {
       this.reserveCountSelect.push(i);
     }
     this.likeStatus();
+    this.reserveStatus();
     this.getSellInfo();
   },
   computed: {
@@ -249,8 +250,10 @@ export default {
     goCategory() {
       if (this.item.product.category == 1) {
         this.$router.push({ name: "Expire" });
+        return;
       } else if (this.item.product.category == 2) {
         this.$router.push({ name: "Uglyfood" });
+        return;
       }
       this.$router.push({ name: "Refurb" });
     },
@@ -273,7 +276,7 @@ export default {
       if (!this.isFilled) {
         return;
       }
-      if (this.reservePrice >= this.item.curPrice) {
+      if (this.product.status == 0 && this.reservePrice >= this.item.curPrice) {
         this.$axios({
           url: "/buy/" + this.item.product.id,
           method: "POST",
@@ -388,8 +391,6 @@ export default {
         .then((response) => {
           if (response.data.success === "success") {
             this.isLike = true;
-          } else {
-            window.location.reload();
           }
         })
         .catch((error) => {
@@ -409,8 +410,6 @@ export default {
         .then((response) => {
           if (response.data.success === "success") {
             this.isLike = false;
-          } else {
-            window.location.reload();
           }
         })
         .catch((error) => {
@@ -432,6 +431,27 @@ export default {
             this.isLike = true;
           } else {
             this.isLike = false;
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    },
+    reserveStatus() {
+      this.$axios({
+        url:
+          "/reserve/my/" +
+          this.$store.getters["userStore/id"] +
+          "/" +
+          this.item.product.id,
+        method: "GET",
+        headers: { "x-access-token": localStorage.getItem("token") },
+      })
+        .then((response) => {
+          if (response.data.success === "success") {
+            this.isReserved = true;
+          } else {
+            this.isReserved = false;
           }
         })
         .catch((error) => {

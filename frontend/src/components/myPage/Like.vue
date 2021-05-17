@@ -9,7 +9,7 @@
       />
     </div>
     <div class="likeBody" v-else>
-      <div class="likeText">예약한 상품이 없습니다.</div>
+      <div class="likeText">찜한 상품이 없습니다.</div>
     </div>
   </div>
 </template>
@@ -36,7 +36,7 @@ export default {
           if (response.data.success === "success") {
             this.items = response.data.data;
           } else {
-            this.hasReserved = false;
+            this.hasLiked = false;
           }
         })
         .catch((error) => {
