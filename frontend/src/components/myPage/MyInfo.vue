@@ -250,13 +250,14 @@ export default {
       }).open();
     },
     chargePoint() {
+      if (this.chargePointCount == 0 || this.chargePointCount < 1000) return;
       this.$axios({
         url: "/member/ready",
         method: "POST",
         headers: { "x-access-token": localStorage.getItem("token") },
         data: {
           email: this.user.email,
-          point: 5000,
+          point: this.chargePointCount,
         },
       })
         .then((response) => {

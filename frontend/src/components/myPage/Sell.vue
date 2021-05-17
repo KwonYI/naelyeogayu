@@ -66,14 +66,14 @@ export default {
   margin-top: 15px;
   align-items: center;
 }
-.reserveBody {
+.sellBody {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   overflow: hidden;
 }
-.reserveText {
+.sellText {
   padding-top: 5%;
   padding-bottom: 2%;
   font-size: 24px;

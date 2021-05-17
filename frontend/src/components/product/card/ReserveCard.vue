@@ -79,12 +79,14 @@
           </p>
           <p class="reserveStock">예약 수량 : {{ item.reserve.count }}개</p>
           <p class="reserveGoal">예약 : {{ item.reserve.price }}원</p>
-          <p class="reserveMax">{{ item.reserve.product.startPrice }}원</p>
+          <p class="reserveMax" v-if="item.reserve.product.status == 0">
+            {{ item.reserve.product.startPrice | comma }}원
+          </p>
           <p class="reserveCur">
-            <span class="reserveRate" v-if="item.productCurDiscountRate != ''"
+            <span class="reserveRate" v-if="item.reserve.product.status == 0"
               >{{ item.productCurDiscountRate | fixed }}%</span
             >
-            {{ item.productCurPrice }}원/개
+            {{ item.productCurPrice | comma }}원/개
           </p>
           <p class="reserveDetail">상세 보기</p>
         </div>
@@ -125,6 +127,9 @@ export default {
     },
     fixed(rate) {
       return rate.toFixed(2);
+    },
+    comma(v) {
+      return String(v).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     },
   },
   methods: {
@@ -288,9 +293,7 @@ export default {
   text-decoration: line-through;
 }
 .reserveRate {
-  font-size: 15px;
-  bottom: 85px;
-  right: 20px;
+  color: red;
 }
 .reserveDate {
   width: 180px;

@@ -59,7 +59,7 @@
       <div id="info">
         <p id="date">마감일 : {{ item.product.expirationDate }}</p>
         <p id="stock">수량 : {{ item.product.stock }}개</p>
-        <p id="max">{{ item.product.startPrice }}원</p>
+        <p id="max">{{ item.product.startPrice | comma }}원</p>
         <p id="cur">
           <span id="rate" v-if="item.product.status == 0"
             >{{ item.discountRate | fixed }}%</span
@@ -67,7 +67,7 @@
           <span id="notrate" v-if="item.product.status == 1">판매 대기</span>
           <span id="notrate" v-if="item.product.status == 2">품절</span>
           <span id="notrate" v-if="item.product.status == 3">마감</span>
-          {{ item.curPrice }}원/개
+          {{ item.curPrice | comma }}원/개
         </p>
         <p id="detail">상세 보기</p>
       </div>
@@ -94,6 +94,9 @@ export default {
     },
     fixed(rate) {
       return rate.toFixed(2);
+    },
+    comma(v) {
+      return String(v).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     },
   },
   methods: {

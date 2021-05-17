@@ -72,13 +72,13 @@
             무게 : {{ item.product.stock }}kg
           </p>
           <p class="likeMax" v-if="item.product.status == 0">
-            {{ item.product.startPrice }}원
+            {{ item.product.startPrice | comma }}원
           </p>
           <p class="likeCur">
             <span class="likeRate" v-if="item.product.status == 0"
               >{{ item.discountRate | fixed }}%</span
             >
-            {{ item.curPrice }}원/{{ unit }}
+            {{ item.curPrice | comma }}원/{{ unit }}
           </p>
           <p class="likeDetail">상세 보기</p>
         </div>
@@ -125,6 +125,9 @@ export default {
     },
     fixed(rate) {
       return rate.toFixed(2);
+    },
+    comma(v) {
+      return String(v).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     },
   },
   methods: {
