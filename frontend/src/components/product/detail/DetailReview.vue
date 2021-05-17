@@ -153,7 +153,6 @@ export default {
           this.review = this.list[review];
         }
       }
-      console.log("isWrite? : " + this.isWrite);
     },
     writeReview() {
       console.log(this.memberId);
