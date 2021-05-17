@@ -56,8 +56,7 @@
               <div class="text-left">
                 <div
                   id="viewcomment"
-                  v-show="verify"
-                  v-if="!(memberId == item.member.id && isModify == true)"
+                  v-if="memberId != item.member.id || isModify == false"
                   v-html="item.descript.replace(/(?:\r\n|\r|\n)/g, '<br>')"
                   style="
                     margin-top: 10px;
@@ -138,7 +137,7 @@ export default {
             this.list = response.data.data;
             this.checkWrite();
           } else {
-            alert("상품 후기를 받아오는데 실패했습니다.");
+            console.log("empty review");
           }
         })
         .catch((error) => {
@@ -153,7 +152,6 @@ export default {
           this.review = this.list[review];
         }
       }
-      console.log("isWrite? : " + this.isWrite);
     },
     writeReview() {
       console.log(this.memberId);
@@ -207,7 +205,7 @@ export default {
           },
         })
           .then((response) => {
-            if (response.data.success) {
+            if (response.data.success === "success") {
               this.$router.go(this.$router.currentRoute);
             } else {
               alert("수정에 실패했습니다.");
