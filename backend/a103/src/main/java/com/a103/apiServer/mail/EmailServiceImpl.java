@@ -49,7 +49,7 @@ public class EmailServiceImpl implements EmailService {
 		msgg += "<br>";
 		msgg += "<p>등록하신 상품  " + buy.getProduct().getName() +" 가(이) " + buy.getCount() + " 개 판매 되었습니다.<p>";
 		msgg += "<br>";
-		msgg += "<p>판매 가격은  " + buy.getPrice() + "이며 " + buy.getBuyDate() +"에 판매 되었습니다.<p>";
+		msgg += "<p>판매 가격은  " + buy.getPrice() + "원 이며 " + buy.getBuyDate() +"에 판매 되었습니다.<p>";
 		msgg += "<br>";
 		msgg += "<p>감사합니다!<p>";
 		msgg += "<br>";
@@ -70,7 +70,7 @@ public class EmailServiceImpl implements EmailService {
 		msgg += "<br>";
 		msgg += "<p>상품  " + buy.getProduct().getName() +" 가(이) " + buy.getCount() + " 개 구매 되었습니다.<p>";
 		msgg += "<br>";
-		msgg += "<p>구매 가격은  " + buy.getPrice() + "이며 " + buy.getBuyDate() +"에 구매 되었습니다.<p>";
+		msgg += "<p>구매 가격은  " + buy.getPrice() + "원 이며 " + buy.getBuyDate() +"에 구매 되었습니다.<p>";
 		msgg += "<br>";
 		msgg += "<p>감사합니다!<p>";
 		msgg += "<br>";
