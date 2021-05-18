@@ -9,7 +9,7 @@ import com.a103.apiServer.model.Buy;
 
 @Repository
 public interface BuyDao extends JpaRepository<Buy, Long>{
-	Buy findBuyByMemberIdAndProductId(long memberId, long productId);
+	long countByMemberIdAndProductId(long memberId, long productId);
 	List<Buy> findListBuyByMemberId(long memberId);
 	List<Buy> findListBuyByProductId(long productId);
 }
