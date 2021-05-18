@@ -91,4 +91,7 @@ export default {
   padding-top: 1%;
   padding-bottom: 7%;
 }
+MyInfo {
+  z-index: 10000;
+}
 </style>

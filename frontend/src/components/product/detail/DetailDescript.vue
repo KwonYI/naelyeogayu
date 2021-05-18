@@ -17,9 +17,6 @@ export default {
       return enter.replace("\n", "<br />");
     },
   },
-  created() {
-    console.log(this.item.product.descript);
-  },
 };
 </script>
 

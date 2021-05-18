@@ -152,7 +152,6 @@ export default {
       }
     },
     writeReview() {
-      console.log(this.memberId);
       this.$axios({
         url: "/review/" + this.memberId,
         method: "POST",
@@ -209,8 +208,8 @@ export default {
               alert("수정에 실패했습니다.");
             }
           })
-          .catch((err) => {
-            console.log(err);
+          .catch((error) => {
+            console.log(error);
             alert("수정에 실패했습니다.");
           });
       }
