@@ -16,7 +16,7 @@
           >종료일: {{ item.product.endDate }}</span
         >
       </div>
-      <v-dialog v-model="sellModal" max-width="600px">
+      <v-dialog class="modal" v-model="sellModal" max-width="600px">
         <template v-slot:activator="{ on: sell, attrs }">
           <div class="productSellInfo" v-bind="attrs" v-on="{ ...sell }">
             입찰 기록
@@ -105,7 +105,12 @@
       <div class="productDetailPriceName">입찰금액</div>
       <div class="productDetailPrice">{{ price | comma }}원</div>
       <div class="productDetailButton">
-        <v-dialog v-model="reserveModal" max-width="600px" v-if="!isReserved">
+        <v-dialog
+          class="modal"
+          v-model="reserveModal"
+          max-width="600px"
+          v-if="!isReserved"
+        >
           <template v-slot:activator="{ on: reserve, attrs }">
             <div
               class="productDetailReserveButton"
@@ -276,7 +281,10 @@ export default {
       if (!this.isFilled) {
         return;
       }
-      if (this.product.status == 0 && this.reservePrice >= this.item.curPrice) {
+      if (
+        this.item.product.status == 0 &&
+        this.reservePrice >= this.item.curPrice
+      ) {
         this.$axios({
           url: "/buy/" + this.item.product.id,
           method: "POST",
@@ -299,7 +307,6 @@ export default {
                 response.data["x-access-token"]
               );
             } else {
-              alert(response.data.message);
               this.reserveAxios(response.data.resultType);
             }
             window.location.reload();
@@ -731,5 +738,8 @@ export default {
 }
 .pass {
   background: #abf200;
+}
+.modal {
+  z-index: 10000;
 }
 </style>
