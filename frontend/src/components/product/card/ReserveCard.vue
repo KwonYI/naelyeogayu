@@ -170,12 +170,14 @@ export default {
     cancelReserve() {
       if (confirm("예약을 취소하시겠습니까?")) {
         this.$axios({
-          url: "/reserve",
+          url:
+            "/reserve/" +
+            this.$store.getters["userStore/id"] +
+            "/" +
+            this.item.product.id,
           method: "DELETE",
           headers: {
             "x-access-token": localStorage.getItem("token"),
-            memberId: this.$store.getters["userStore/id"],
-            productId: this.item.reserve.product.id,
           },
         })
           .then((response) => {
