@@ -133,11 +133,17 @@ export default {
   methods: {
     goDetail(status) {
       if (status == 2) {
-        alert("해당 상품은 품절되었습니다");
-        return;
+        if (
+          confirm("해당 상품은 품절되었습니다. 찜 목록에서 삭제하시겠습니까?")
+        ) {
+          this.disLikeCheck();
+        }
       } else if (status == 3) {
-        alert("해당 상품은 마감되었습니다");
-        return;
+        if (
+          confirm("해당 상품은 마감되었습니다. 찜 목록에서 삭제하시겠습니까?")
+        ) {
+          this.disLikeCheck();
+        }
       } else {
         this.$router.go(
           this.$router.push({
@@ -146,6 +152,26 @@ export default {
           })
         );
       }
+    },
+    disLikeCheck() {
+      this.$axios({
+        url: "/bookmark",
+        method: "DELETE",
+        headers: { "x-access-token": localStorage.getItem("token") },
+        data: {
+          memberId: this.$store.getters["userStore/id"],
+          productId: this.item.product.id,
+        },
+      })
+        .then((response) => {
+          if (response.data.success === "success") {
+            alert("삭제되었습니다.");
+            window.location.reload();
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+        });
     },
   },
 };

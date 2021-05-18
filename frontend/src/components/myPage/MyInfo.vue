@@ -83,7 +83,7 @@
           </div>
           <div class="myInfoCell col2">
             <span class="myInfoInfo">{{ user.point }} 포인트</span>
-            <v-dialog v-model="chargeModal" max-width="600px">
+            <v-dialog class="modal" v-model="chargeModal" max-width="600px">
               <template v-slot:activator="{ on, attrs }">
                 <v-btn
                   class="myInfoPointCharge"
@@ -349,5 +349,8 @@ export default {
   padding-top: 50px;
   margin-right: 2%;
   max-width: 40px;
+}
+.modal {
+  z-index: 10000;
 }
 </style>
