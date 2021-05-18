@@ -18,4 +18,7 @@ export default {};
 #img {
   filter: brightness(80%);
 }
+img {
+  width: 100%;
+}
 </style>
