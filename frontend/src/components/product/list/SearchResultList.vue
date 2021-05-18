@@ -1,7 +1,12 @@
 <template>
   <div>
     <div v-if="getSize.length > 0">
-      <Expirecard v-for="(item, index) in getSize" :key="index" :item="item" />
+      <component
+        v-bind:is="name"
+        v-for="(item, index) in getSize"
+        :key="index"
+        :item="item"
+      />
     </div>
     <div v-else>
       <p id="noresult">검색결과가 없습니다!</p>
@@ -10,12 +15,18 @@
 </template>
 
 <script>
-import Expirecard from "@/components/product/card/ExpireCard.vue";
+import expire from "@/components/product/card/ExpireCard.vue";
+import refurb from "@/components/product/card/RefurbCard.vue";
+import ugly from "@/components/product/card/UglyCard.vue";
 export default {
   components: {
-    Expirecard,
+    expire,
+    refurb,
+    ugly,
   },
-  methods: {},
+  props: {
+    name: String,
+  },
   computed: {
     getSize() {
       return this.$store.getters["productStore/getResultList"];

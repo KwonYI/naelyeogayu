@@ -37,7 +37,6 @@ export default {
   computed: {
     ...mapGetters({
       getDetailInfo: "productStore/getDetailInfo",
-      //   getUserId: "userStore/getUserId"
     }),
     category() {
       if (this.getDetailInfo) {
@@ -94,5 +93,6 @@ export default {
 }
 .productDetailBottom {
   width: 100%;
+  margin-bottom: 40px;
 }
 </style>

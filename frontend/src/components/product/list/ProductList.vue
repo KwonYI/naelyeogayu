@@ -1,6 +1,7 @@
 <template>
   <div>
-    <Expirecard
+    <component
+      v-bind:is="card.name"
       v-for="(item, index) in list"
       :key="index"
       :item="list[index]"
@@ -18,15 +19,20 @@
 
 <script>
 import InfiniteLoading from "vue-infinite-loading";
-import Expirecard from "@/components/product/card/ExpireCard.vue";
+import expire from "@/components/product/card/ExpireCard.vue";
+import refurb from "@/components/product/card/RefurbCard.vue";
+import ugly from "@/components/product/card/UglyCard.vue";
+
 import axios from "axios";
 export default {
   props: {
-    name: String,
+    card: Object,
   },
   components: {
     InfiniteLoading,
-    Expirecard,
+    expire,
+    refurb,
+    ugly,
   },
   created() {
     this.sizeCheck();
@@ -41,7 +47,7 @@ export default {
     infiniteHandler($state) {
       axios({
         method: "get",
-        url: `/product/${this.name}/${this.limit}`,
+        url: `/product/${this.card.name}/${this.limit}`,
       }).then((res) => {
         setTimeout(() => {
           if (this.getSize > this.limit) {
@@ -58,7 +64,10 @@ export default {
       });
     },
     async sizeCheck() {
-      await this.$store.dispatch("productStore/getListSize", 1);
+      await this.$store.dispatch(
+        "productStore/getListSize",
+        this.card.category
+      );
     },
   },
   computed: {

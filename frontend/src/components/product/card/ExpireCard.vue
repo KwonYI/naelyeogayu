@@ -5,7 +5,8 @@
         <img id="label" src="@/assets/label/label.png" alt="label" />
         <div id="dday">
           <p id="remain">유통 임박</p>
-          <p id="day">D-{{ item.dday }}</p>
+          <p id="day" v-if="item.dday != 0">D-{{ item.dday }}</p>
+          <p id="day" v-else>D-day</p>
         </div>
         <v-img
           id="img"
@@ -19,7 +20,8 @@
         <img id="label" src="@/assets/label/label.png" alt="label" />
         <div id="dday">
           <p id="remain">판매 대기</p>
-          <p id="day">D-{{ item.dday }}</p>
+          <p id="day" v-if="item.dday != 0">D-{{ item.dday }}</p>
+          <p id="day" v-else>D-day</p>
         </div>
         <v-img
           id="img"

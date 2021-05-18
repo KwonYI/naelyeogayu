@@ -7,6 +7,7 @@ const productStore = {
     size: 0,
     detailInfo: "",
     searchList: [],
+    word: "",
   },
   mutations: {
     setsize(state, payload) {
@@ -22,10 +23,13 @@ const productStore = {
       for (let key in payload) {
         state.searchList.push(payload[key]);
       }
-      console.log(state.searchList);
     },
     setListDefault(state) {
       state.searchList = [];
+      state.word = "";
+    },
+    setSearch(state, payload) {
+      state.word = payload;
     },
   },
   getters: {
@@ -37,6 +41,9 @@ const productStore = {
     },
     getResultList(state) {
       return state.searchList;
+    },
+    getSearhItem(state) {
+      return state.word;
     },
   },
   actions: {
