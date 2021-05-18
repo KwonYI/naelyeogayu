@@ -86,6 +86,7 @@ const routes = [
     path: "/detail/:productId",
     name: "Detail",
     component: Detail,
+    beforeEnter: requireAuth(),
   },
 ];
 

@@ -267,7 +267,7 @@ export default {
   justify-content: center;
   align-items: center;
   overflow: hidden;
-  margin-top: 52px;
+  margin: 52px auto;
 }
 .joinTitle {
   width: 600px;

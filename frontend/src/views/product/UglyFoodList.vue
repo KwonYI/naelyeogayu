@@ -26,8 +26,12 @@
         />
       </div>
       <hr />
-      <component v-if="this.search" v-bind:is="selected"></component>
-      <component v-else v-bind:is="selected" :name="selected"></component>
+      <component
+        v-if="this.search"
+        v-bind:is="selected"
+        :name="card.name"
+      ></component>
+      <component v-else v-bind:is="selected" :card="card"></component>
     </div>
   </div>
 </template>
@@ -36,6 +40,7 @@
 import pricegrid from "@/components/product/sort/PriceGrid";
 import ugly from "@/components/product/list/ProductList.vue";
 import searchResult from "@/components/product/list/SearchResultList.vue";
+import { mapGetters } from "vuex";
 
 export default {
   components: {
@@ -43,9 +48,19 @@ export default {
     searchResult,
     pricegrid,
   },
+  created() {
+    if (this.getSearhItem.length > 0) {
+      this.item.word = this.getSearhItem;
+      this.getSearch();
+    }
+  },
   data: function () {
     return {
       selected: "ugly",
+      card: {
+        name: "ugly",
+        category: 2,
+      },
       item: {
         word: "",
         category: 2,
@@ -74,6 +89,11 @@ export default {
         this.selected = "searchResult";
       }
     },
+  },
+  computed: {
+    ...mapGetters({
+      getSearhItem: "productStore/getSearhItem",
+    }),
   },
 };
 </script>

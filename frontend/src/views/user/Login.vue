@@ -176,13 +176,16 @@ export default {
 </script>
 
 <style>
+.login * {
+  font-family: "NEXON Lv1 Gothic OTF";
+}
 .login {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   overflow: hidden;
-  margin-top: 52px;
+  margin: 52px auto;
 }
 .loginTitle {
   width: 600px;
@@ -209,11 +212,7 @@ export default {
   float: right;
 }
 .active {
-  background: linear-gradient(
-    109.63deg,
-    rgb(200, 245, 192) 1.79%,
-    rgb(4, 195, 4) 101.38%
-  );
+  border: 1px solid rgb(4, 195, 4);
 }
 .divider {
   font-size: 10px;

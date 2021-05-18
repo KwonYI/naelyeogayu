@@ -8,7 +8,7 @@
         <span class="productDetailInfoCategory" @click="goCategory">
           {{ category }}
         </span>
-        <span class="productDetailInfoSearch" @click="goMain">
+        <span class="productDetailInfoSearch" @click="goSearch">
           <v-icon>mdi-home-outline</v-icon>
           {{ item.product.name }}
         </span>
@@ -196,6 +196,7 @@ export default {
       reservePrice: "",
       reserveCountSelect: [],
       sellInfoes: [],
+      search: "",
     };
   },
   created() {
@@ -219,8 +220,10 @@ export default {
       return "리퍼브 상품";
     },
     dday() {
-      if (this.item.dday >= 0) {
+      if (this.item.dday > 0) {
         return "D-" + this.item.dday;
+      } else if (this.item.dday == 0) {
+        return "D-day";
       } else {
         return "경매가 마감되었습니다.";
       }
@@ -258,12 +261,21 @@ export default {
         return;
       } else if (this.item.product.category == 2) {
         this.$router.push({ name: "Uglyfood" });
-        return;
+      } else {
+        this.$router.push({ name: "Refurb" });
       }
-      this.$router.push({ name: "Refurb" });
     },
-    goMain() {
-      this.$router.push({ name: "Home" });
+    goSearch() {
+      this.search = this.item.product.name;
+      this.$store.commit("productStore/setSearch", this.search);
+
+      if (this.item.product.category == 1) {
+        this.$router.push({ name: "Expire" });
+      } else if (this.item.product.category == 2) {
+        this.$router.push({ name: "Uglyfood" });
+      } else {
+        this.$router.push({ name: "Refurb" });
+      }
     },
     closeModal() {
       this.reserveModal = false;
