@@ -66,13 +66,13 @@
           <p class="buyDate">구매일 : {{ item.buyDate | subString }}</p>
           <p class="buyGoal">구매 : {{ item.price }}원</p>
           <p class="buyMax" v-if="item.product.status == 0">
-            {{ item.product.startPrice }}원
+            {{ item.product.startPrice | comma }}원
           </p>
           <p class="buyCur">
             <span class="buyRate" v-if="item.product.status == 0"
               >{{ item.productCurDiscountRate | fixed }}%</span
             >
-            {{ item.productCurPrice }}원/{{ unit }}
+            {{ item.productCurPrice | comma }}원/{{ unit }}
           </p>
           <p class="buyDetail">상세 보기</p>
         </div>
@@ -115,6 +115,9 @@ export default {
     subString(string) {
       return string.substring(0, string.indexOf("T"));
     },
+    comma(v) {
+      return String(v).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    },
   },
   methods: {
     goDetail(status) {
@@ -153,13 +156,13 @@ export default {
   font-style: normal;
 }
 .buyTitle,
+.buyRate,
 .buyCur {
   font-family: "NEXON Lv1 Gothic OTF Bold";
 }
 .buyStock,
 .buyMax,
 .buyDate,
-.buyRate,
 .buyGoal,
 .buyCount,
 .buyUnit {
@@ -278,9 +281,7 @@ export default {
   text-decoration: line-through;
 }
 .buyRate {
-  font-size: 15px;
-  bottom: 85px;
-  right: 20px;
+  color: red;
 }
 .buyNotrate {
   color: red;

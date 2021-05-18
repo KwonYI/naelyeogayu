@@ -62,12 +62,12 @@
         <p id="date">마감일 : {{ item.product.endDate }}</p>
         <p id="stock">수량 : {{ item.product.stock }}box</p>
         <p id="unit">무게 : {{ item.product.stock }}kg</p>
-        <p id="max">{{ item.product.startPrice }}원</p>
+        <p id="max">{{ item.product.startPrice | comma }}원</p>
         <p id="cur">
           <span id="rate" v-if="item.discountRate != 0"
             >{{ item.discountRate | fixed }}%</span
           >
-          {{ item.curPrice }}원/box
+          {{ item.curPrice | comma }}원/box
         </p>
         <p id="detail">상세 보기</p>
       </div>
@@ -95,6 +95,9 @@ export default {
     },
     fixed(rate) {
       return rate.toFixed(2);
+    },
+    comma(v) {
+      return String(v).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     },
   },
   methods: {

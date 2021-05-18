@@ -83,7 +83,7 @@
           </div>
           <div class="myInfoCell col2">
             <span class="myInfoInfo">{{ user.point }} 포인트</span>
-            <v-dialog v-model="chargeModal" max-width="600px">
+            <v-dialog class="modal" v-model="chargeModal" max-width="600px">
               <template v-slot:activator="{ on, attrs }">
                 <v-btn
                   class="myInfoPointCharge"
@@ -250,13 +250,14 @@ export default {
       }).open();
     },
     chargePoint() {
+      if (this.chargePointCount == 0 || this.chargePointCount < 1000) return;
       this.$axios({
         url: "/member/ready",
         method: "POST",
         headers: { "x-access-token": localStorage.getItem("token") },
         data: {
           email: this.user.email,
-          point: 5000,
+          point: this.chargePointCount,
         },
       })
         .then((response) => {
@@ -348,5 +349,8 @@ export default {
   padding-top: 50px;
   margin-right: 2%;
   max-width: 40px;
+}
+.modal {
+  z-index: 10000;
 }
 </style>

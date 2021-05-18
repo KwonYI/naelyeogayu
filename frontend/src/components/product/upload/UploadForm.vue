@@ -67,6 +67,15 @@
                     </v-btn>
                   </v-date-picker>
                 </v-menu>
+                <input
+                  ref="expireImageInput"
+                  type="file"
+                  hidden
+                  @change="onCheckExpire"
+                />
+                <v-btn depressed @click="onClickCheckExpire"
+                  >사진으로 유통기한 확인하기</v-btn
+                >
               </div>
 
               <div class="stock">
@@ -325,6 +334,7 @@ import axios from "axios";
 import moment from "moment";
 import "moment/locale/ko";
 // const SERVER_URL = process.env.VUE_APP_SERVER_URL;
+const KakaoAK = process.env.VUE_APP_KAKAOAK;
 export default {
   data() {
     return {
@@ -453,6 +463,49 @@ export default {
     },
     backpage() {
       this.$emit("back", true);
+    },
+    onClickCheckExpire() {
+      this.$refs.expireImageInput.click();
+    },
+    onCheckExpire(e) {
+      let formData = new FormData();
+      formData.append("image", e.target.files[0]);
+      axios
+        .post(`https://dapi.kakao.com/v2/vision/text/ocr`, formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `KakaoAK ${KakaoAK}`,
+          },
+        })
+        .then((res) => {
+          let result = res.data.result;
+          let flag = false;
+          let date;
+          for (let i = 0; i < result.length; i++) {
+            let word = result[i]["recognition_words"][0].replace(/(\s*)/g, "");
+            let count = (word.match(/\./g) || []).length;
+            if (count >= 2) {
+              let cur_date = moment(word);
+              if (cur_date.isValid()) {
+                date = cur_date.format("YYYY-MM-DD");
+                flag = true;
+                break;
+              }
+            }
+          }
+          if (flag) {
+            this.product.expirationDate = date;
+          } else {
+            alert("유통기한을 인식할 수 없습니다. 다른 사진으로 시도해주세요.");
+          }
+        })
+        .catch((error) => {
+          if (error.response.status === 413) {
+            alert("사진 용량이 너무 큽니다. 다시 시도해주세요.");
+          } else {
+            alert("서버 오류입니다. 잠시 후 다시 시도해주세요.");
+          }
+        });
     },
   },
 };

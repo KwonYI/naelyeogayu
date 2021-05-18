@@ -1,7 +1,9 @@
 <template>
   <div class="productDetailDescript">
     <div class="productDetailDescriptHeader">{{ item.product.name }}</div>
-    <div class="productDetailDescriptBody">{{ item.product.descript }}</div>
+    <div class="productDetailDescriptBody">
+      {{ item.product.descript | fixed }}
+    </div>
   </div>
 </template>
 
@@ -9,6 +11,11 @@
 export default {
   props: {
     item: Object,
+  },
+  filters: {
+    fixed(enter) {
+      return enter.replace("\n", "<br />");
+    },
   },
 };
 </script>

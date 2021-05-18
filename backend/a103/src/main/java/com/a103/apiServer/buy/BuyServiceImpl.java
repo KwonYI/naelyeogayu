@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.a103.apiServer.mail.EmailService;
 import com.a103.apiServer.member.MemberDao;
 import com.a103.apiServer.model.Buy;
 import com.a103.apiServer.model.Member;
@@ -23,8 +24,11 @@ public class BuyServiceImpl implements BuyService{
 	@Autowired
 	MemberDao memberDao;
 	
+	@Autowired
+	EmailService emailService;
+	
 	@Override
-	public int BuyProduct(long productId, Buy buy) {
+	public int BuyProduct(long productId, Buy buy) throws Exception {
 		Product product = productDao.findProductById(productId);
 		Member buyer = memberDao.findMemberById(buy.getMemberId());
 		Member seller = memberDao.findMemberById(product.getSellerId());
@@ -49,6 +53,8 @@ public class BuyServiceImpl implements BuyService{
 			productDao.save(product);
 			buy.setProduct(product);
 			buyDao.save(buy);
+			emailService.sendMessage(1, buy);
+			emailService.sendMessage(2, buy);
 			return 1;
 		}else if(productStock < buyProductCount){
 			return 3;

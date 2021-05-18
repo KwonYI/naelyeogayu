@@ -13,6 +13,7 @@ local.properties
 
 application.yml
 application.properties
+mail.properties
 
 # External tool builders
 .externalToolBuilders/

@@ -57,8 +57,10 @@ export default {
     goCategory() {
       if (this.getDetailInfo.product.category == 1) {
         this.$router.push({ name: "Expire" });
+        return;
       } else if (this.getDetailInfo.product.category == 2) {
         this.$router.push({ name: "Uglyfood" });
+        return;
       }
       this.$router.push({ name: "Refurb" });
     },

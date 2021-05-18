@@ -16,7 +16,7 @@
           >종료일: {{ item.product.endDate }}</span
         >
       </div>
-      <v-dialog v-model="sellModal" max-width="600px">
+      <v-dialog class="modal" v-model="sellModal" max-width="600px">
         <template v-slot:activator="{ on: sell, attrs }">
           <div class="productSellInfo" v-bind="attrs" v-on="{ ...sell }">
             입찰 기록
@@ -105,7 +105,12 @@
       <div class="productDetailPriceName">입찰금액</div>
       <div class="productDetailPrice">{{ price | comma }}원</div>
       <div class="productDetailButton">
-        <v-dialog v-model="reserveModal" max-width="600px" v-if="!isReserved">
+        <v-dialog
+          class="modal"
+          v-model="reserveModal"
+          max-width="600px"
+          v-if="!isReserved"
+        >
           <template v-slot:activator="{ on: reserve, attrs }">
             <div
               class="productDetailReserveButton"
@@ -199,6 +204,7 @@ export default {
       this.reserveCountSelect.push(i);
     }
     this.likeStatus();
+    this.reserveStatus();
     this.getSellInfo();
   },
   computed: {
@@ -252,6 +258,7 @@ export default {
     goCategory() {
       if (this.item.product.category == 1) {
         this.$router.push({ name: "Expire" });
+        return;
       } else if (this.item.product.category == 2) {
         this.$router.push({ name: "Uglyfood" });
       } else {
@@ -286,7 +293,10 @@ export default {
       if (!this.isFilled) {
         return;
       }
-      if (this.reservePrice >= this.item.curPrice) {
+      if (
+        this.item.product.status == 0 &&
+        this.reservePrice >= this.item.curPrice
+      ) {
         this.$axios({
           url: "/buy/" + this.item.product.id,
           method: "POST",
@@ -309,7 +319,6 @@ export default {
                 response.data["x-access-token"]
               );
             } else {
-              alert(response.data.message);
               this.reserveAxios(response.data.resultType);
             }
             window.location.reload();
@@ -401,8 +410,6 @@ export default {
         .then((response) => {
           if (response.data.success === "success") {
             this.isLike = true;
-          } else {
-            window.location.reload();
           }
         })
         .catch((error) => {
@@ -422,8 +429,6 @@ export default {
         .then((response) => {
           if (response.data.success === "success") {
             this.isLike = false;
-          } else {
-            window.location.reload();
           }
         })
         .catch((error) => {
@@ -451,6 +456,27 @@ export default {
           console.error(error);
         });
     },
+    reserveStatus() {
+      this.$axios({
+        url:
+          "/reserve/my/" +
+          this.$store.getters["userStore/id"] +
+          "/" +
+          this.item.product.id,
+        method: "GET",
+        headers: { "x-access-token": localStorage.getItem("token") },
+      })
+        .then((response) => {
+          if (response.data.success === "success") {
+            this.isReserved = true;
+          } else {
+            this.isReserved = false;
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    },
     getSellInfo() {
       this.$axios({
         url: "/buy/productlist/" + this.item.product.id,
@@ -469,12 +495,14 @@ export default {
     cancelReserve() {
       if (confirm("예약을 취소하시겠습니까?")) {
         this.$axios({
-          url: "/reserve",
+          url:
+            "/reserve/" +
+            this.$store.getters["userStore/id"] +
+            "/" +
+            this.item.product.id,
           method: "DELETE",
           headers: {
             "x-access-token": localStorage.getItem("token"),
-            memberId: this.$store.getters["userStore/id"],
-            productId: this.item.product.id,
           },
         })
           .then((response) => {
@@ -491,11 +519,10 @@ export default {
     cancelSell() {
       if (confirm("경매를 취소하시겠습니까?")) {
         this.$axios({
-          url: "/product",
+          url: "/product/" + this.item.product.id,
           method: "DELETE",
           headers: {
             "x-access-token": localStorage.getItem("token"),
-            productId: this.item.product.id,
           },
         })
           .then((response) => {
@@ -724,5 +751,8 @@ export default {
 }
 .pass {
   background: #abf200;
+}
+.modal {
+  z-index: 10000;
 }
 </style>

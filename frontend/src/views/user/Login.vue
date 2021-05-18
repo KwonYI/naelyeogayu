@@ -43,12 +43,6 @@
         <div class="socialLogin">
           <img
             class="socialButton"
-            src="@/assets/google.png"
-            alt="구글로그인"
-            @click="loginWithGoogle"
-          />
-          <img
-            class="socialButton"
             src="@/assets/kakao.png"
             alt="카카오로그인"
             @click="loginWithKakao"
@@ -64,10 +58,6 @@
 </template>
 
 <script>
-import firebase from "firebase";
-import "@firebase/auth";
-import "@firebase/firestore";
-
 export default {
   data() {
     return {
@@ -125,45 +115,6 @@ export default {
         .catch((error) => {
           console.error(error);
           alert("이메일과 비밀번호를 확인해주세요.");
-        });
-    },
-    loginWithGoogle: function () {
-      const provider = new firebase.auth.GoogleAuthProvider();
-      firebase.auth().languageCode = "ko";
-      firebase
-        .auth()
-        .signInWithPopup(provider)
-        .then((result) => {
-          this.$axios({
-            url: "/member/social",
-            method: "POST",
-            data: {
-              email: result.user.email,
-              nickname: result.user.displayName,
-              password: null,
-              address: null,
-              phone: null,
-              point: 0,
-            },
-          })
-            .then((response) => {
-              if (response.data.success === "success") {
-                localStorage.setItem("token", response.data["x-access-token"]);
-                localStorage.setItem("isSocial", JSON.stringify(true));
-                this.$store.dispatch(
-                  "userStore/login",
-                  response.data["x-access-token"]
-                );
-                if (response.data.first === "first") {
-                  this.$router.push({ name: "SocialJoin" });
-                }
-                this.$router.push({ name: "Home" });
-              }
-            })
-            .catch((error) => {
-              alert("로그인에 실패했습니다.");
-              console.error(error);
-            });
         });
     },
     loginWithKakao: function () {
@@ -288,6 +239,7 @@ export default {
   float: right;
 }
 .loginJoin {
+  clear: both;
   float: right;
 }
 </style>

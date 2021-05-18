@@ -73,20 +73,26 @@
           />
         </div>
         <p class="reserveTitle">{{ item.reserve.product.name }}</p>
-        <div class="reserveInfo">
+        <div class="reserveInfo" v-if="item.reserve.status == 0">
           <p class="reserveRemainStock">
             수량 : {{ item.reserve.product.stock }}개
           </p>
           <p class="reserveStock">예약 수량 : {{ item.reserve.count }}개</p>
           <p class="reserveGoal">예약 : {{ item.reserve.price }}원</p>
-          <p class="reserveMax">{{ item.reserve.product.startPrice }}원</p>
+          <p class="reserveMax" v-if="item.reserve.product.status == 0">
+            {{ item.reserve.product.startPrice | comma }}원
+          </p>
           <p class="reserveCur">
-            <span class="reserveRate" v-if="item.productCurDiscountRate != ''"
+            <span class="reserveRate" v-if="item.reserve.product.status == 0"
               >{{ item.productCurDiscountRate | fixed }}%</span
             >
-            {{ item.productCurPrice }}원/개
+            {{ item.productCurPrice | comma }}원/개
           </p>
           <p class="reserveDetail">상세 보기</p>
+        </div>
+        <div v-else>
+          <div class="reserveFailInfo" v-html="message"></div>
+          <p class="reserveFailDetail">상세 보기</p>
         </div>
       </div>
     </div>
@@ -115,6 +121,14 @@ export default {
       }
       return "";
     },
+    message() {
+      if (this.item.reserve.status == 3) {
+        return "재고가 부족하여<br />구매에 실패했습니다.";
+      } else if (this.item.reserve.status == 4) {
+        return "잔액이 부족하여<br />구매에 실패했습니다.";
+      }
+      return "경매가 마감되었습니다.";
+    },
   },
   filters: {
     calculate(date) {
@@ -126,15 +140,24 @@ export default {
     fixed(rate) {
       return rate.toFixed(2);
     },
+    comma(v) {
+      return String(v).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    },
   },
   methods: {
     goDetail(status) {
       if (status == 2) {
-        alert("해당 상품은 품절되었습니다");
-        return;
+        if (
+          confirm("해당 상품은 품절되었습니다. 찜 목록에서 삭제하시겠습니까?")
+        ) {
+          this.cancelReserve();
+        }
       } else if (status == 3) {
-        alert("해당 상품은 마감되었습니다");
-        return;
+        if (
+          confirm("해당 상품은 마감되었습니다. 찜 목록에서 삭제하시겠습니까?")
+        ) {
+          this.cancelReserve();
+        }
       } else {
         this.$router.go(
           this.$router.push({
@@ -142,6 +165,30 @@ export default {
             params: { productId: this.item.reserve.product.id },
           })
         );
+      }
+    },
+    cancelReserve() {
+      if (confirm("예약을 취소하시겠습니까?")) {
+        this.$axios({
+          url:
+            "/reserve/" +
+            this.$store.getters["userStore/id"] +
+            "/" +
+            this.item.product.id,
+          method: "DELETE",
+          headers: {
+            "x-access-token": localStorage.getItem("token"),
+          },
+        })
+          .then((response) => {
+            if (response.data.success === "success") {
+              alert("예약이 취소되었습니다.");
+              window.location.reload();
+            }
+          })
+          .catch((error) => {
+            console.error(error);
+          });
       }
     },
   },
@@ -288,9 +335,7 @@ export default {
   text-decoration: line-through;
 }
 .reserveRate {
-  font-size: 15px;
-  bottom: 85px;
-  right: 20px;
+  color: red;
 }
 .reserveDate {
   width: 180px;
@@ -324,5 +369,22 @@ export default {
   font-size: 15px;
   bottom: 85px;
   right: 20px;
+}
+.reserveFailInfo {
+  font-size: 18px;
+  font-family: "NEXON Lv1 Gothic OTF Bold";
+  text-align: center;
+  margin: 10px 50px 13px 50px;
+  padding: 10px 0 10px 0;
+  border: 1px solid black;
+}
+.reserveFailDetail {
+  font-size: 14px;
+  font-family: "NEXON Lv1 Gothic OTF";
+  width: 180px;
+  border: 1px solid grey;
+  text-align: center;
+  border-radius: 10px;
+  margin: 0 auto 10px auto;
 }
 </style>
