@@ -57,7 +57,7 @@
       </div>
       <p id="title">{{ item.product.name }}</p>
       <div id="info">
-        <p id="date">마감일 : {{ item.product.expirationDate }}</p>
+        <p id="date">마감일 : {{ item.product.endDate }}</p>
         <p id="stock">수량 : {{ item.product.stock }}개</p>
         <p id="max">{{ item.product.startPrice | comma }}원</p>
         <p id="cur">

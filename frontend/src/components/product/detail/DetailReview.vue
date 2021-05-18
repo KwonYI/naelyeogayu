@@ -19,7 +19,6 @@
             style="
               margin-bottom: 10px;
               margin-left: 0px;
-              box-shadow: 5px 5px 5px #cccccc;
               min-height: 80px;
               border-radius: 5px;
             "
