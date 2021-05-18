@@ -56,7 +56,7 @@ public class ReserveScheduler {
 	}
 	
 	@Scheduled(cron = "5 0 0/4 * * *")
-	public void executeReserve() {
+	public void executeReserve() throws Exception {
 		logger.info("execute expire");
 		//예약중인 목록 검색
 		List<Reserve> waitingList= reserveDao.findListReserveByStatusOrderBypriceDescIdAsc(0);
