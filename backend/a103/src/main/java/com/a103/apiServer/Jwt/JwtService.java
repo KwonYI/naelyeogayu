@@ -20,7 +20,7 @@ public class JwtService {
 
 	private String signature = "VUETOKEN";
 	
-	private Long expireMin = 30L;
+	private Long expireMin = 60L;
 
 //	    로그인 성공시 사용자 정보를 기반으로 JWTToken을 생성하여 반환.
 	public String create(Member member) {
