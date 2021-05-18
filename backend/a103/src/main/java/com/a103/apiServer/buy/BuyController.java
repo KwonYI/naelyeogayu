@@ -185,9 +185,8 @@ public class BuyController {
 		Map result = new HashMap<>();
 
 		try {
-			Buy buy = buyDao.findBuyByMemberIdAndProductId(memberId, productId);
-
-			if (buy != null) {
+			long cnt = buyDao.countByMemberIdAndProductId(memberId, productId);
+			if (cnt >= 1) {
 				result.put("success", "success");
 				entity = new ResponseEntity<>(result, HttpStatus.OK);
 			} else {
