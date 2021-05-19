@@ -93,15 +93,4 @@ export default {
 };
 </script>
 
-<style>
-.sideBar {
-  height: 100%;
-}
-.sideBarTitle {
-  font-weight: bold;
-  font-size: 22px;
-}
-.divider {
-  border-bottom: solid 2px green;
-}
-</style>
+<style src="@/assets/css/user/myPage/SideBar.css" scoped></style>

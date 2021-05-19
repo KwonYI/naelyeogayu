@@ -81,7 +81,10 @@
         </span>
       </div>
       <div class="productDetailRemain">
-        남은 수량 {{ item.product.stock }}개
+        남은 수량 {{ item.product.stock }}{{ unit }}
+        <span v-if="item.product.category == 2 && item.product.unit != 0"
+          >/{{ item.product.unit }}kg</span
+        >
       </div>
       <div class="productPriceDetail">
         <span class="productDetailRate">{{ item.discountRate | fixed }}% </span>
@@ -168,8 +171,18 @@
         >
           예약취소
         </div>
-        <div class="productDetailBuyButton" @click="buy" v-if="!isSeller">
+        <div
+          class="productDetailBuyButton"
+          @click="buy"
+          v-if="!isSeller && !isClick"
+        >
           입찰하기
+        </div>
+        <div class="productDetailBuyButton" v-if="!isSeller && isClick">
+          <v-progress-circular
+            indeterminate
+            color="white"
+          ></v-progress-circular>
         </div>
         <div class="productDetailBuyButton" @click="cancelSell" v-if="isSeller">
           경매 취소
@@ -188,6 +201,7 @@ export default {
     return {
       count: 0,
       isLike: false,
+      isClick: false,
       isFilled: false,
       isReserved: false,
       sellModal: false,
@@ -206,6 +220,7 @@ export default {
     this.likeStatus();
     this.reserveStatus();
     this.getSellInfo();
+    this.watchLog();
   },
   computed: {
     price() {
@@ -233,6 +248,12 @@ export default {
         return true;
       }
       return false;
+    },
+    unit() {
+      if (this.item.product.category == 2) {
+        return "box";
+      }
+      return "개";
     },
   },
   filters: {
@@ -358,6 +379,7 @@ export default {
     },
     buy() {
       if (this.count == 0 || this.item.product.status != 0) return;
+      this.isClick = true;
       this.$axios({
         url: "/buy/" + this.item.product.id,
         method: "POST",
@@ -370,6 +392,7 @@ export default {
         },
       })
         .then((response) => {
+          this.isClick = false;
           if (response.data.success === "success") {
             this.$store.dispatch("userStore/buy", this.price);
             alert("구매에 성공하셨습니다.");
@@ -536,223 +559,23 @@ export default {
           });
       }
     },
+    watchLog() {
+      this.$axios({
+        url: "/watch",
+        method: "POST",
+        headers: {
+          "x-access-token": localStorage.getItem("token"),
+        },
+        data: {
+          productId: this.item.product.id,
+          memberId: this.$store.getters["userStore/id"],
+        },
+      }).catch((error) => {
+        console.error(error);
+      });
+    },
   },
 };
 </script>
 
-<style>
-.productDetailTitle,
-.productDetailRate,
-.productDetailCur,
-.productDetailPrice,
-.productDetailDday,
-.modalHeader,
-.productSellInfo,
-.noSellInfo,
-.sellModalHeader {
-  font-family: "NEXON Lv1 Gothic OTF Bold";
-}
-.productDetailInfoHeader,
-.productDetailMax,
-.productDetailCountName,
-.productDetailCount,
-.productDetailRemain,
-.productDetailPriceName,
-.productDetailEndDate,
-.modalSubHeader,
-.modalButton,
-.sellModalRow {
-  font-family: "NEXON Lv1 Gothic OTF";
-}
-.productDetailInfo {
-  display: flex;
-  flex-direction: row;
-  margin-bottom: 5%;
-}
-.productDetailInfoImg {
-  float: left;
-  width: 60%;
-  padding-top: 3%;
-  object-fit: cover;
-}
-.productDetailInfoBody {
-  margin-left: 5%;
-  width: 40%;
-}
-.productDetailInfoHeader {
-  font-size: 13px;
-  border-bottom: solid 1px lightgray;
-  margin-bottom: 5%;
-}
-.productDetailInfoCategory {
-  padding-right: 2%;
-  border-right: 1px solid gray;
-  cursor: pointer;
-}
-.productDetailInfoSearch {
-  padding-left: 1%;
-  cursor: pointer;
-}
-.productDetailEndDate {
-  float: right;
-}
-.productDetailDday {
-  font-size: 38px;
-  color: red;
-}
-.productSellInfo {
-  float: right;
-  margin-top: 1%;
-  font-size: 17px;
-  padding: 2px 10px;
-  border: 2px solid black;
-  cursor: pointer;
-}
-.productDetailTitle {
-  font-size: 30px;
-  margin-top: 1%;
-}
-.productDetailRemain {
-  font-size: 15px;
-  color: gray;
-  margin-bottom: 8%;
-}
-.productPriceDetail {
-  margin-bottom: 10%;
-}
-.productDetailRate {
-  font-size: 52px;
-  float: left;
-  color: red;
-  padding-right: 15px;
-}
-.productDetailMax {
-  font-size: 17px;
-  color: gray;
-  text-decoration: line-through;
-}
-.productLikeCheck {
-  float: right;
-  cursor: pointer;
-}
-.productDetailCur {
-  font-size: 30px;
-  padding-bottom: 10px;
-}
-.productDetailCountName {
-  font-size: 20px;
-  border-bottom: solid 1px gray;
-}
-.productDetailCount {
-  margin-top: 3%;
-  margin-bottom: 10%;
-  align-items: center;
-  float: right;
-  width: 40%;
-}
-.countButtonLeft {
-  float: left;
-}
-.countButtonRight {
-  float: right;
-}
-.countNumber {
-  font-size: 25px;
-  text-align: center;
-  padding-left: 9%;
-}
-.productDetailPriceName {
-  clear: both;
-  font-size: 20px;
-  border-bottom: solid 1px gray;
-}
-.productDetailPrice {
-  margin-top: 3%;
-  margin-bottom: 15%;
-  font-size: 30px;
-  float: right;
-}
-.productDetailButton {
-  clear: both;
-}
-.productDetailReserveButton {
-  font-size: 20px;
-  font-weight: bold;
-  float: left;
-  text-align: center;
-  padding-top: 2%;
-  padding-bottom: 2%;
-  border: 2px solid black;
-  width: 50%;
-  cursor: pointer;
-}
-.productDetailBuyButton {
-  font-size: 20px;
-  font-weight: bold;
-  float: right;
-  text-align: center;
-  padding-top: 2%;
-  padding-bottom: 2%;
-  background-color: #abf200;
-  border: 2px solid #abf200;
-  width: 50%;
-  cursor: pointer;
-}
-.modalHeader {
-  width: 100%;
-  border-bottom: solid 2px green;
-  margin-bottom: 4%;
-}
-.sellModalHeader {
-  width: 100%;
-  border-bottom: solid 2px green;
-}
-.sellModalTable {
-  width: 100%;
-  align-items: center;
-  justify-content: center;
-  border-spacing: 50px 10px;
-}
-.noSellInfo {
-  font-size: 18px;
-  padding-top: 3%;
-  text-align: center;
-}
-.sellModalRow {
-  font-size: 16px;
-  text-align: center;
-}
-.modalInput {
-  width: 50%;
-  margin-left: auto;
-  margin-right: auto;
-}
-.modalButton {
-  float: right;
-  border: 2px solid black;
-  padding: 5px 15px;
-  margin-right: 10px;
-  text-align: center;
-  cursor: pointer;
-}
-.modalButtonDisabled {
-  float: right;
-  border: 2px solid black;
-  padding: 5px 15px;
-  text-align: center;
-  color: gray;
-  background: lightgray;
-  margin-right: 10px;
-  opacity: 40%;
-}
-.cancel {
-  background: rgb(226, 50, 50);
-  color: white;
-}
-.pass {
-  background: #abf200;
-}
-.modal {
-  z-index: 10000;
-}
-</style>
+<style src="@/assets/css/product/detail/DetailInfo.css" scoped></style>

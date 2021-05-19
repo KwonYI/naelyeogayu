@@ -22,7 +22,7 @@
       <div v-if="leftActive">
         <Descript :item="item"></Descript>
       </div>
-      <div v-else>
+      <div class="detailTapBody" v-else>
         <Review :item="item"></Review>
       </div>
     </div>
@@ -48,61 +48,4 @@ export default {
 };
 </script>
 
-<style>
-.detailTapHeaderRight,
-.detailTapHeaderLeft {
-  font-family: "NEXON Lv1 Gothic OTF Bold";
-}
-.detailTapHeader {
-  width: 100%;
-}
-.detailTapHeaderLeft {
-  float: left;
-  border-top: 1px solid gray;
-  border-bottom: 1px solid gray;
-  padding: 1% 0;
-  text-align: center;
-  cursor: pointer;
-  font-size: 20px;
-  font-family: "SDSamliphopangche_Outline";
-  width: 50%;
-}
-.detailTapHeaderLeftIsActive {
-  float: left;
-  border-top: 1px solid gray;
-  border-bottom: 1px solid gray;
-  padding: 1% 0;
-  text-align: center;
-  width: 50%;
-  font-size: 20px;
-  font-family: "SDSamliphopangche_Outline";
-  cursor: pointer;
-  background: linear-gradient(#ffffff 80%, #abf200 20%);
-}
-.detailTapHeaderRight {
-  float: right;
-  border-top: 1px solid gray;
-  border-bottom: 1px solid gray;
-  padding: 1% 0;
-  text-align: center;
-  width: 50%;
-  font-size: 20px;
-  font-family: "SDSamliphopangche_Outline";
-  cursor: pointer;
-}
-.detailTapHeaderRightIsActive {
-  float: right;
-  border-top: 1px solid gray;
-  border-bottom: 1px solid gray;
-  padding: 1% 0;
-  text-align: center;
-  width: 50%;
-  font-size: 20px;
-  font-family: "SDSamliphopangche_Outline";
-  cursor: pointer;
-  background: linear-gradient(#ffffff 80%, #abf200 20%);
-}
-.detailTapBody {
-  clear: both;
-}
-</style>
+<style src="@/assets/css/product/detail/DetailTap.css" scoped></style>

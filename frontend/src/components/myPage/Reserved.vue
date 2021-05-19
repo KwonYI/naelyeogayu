@@ -51,32 +51,4 @@ export default {
 };
 </script>
 
-<style>
-.reserveInfoTitle {
-  clear: both;
-  font-weight: bold;
-  font-size: 25px;
-  border-bottom: solid 2px green;
-}
-.reserveGrid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 0.5%;
-  width: 100% !important;
-  margin-top: 15px;
-  align-items: center;
-}
-.reserveBody {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  overflow: hidden;
-}
-.reserveText {
-  padding-top: 5%;
-  padding-bottom: 2%;
-  font-size: 24px;
-  font-weight: bold;
-}
-</style>
+<style src="@/assets/css/user/myPage/Reserved.css" scoped></style>

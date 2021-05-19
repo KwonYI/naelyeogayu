@@ -1,0 +1,23 @@
+.deleteUserTitle {
+    font-weight: bold;
+    font-size: 25px;
+    border-bottom: solid 2px green;
+    clear: both;
+}
+.deleteUserBody {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+.deleteUserText {
+    padding-top: 5%;
+    padding-bottom: 2%;
+    font-size: 24px;
+    font-weight: bold;
+}
+.deleteButton {
+    float: right;
+    margin-right: 15px;
+}

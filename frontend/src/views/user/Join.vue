@@ -260,42 +260,4 @@ export default {
 };
 </script>
 
-<style>
-.join {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  overflow: hidden;
-  margin: 52px auto;
-}
-.joinTitle {
-  width: 600px;
-  float: left;
-  font-size: 30px;
-}
-.joinInput {
-  width: 500px;
-  align-items: center;
-  margin: 0px;
-}
-.signUpButton {
-  width: 25%;
-  margin-top: 5px;
-  font-weight: bold;
-  font-size: 20px;
-  border-radius: 8px;
-  float: right;
-}
-.emailCheckButton {
-  width: 25%;
-  float: right;
-}
-.addressFindButton {
-  width: 25%;
-  float: right;
-}
-.clear {
-  clear: both;
-}
-</style>
+<style src="@/assets/css/user/Join.css" scoped></style>

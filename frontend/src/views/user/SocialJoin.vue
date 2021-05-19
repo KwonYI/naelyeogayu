@@ -212,13 +212,4 @@ export default {
 };
 </script>
 
-<style>
-.modifyButton {
-  width: 25%;
-  margin-top: 5px;
-  font-weight: bold;
-  font-size: 20px;
-  border-radius: 8px;
-  float: right;
-}
-</style>
+<style src="@/assets/css/user/MyPage.css" scoped></style>
