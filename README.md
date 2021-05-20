@@ -182,8 +182,9 @@ SSAFY 4기 자율 1반 3팀 <span style="color: green; font-size: 25px">더치�
     FrontEnd 
     
     1. .env.local파일을 exec/frontend/src에 이동
-    2. npm install
-    3. npm run serve
+    2. cd exec/fronted
+    3. npm install
+    4. npm run serve
 ```
 ```
     BackEnd
