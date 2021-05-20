@@ -305,7 +305,7 @@
             </div>
             <div>
               <span>일별 평균 하락율 : </span
-              ><span v-if="dayflag">- {{ dayDiscount }}%</span>
+              ><span v-if="dayflag">{{ dayDiscount }}%</span>
             </div>
             <div>
               <span>경매 기간 : </span
@@ -399,14 +399,17 @@ export default {
   },
   computed: {
     totalDiscount: function () {
-      var start = Number(this.startPrice.replace(/[^0-9]/g, ""));
-      var end = Number(this.endPrice.replace(/[^0-9]/g, ""));
+      let start = Number(this.startPrice.replace(/[^0-9]/g, ""));
+      let end = Number(this.endPrice.replace(/[^0-9]/g, ""));
       return (((start - end) / start) * 100).toFixed(2);
     },
     dayDiscount: function () {
       const start = moment(this.product.startDate, "YYYY-MM-DD");
       const end = moment(this.product.endDate, "YYYY-MM-DD");
-      return (this.totalDiscount / end.diff(start, "days")).toFixed(2);
+      if (isNaN(this.totalDiscount)) {
+        return 0;
+      }
+      return -(this.totalDiscount / end.diff(start, "days")).toFixed(2);
     },
     deadLine: function () {
       return moment(this.product.expirationDate)
