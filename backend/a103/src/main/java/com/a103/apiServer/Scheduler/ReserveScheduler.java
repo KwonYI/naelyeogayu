@@ -45,7 +45,7 @@ public class ReserveScheduler {
 	@Scheduled(cron = "0 0 0 * * *")
 	public void EndReserve() {
 		logger.info("reserve expire");
-				
+
 		try {
 			reserveDao.updateStatusByDate(2, 0, LocalDate.now());
 		} catch (Exception e) {
