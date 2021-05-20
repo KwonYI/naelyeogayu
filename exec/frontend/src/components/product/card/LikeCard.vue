@@ -19,8 +19,7 @@
         <div class="likeBox" v-if="item.product.status == 1">
           <img class="likeLabel" src="@/assets/label/label.png" alt="label" />
           <div class="likeDday">
-            <p class="likeRemain">판매 대기</p>
-            <p class="likeDay">{{ dday }}</p>
+            <p class="likeEnd">판매 대기</p>
           </div>
           <v-img
             class="likeImgGrayScale"
@@ -107,9 +106,9 @@ export default {
       return "최대 할인";
     },
     dday() {
-      if (this.item.productCurDday > 0) {
-        return "D-" + this.item.productCurDday;
-      } else if (this.item.productCurDday == 0) {
+      if (this.item.dday > 0) {
+        return "D-" + this.item.dday;
+      } else if (this.item.dday == 0) {
         return "D-day";
       }
       return "";
@@ -178,6 +177,9 @@ export default {
           console.error(error);
         });
     },
+  },
+  created() {
+    console.log(this.item);
   },
 };
 </script>

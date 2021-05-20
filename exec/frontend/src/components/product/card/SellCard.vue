@@ -19,8 +19,7 @@
         <div class="sellBox" v-if="item.product.status == 1">
           <img class="sellLabel" src="@/assets/label/label.png" alt="label" />
           <div class="sellDday">
-            <p class="sellRemain">판매 대기</p>
-            <p class="sellDay">{{ dday }}</p>
+            <p class="sellEnd">판매 대기</p>
           </div>
           <v-img
             class="sellImgGrayScale"
