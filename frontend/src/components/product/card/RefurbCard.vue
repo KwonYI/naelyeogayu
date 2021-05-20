@@ -18,7 +18,7 @@
       <div id="box" v-if="item.product.status == 1">
         <img id="label" src="@/assets/label/label.png" alt="label" />
         <div id="dday">
-          <p id="remain">판매 대기</p>
+          <p id="end">판매 대기</p>
         </div>
         <v-img
           id="img"
