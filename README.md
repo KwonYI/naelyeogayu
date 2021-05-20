@@ -20,7 +20,7 @@ SSAFY 4기 자율 1반 3팀 입니다.
 
 실행방법 :
 
-1. cd fronted
+1. cd frontend
 
 2. npm install
 
