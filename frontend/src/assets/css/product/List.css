@@ -1,0 +1,104 @@
+@font-face {
+    font-family: "NEXON Lv1 Gothic OTF Bold";
+    src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@2.1/NEXON Lv1 Gothic OTF Bold.woff")
+      format("woff");
+    font-weight: normal;
+    font-style: normal;
+  }
+  #explain {
+    width: 1290px;
+    margin: 0 auto;
+  }
+  #question {
+    max-height: 40px;
+    margin: 5px 0px 5px 150px;
+    font-size: 18px;
+    font-family: "NEXON Lv1 Gothic OTF Bold";
+    color: rgb(57, 57, 57);
+  }
+  #expirephoto {
+    margin: 0 auto;
+    height: 170px;
+    width: 1050px;
+    border: solid 2px rgb(95, 95, 95);
+    background-image: url("../../../assets/banner/expire.png");
+  }
+  #uglypthoto{
+    margin: 0 auto;
+    height: 170px;
+    width: 1050px;
+    border: solid 2px rgb(95, 95, 95);
+    background-image: url("../../../assets/banner/ugly.png");
+  }
+  #refurbphoto{
+    margin: 0 auto;
+    height: 170px;
+    width: 1050px;
+    border: solid 2px rgb(95, 95, 95);
+    background-image: url("../../../assets/banner/refurb.png");  
+  }
+#title{
+  width: 1290px;
+  padding-top:40px;
+  margin: 0 auto;
+  position: relative;
+}
+  #listtitle {
+    width:200px;
+    margin:0 auto;
+    text-align: center;
+    font-size: 28px;
+    font-family: "NEXON Lv1 Gothic OTF Bold";
+    color: rgb(0, 0, 0);
+  }
+  #icon:hover,
+  #listtitle:hover{
+    cursor: pointer;
+  }
+  .text {
+    font-size: 24px;
+  }
+
+  #searchBar {
+    position: absolute;
+    width: 200px;
+    top: 40px;
+    right: 20px;
+  }
+  .input {
+    width: 100%;
+    padding: 7px;
+    background-color: transparent;
+    transition: transform 250ms ease-in-out;
+    font-size: 14px;
+    line-height: 16px;
+  
+    color: #636362;
+  
+    border-radius: 50px; 
+    border: 1px solid #575756;
+    transition: all 250ms ease-in-out;
+    backface-visibility: hidden;
+    transform-style: preserve-3d;
+  }
+  .input::placeholder {
+    letter-spacing: 4px;
+    font-size: 14px;
+    font-family: "NEXON Lv1 Gothic OTF";
+  }
+  .input:hover,
+  .input:focus {
+    padding: 8px 0;
+    outline: 0;
+    border: 1px solid transparent;
+    border-bottom: 1px solid #575756;
+    border-radius: 0;
+  }
+
+  #icon{
+    position: absolute;
+    top:7px;
+    right:10px;
+    height: 18px;
+    width: 18px;
+  }

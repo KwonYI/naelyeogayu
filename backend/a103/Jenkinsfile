@@ -11,7 +11,30 @@ pipeline {
             }
             options { skipDefaultCheckout(false) }
             steps {
-                sh 'mvn -f backend/a103/pom.xml -B -DskipTests clean package'
+                script{
+                    try {
+                        mattermostSend (
+                            color: "#2A42EE", 
+                            message: "Build STARTED: ${env.JOB_NAME} #${env.BUILD_NUMBER} (<${env.BUILD_URL}|Link to build>)"
+                        )                   
+                        sh 'mvn -f backend/a103/pom.xml -B -DskipTests clean package'
+                        currentBuild.result = "SUCCESS"
+                    } catch(e) {
+                        currentBuild.result = "FAILURE"
+                    } finally {
+                        if(currentBuild.result == "FAILURE") {
+                            mattermostSend (
+                                color: "danger", 
+                                message: "Build FAILED: ${env.JOB_NAME} #${env.BUILD_NUMBER} (<${env.BUILD_URL}|Link to build>)"
+                            )
+                        } else {
+                            mattermostSend (
+                                color: "good", 
+                                message: "Build SUCCESS: ${env.JOB_NAME} #${env.BUILD_NUMBER} (<${env.BUILD_URL}|Link to build>)"
+                            )
+                        }                            
+                    } 
+                }
             }
         }
         stage('Docker build') {
@@ -25,7 +48,6 @@ pipeline {
             steps {
                 sh 'docker ps -f name=backend-server-container -q | xargs --no-run-if-empty docker container stop'
                 sh 'docker container ls -a -fname=backend-server-container -q | xargs -r docker container rm'
-	            sh 'docker rmi $(docker images -f "dangling=true" -q)'
 				sh 'docker run -d --name backend-server-container -p 9000:9000 backend-server-image:latest'
             }
         }

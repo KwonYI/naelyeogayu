@@ -11,6 +11,10 @@ local.properties
 .loadpath
 .recommenders
 
+application.yml
+application.properties
+mail.properties
+
 # External tool builders
 .externalToolBuilders/
 
