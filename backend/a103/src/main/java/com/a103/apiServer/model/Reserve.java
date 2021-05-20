@@ -1,7 +1,6 @@
 package com.a103.apiServer.model;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -33,7 +32,7 @@ public class Reserve {
 	private Product product;
 
 	@Column(name = "due_date")
-	private LocalDateTime dueDate;
+	private LocalDate dueDate;
 
 	private int price;
 
