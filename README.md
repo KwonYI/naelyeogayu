@@ -3,7 +3,7 @@
 SSAFY 4기 자율 1반 3팀 <span style="color: green; font-size: 25px">더치페이</span>입니다.
 
 <p align="center">
-<img  width=600 src="https://raw.githubusercontent.com/chunawoos/image/main/__2_-removebg-preview.png?token=ASMETDAAEN4R7GTBVPQHKE3AUZJNQ" alt="logo" />
+![__2_-removebg-preview](/uploads/834f423c23139e6ccc50b9a66c5dd10a/__2_-removebg-preview.png)
 
 <p style="padding: 15px">
 <img src="https://img.shields.io/static/v1?label=SSAFY&message=4%EA%B8%B0&color=0ABAB5">
