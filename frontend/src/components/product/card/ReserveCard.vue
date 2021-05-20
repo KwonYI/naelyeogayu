@@ -27,8 +27,7 @@
             alt="label"
           />
           <div class="reserveDday">
-            <p class="reserveRemain">판매 대기</p>
-            <p class="reserveDay">{{ dday }}</p>
+            <p class="reserveEnd">판매 대기</p>
           </div>
           <v-img
             class="reserveImgGrayScale"
