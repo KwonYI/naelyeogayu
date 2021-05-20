@@ -95,13 +95,33 @@
           <div class="productDetailCur">{{ item.curPrice | comma }}원</div>
         </span>
       </div>
-      <div class="productDetailCountName">수량</div>
+      <div class="productDetailCountName">
+        수량<br /><span v-if="item.product.status == 1" id="caution"
+          >해당 상품은 판매 대기 상품으로 예약 또는 찜하기만 가능합니다.</span
+        >
+      </div>
       <div class="productDetailCount">
-        <v-btn class="countButtonLeft" tile @click="addCount"
+        <v-btn
+          class="countButtonLeft"
+          tile
+          @click="addCount"
+          disabled
+          v-if="item.product.status == 1"
+          ><v-icon>mdi-plus</v-icon></v-btn
+        >
+        <v-btn class="countButtonLeft" tile @click="addCount" v-else
           ><v-icon>mdi-plus</v-icon></v-btn
         >
         <span class="countNumber">{{ count }}</span>
-        <v-btn class="countButtonRight" tile @click="subCount"
+        <v-btn
+          class="countButtonRight"
+          tile
+          @click="subCount"
+          disabled
+          v-if="item.product.status == 1"
+          ><v-icon>mdi-minus</v-icon></v-btn
+        >
+        <v-btn class="countButtonRight" tile @click="subCount" v-else
           ><v-icon>mdi-minus</v-icon></v-btn
         >
       </div>
