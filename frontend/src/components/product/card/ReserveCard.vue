@@ -131,7 +131,7 @@ export default {
       if (this.item.reserve.status == 1) {
         return "입찰 완료했습니다!<br />구매에 성공했습니다.";
       } else if (this.item.reserve.status == 2) {
-        return "예약이 만료되었습니다.<br />구매에 실패했습니다.";
+        return "예약이 만료되어<br />구매에 실패했습니다.";
       } else if (
         this.item.reserve.status == 3 ||
         this.item.reserve.product.status == 2
