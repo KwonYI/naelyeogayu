@@ -16,3 +16,14 @@ SSAFY 4기 자율 1반 3팀 입니다.
 팀원 : 
 
 하태민, 천창민, 김명규, 권영일, 송지헌
+
+
+실행방법 :
+
+1. cd fronted
+
+2. npm install
+
+3. npm run serve
+
+
