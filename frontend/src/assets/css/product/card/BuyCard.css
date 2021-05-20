@@ -14,7 +14,9 @@
 }
 .buyTitle,
 .buyRate,
-.buyCur {
+.buyCur,
+.buySoldout,
+.buyEnd {
     font-family: "NEXON Lv1 Gothic OTF Bold";
 }
 .buyStock,
