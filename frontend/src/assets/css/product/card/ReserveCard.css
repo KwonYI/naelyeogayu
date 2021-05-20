@@ -23,7 +23,8 @@
   .reserveStock,
   .reserveGoal,
   .reserveMax,
-  .reserveDate {
+  .reserveDate,
+  .reserveDueDate {
     font-family: "NEXON Lv1 Gothic OTF";
   }
   .reserveCardView {
@@ -64,7 +65,7 @@
     border-radius: 20px 20px 0 0;
   }
   .reserveInfo {
-    height: 125px;
+    height: 145px;
   }
   .reserveInfo p {
     position: absolute;
@@ -110,12 +111,17 @@
   }
   .reserveRemainStock {
     font-size: 15px;
-    bottom: 80px;
+    bottom: 100px;
     right: 20px;
+  }
+  .reserveDueDate {
+    font-size: 15px;
+    bottom: 60px;
+    left: 20px;
   }
   .reserveStock {
     font-size: 15px;
-    bottom: 80px;
+    bottom: 100px;
     left: 20px;
   }
   .reserveCur {
@@ -126,7 +132,7 @@
   }
   .reserveGoal {
     font-size: 15px;
-    bottom: 60px;
+    bottom: 80px;
     left: 20px;
   }
   .reserveMax {

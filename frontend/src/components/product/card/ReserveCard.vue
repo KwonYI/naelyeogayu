@@ -73,14 +73,18 @@
           />
         </div>
         <p class="reserveTitle">{{ item.reserve.product.name }}</p>
-        <div class="reserveInfo" v-if="item.reserve.status == 0">
+        <div
+          class="reserveInfo"
+          v-if="item.reserve.status == 0 && item.reserve.product.status < 2"
+        >
+          <p class="reserveDueDate">만료일 : {{ item.reserve.dueDate }}</p>
           <p class="reserveRemainStock">
             수량 : {{ item.reserve.product.stock }}{{ unit }}
           </p>
           <p class="reserveStock">
             예약 수량 : {{ item.reserve.count }}{{ unit }}
           </p>
-          <p class="reserveGoal">예약 : {{ item.reserve.price }}원</p>
+          <p class="reserveGoal">예약 : {{ item.reserve.price | comma }}원</p>
           <p class="reserveMax" v-if="item.reserve.product.status == 0">
             {{ item.reserve.product.startPrice | comma }}원
           </p>
@@ -124,12 +128,17 @@ export default {
       return "";
     },
     message() {
-      if (this.item.reserve.status == 3) {
+      if (this.item.reserve.status == 1) {
+        return "입찰 완료했습니다!<br />구매에 성공했습니다.";
+      } else if (this.item.reserve.status == 2) {
+        return "예약이 만료되었습니다.<br />구매에 실패했습니다.";
+      } else if (
+        this.item.reserve.status == 3 ||
+        this.item.reserve.product.status == 2
+      ) {
         return "재고가 부족하여<br />구매에 실패했습니다.";
       } else if (this.item.reserve.status == 4) {
         return "잔액이 부족하여<br />구매에 실패했습니다.";
-      } else if (this.item.reserve.status == 1) {
-        return "입찰 완료했습니다!<br /> 추가로 입찰하려면 클릭해주세요.";
       }
       return "경매가 마감되어<br /> 구매에 실패했습니다.";
     },
@@ -158,13 +167,13 @@ export default {
     goDetail(status) {
       if (status == 2) {
         if (
-          confirm("해당 상품은 품절되었습니다. 찜 목록에서 삭제하시겠습니까?")
+          confirm("해당 상품은 품절되었습니다. 예약 목록에서 삭제하시겠습니까?")
         ) {
           this.cancelReserve();
         }
       } else if (status == 3) {
         if (
-          confirm("해당 상품은 마감되었습니다. 찜 목록에서 삭제하시겠습니까?")
+          confirm("해당 상품은 마감되었습니다. 예약 목록에서 삭제하시겠습니까?")
         ) {
           this.cancelReserve();
         }
@@ -178,31 +187,32 @@ export default {
       }
     },
     cancelReserve() {
-      if (confirm("예약을 취소하시겠습니까?")) {
-        this.$axios({
-          url:
-            "/reserve/" +
-            this.$store.getters["userStore/id"] +
-            "/" +
-            this.item.product.id,
-          method: "DELETE",
-          headers: {
-            "x-access-token": localStorage.getItem("token"),
-          },
+      this.$axios({
+        url:
+          "/reserve/" +
+          this.$store.getters["userStore/id"] +
+          "/" +
+          this.item.reserve.product.id,
+        method: "DELETE",
+        headers: {
+          "x-access-token": localStorage.getItem("token"),
+        },
+      })
+        .then((response) => {
+          if (response.data.success === "success") {
+            alert("예약이 취소되었습니다.");
+            window.location.reload();
+          }
         })
-          .then((response) => {
-            if (response.data.success === "success") {
-              alert("예약이 취소되었습니다.");
-              window.location.reload();
-            }
-          })
-          .catch((error) => {
-            console.error(error);
-          });
-      }
+        .catch((error) => {
+          console.error(error);
+        });
     },
+  },
+  created() {
+    console.log(this.item);
   },
 };
 </script>
 
-<style src="@/assets/css/product/card/LikeCard.css" scoped></style>
+<style src="@/assets/css/product/card/ReserveCard.css" scoped></style>

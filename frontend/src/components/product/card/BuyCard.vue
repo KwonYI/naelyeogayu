@@ -31,9 +31,9 @@
           />
         </div>
         <div class="buyBox" v-if="item.product.status == 2">
-          <img class="buyLabel" src="@/assets/label/label.png" alt="label" />
+          <img class="buyLabel" src="@/assets/label/endlabel.png" alt="label" />
           <div class="buyDday">
-            <p class="buyRemain">품절</p>
+            <p class="buySoldout">품절</p>
           </div>
           <v-img
             class="buyImgGrayScale"
@@ -44,9 +44,9 @@
           />
         </div>
         <div class="buyBox" v-if="item.product.status == 3">
-          <img class="buyLabel" src="@/assets/label/label.png" alt="label" />
+          <img class="buyLabel" src="@/assets/label/endlabel.png" alt="label" />
           <div class="buyDday">
-            <p class="buyRemain">경매 마감</p>
+            <p class="buyEnd">경매 마감</p>
           </div>
           <v-img
             class="buyImgGrayScale"
@@ -67,9 +67,9 @@
             무게 : {{ item.product.unit }}kg
           </p>
           <p class="buyStock">수량 : {{ item.product.stock }}{{ unit }}</p>
-          <p class="buyCount">구매 수량 : {{ item.count }}</p>
+          <p class="buyCount">구매 수량 : {{ item.count }}{{ unit }}</p>
           <p class="buyDate">구매일 : {{ item.buyDate | subString }}</p>
-          <p class="buyGoal">구매 : {{ item.price }}원</p>
+          <p class="buyGoal">구매 : {{ item.price | comma }}원</p>
           <p class="buyMax" v-if="item.product.status == 0">
             {{ item.product.startPrice | comma }}원
           </p>

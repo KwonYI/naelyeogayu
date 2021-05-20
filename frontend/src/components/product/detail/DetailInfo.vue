@@ -150,6 +150,46 @@
                     type="number"
                   ></v-text-field>
                 </div>
+                <div class="modalInput">
+                  <v-menu
+                    ref="endDateMenu"
+                    v-model="endDateMenu"
+                    :close-on-content-click="false"
+                    :return-value.sync="item.product.endDate"
+                    transition="scale-transition"
+                    offset-y
+                    min-width="auto"
+                  >
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-text-field
+                        v-model="reserveEndDate"
+                        label="예약 마감일"
+                        append-icon="mdi-calendar"
+                        v-bind="attrs"
+                        v-on="on"
+                      ></v-text-field>
+                    </template>
+                    <v-date-picker
+                      v-model="reserveEndDate"
+                      :min="today"
+                      :max="item.product.endDate"
+                      no-title
+                      scrollable
+                    >
+                      <v-spacer></v-spacer>
+                      <v-btn text color="primary" @click="endDateMenu = false">
+                        취소
+                      </v-btn>
+                      <v-btn
+                        text
+                        color="primary"
+                        @click="$refs.endDateMenu.save(reserveEndDate)"
+                      >
+                        확인
+                      </v-btn>
+                    </v-date-picker>
+                  </v-menu>
+                </div>
               </v-container>
             </v-card-text>
             <v-card-actions>
@@ -185,7 +225,7 @@
           ></v-progress-circular>
         </div>
         <div class="productDetailBuyButton" @click="cancelSell" v-if="isSeller">
-          경매 취소
+          판매 취소
         </div>
       </div>
     </div>
@@ -193,6 +233,9 @@
 </template>
 
 <script>
+import moment from "moment";
+import "moment/locale/ko";
+
 export default {
   props: {
     item: Object,
@@ -206,8 +249,10 @@ export default {
       isReserved: false,
       sellModal: false,
       reserveModal: false,
+      endDateMenu: false,
       reserveCount: 0,
       reservePrice: "",
+      reserveEndDate: "",
       reserveCountSelect: [],
       sellInfoes: [],
       search: "",
@@ -255,6 +300,9 @@ export default {
       }
       return "개";
     },
+    today() {
+      return moment().format("YYYY-MM-DD");
+    },
   },
   filters: {
     comma(val) {
@@ -274,12 +322,15 @@ export default {
     reservePrice() {
       this.checkForm();
     },
+    reserveEndDate() {
+      console.log(this.reserveEndDate);
+      this.checkForm();
+    },
   },
   methods: {
     goCategory() {
       if (this.item.product.category == 1) {
         this.$router.push({ name: "Expire" });
-        return;
       } else if (this.item.product.category == 2) {
         this.$router.push({ name: "Uglyfood" });
       } else {
@@ -302,9 +353,14 @@ export default {
       this.reserveModal = false;
       this.ReserveCount = 0;
       this.ReservePrice = 0;
+      this.reserveEndDate = "";
     },
     checkForm() {
-      if (this.reserveCount == 0 || this.reservePrice == "") {
+      if (
+        this.reserveCount == 0 ||
+        this.reservePrice == "" ||
+        this.reserveEndDate == ""
+      ) {
         this.isFilled = false;
         return;
       }
@@ -331,7 +387,7 @@ export default {
         })
           .then((response) => {
             if (response.data.success === "success") {
-              this.$store.dispatch("userStore/buy", this.price);
+              this.$store.dispatch("userStore/buy", this.item.curPrice);
               alert("구매에 성공하셨습니다.");
               this.reserveAxios(1);
               localStorage.setItem("token", response.data["x-access-token"]);
@@ -342,7 +398,6 @@ export default {
             } else {
               this.reserveAxios(response.data.resultType);
             }
-            window.location.reload();
           })
           .catch((error) => {
             console.error(error);
@@ -359,6 +414,7 @@ export default {
         data: {
           memberId: this.$store.getters["userStore/id"],
           product: this.item.product,
+          dueDate: this.reserveEndDate,
           price: this.reservePrice,
           count: this.reserveCount,
           status: status,
