@@ -1,0 +1,43 @@
+.join {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    margin-top: 52px;
+}
+.joinTitle {
+    width: 600px;
+    float: left;
+    font-size: 30px;
+}
+.border {
+  border: solid 2px;
+  border-color: chartreuse;
+  border-style: inset;
+  padding: 40px;
+}
+.joinInput {
+    width: 500px;
+    align-items: center;
+    margin: 0px;
+}
+.signUpButton {
+    width: 25%;
+    margin-top: 5px;
+    font-weight: bold;
+    font-size: 20px;
+    border-radius: 8px;
+    float: right;
+}
+.emailCheckButton {
+    width: 25%;
+    float: right;
+}
+.addressFindButton {
+    width: 25%;
+    float: right;
+}
+.clear {
+    clear: both;
+}

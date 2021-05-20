@@ -1,0 +1,55 @@
+pipeline {
+    agent none
+    options { skipDefaultCheckout(true) }
+    stages {
+        stage('Build and Test') {
+            agent {
+                docker {
+                    image 'maven:3-alpine'
+                    args '-v /root/.m2:/root/.m2'
+                }
+            }
+            options { skipDefaultCheckout(false) }
+            steps {
+                script{
+                    try {
+                        mattermostSend (
+                            color: "#2A42EE", 
+                            message: "Build STARTED: ${env.JOB_NAME} #${env.BUILD_NUMBER} (<${env.BUILD_URL}|Link to build>)"
+                        )                   
+                        sh 'mvn -f backend/a103/pom.xml -B -DskipTests clean package'
+                        currentBuild.result = "SUCCESS"
+                    } catch(e) {
+                        currentBuild.result = "FAILURE"
+                    } finally {
+                        if(currentBuild.result == "FAILURE") {
+                            mattermostSend (
+                                color: "danger", 
+                                message: "Build FAILED: ${env.JOB_NAME} #${env.BUILD_NUMBER} (<${env.BUILD_URL}|Link to build>)"
+                            )
+                        } else {
+                            mattermostSend (
+                                color: "good", 
+                                message: "Build SUCCESS: ${env.JOB_NAME} #${env.BUILD_NUMBER} (<${env.BUILD_URL}|Link to build>)"
+                            )
+                        }                            
+                    } 
+                }
+            }
+        }
+        stage('Docker build') {
+            agent any
+            steps {
+                sh 'docker build -t backend-server-image:latest ./backend/a103'
+            }
+        }
+        stage('Docker run') {
+            agent any
+            steps {
+                sh 'docker ps -f name=backend-server-container -q | xargs --no-run-if-empty docker container stop'
+                sh 'docker container ls -a -fname=backend-server-container -q | xargs -r docker container rm'
+				sh 'docker run -d --name backend-server-container -p 9000:9000 backend-server-image:latest'
+            }
+        }
+    }
+}
