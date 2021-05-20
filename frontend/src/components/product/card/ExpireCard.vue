@@ -120,4 +120,4 @@ export default {
 };
 </script>
 
-<style src="@/assets/css/ListCard.css" scoped></style>
+<style src="@/assets/css/product/card/ListCard.css" scoped></style>

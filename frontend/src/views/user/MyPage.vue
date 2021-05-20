@@ -65,33 +65,4 @@ export default {
 };
 </script>
 
-<style>
-.myPage {
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  overflow: hidden;
-}
-.myPageFrame {
-  position: relative;
-  width: 1280px;
-  margin-left: auto;
-  margin-right: auto;
-}
-.sideBar {
-  float: left;
-  height: 100%;
-}
-.myPageContents {
-  float: left;
-  width: 80%;
-}
-.myPageContents > * {
-  padding-left: 1%;
-  padding-top: 1%;
-  padding-bottom: 7%;
-}
-MyInfo {
-  z-index: 10000;
-}
-</style>
+<style src="@/assets/css/user/MyPage.css" scoped></style>

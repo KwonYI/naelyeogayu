@@ -74,27 +74,4 @@ export default {
 };
 </script>
 
-<style>
-.productDetail {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  overflow: hidden;
-  position: relative;
-  width: 1280px;
-  margin-left: auto;
-  margin-right: auto;
-}
-.productDetailHeader {
-  float: left;
-  width: 100%;
-}
-.productDetailTop {
-  width: 100%;
-}
-.productDetailBottom {
-  width: 100%;
-  margin-bottom: 40px;
-}
-</style>
+<style src="@/assets/css/product/Detail.css" scoped></style>

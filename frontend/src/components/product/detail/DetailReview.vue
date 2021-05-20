@@ -2,103 +2,86 @@
   <div class="productReview">
     <div class="productReviewBody">
       <div class="productReviewWrite" v-if="verify == true && isWrite == false">
-        <v-textarea
-          v-model="descript"
-          ref="descript"
+        <v-text-field
+          v-model="reviewContent"
+          ref="reviewContent"
           placeholder="후기를 입력하세요."
           @keyup.enter="writeReview"
+          @focus="isFocus = true"
         >
-        </v-textarea>
+        </v-text-field>
+        <div class="reviewWriteButton" v-if="isFocus">
+          <v-btn @click="cancel">취소</v-btn>
+          <v-btn @click="writeReview">작성</v-btn>
+        </div>
       </div>
-      <div class="productReviewList">
-        <div v-for="(item, index) in list" :item="item" :key="index">
-          <div
-            border-variant="info"
-            class="row"
-            no-body
-            style="
-              margin-bottom: 10px;
-              margin-left: 0px;
-              min-height: 80px;
-              border-radius: 5px;
-            "
+      <div
+        class="productReviewList"
+        v-for="(item, index) in list"
+        :item="item"
+        :key="index"
+        v-show="list.length != 0"
+      >
+        <div class="productReviewHeader" style="padding: 0px">
+          <span class="productReviewWriter">
+            {{ item.member.nickname }}
+          </span>
+          <span class="productReviewDate"
+            >{{ item.date | time }} ( {{ item.date | diff }} )</span
           >
-            <div class="col" style="padding: 0px">
-              <div class="text-left">
-                <div
-                  class="d-flex align-items-center"
-                  style="margin-top: 10px; padding: 0"
-                >
-                  <strong style="margin-right: 10px">
-                    {{ item.member.nickname }}
-                  </strong>
-                  <small>({{ item.date }})</small>
-                  <div v-if="memberId == item.member.id">
-                    <button
-                      style="margin-left: 10px"
-                      @click="modifyClick(item.descript)"
-                      variant="link"
-                    >
-                      수정
-                    </button>
-                    <button
-                      style="margin-left: 10px"
-                      @click="deleteReview()"
-                      variant="link"
-                    >
-                      삭제
-                    </button>
-                  </div>
-                </div>
-              </div>
-              <hr style="margin: 0px" />
-              <div class="text-left">
-                <div
-                  id="viewcomment"
-                  v-if="memberId != item.member.id || isModify == false"
-                  v-html="item.descript.replace(/(?:\r\n|\r|\n)/g, '<br>')"
-                  style="
-                    margin-top: 10px;
-                    margin-right: 30px;
-                    margin-left: 0px;
-                    margin-bottom: 10px;
-                    font-size: 10pt;
-                  "
-                >
-                  {{ item.descript }}
-                </div>
-                <div
-                  id="modifyinput"
-                  v-if="memberId == item.member.id && isModify == true"
-                >
-                  <form @submit="modifyReview">
-                    <div class="m3 mt-2">
-                      <div cols="11">
-                        <v-textarea
-                          id="modicontents"
-                          v-model="modicontents"
-                          placeholder="내용을 입력하세요."
-                          rows="2"
-                          @keyup.enter="modifyReview"
-                        >
-                        </v-textarea>
-                      </div>
-                      <div class="p-0">
-                        <button type="submit" variant="dark">수정</button>
-                      </div>
-                    </div>
-                  </form>
+          <div
+            class="productReviewModifyButtons"
+            v-if="memberId == item.member.id"
+          >
+            <div
+              class="productReviewModifyButtonLeft"
+              @click="modifyClick(item.descript)"
+            >
+              수정
+            </div>
+            <div class="productReviewModifyButtonRight" @click="deleteReview()">
+              삭제
+            </div>
+          </div>
+        </div>
+        <div class="productReviewContent">
+          <div
+            class="productReview"
+            v-if="memberId != item.member.id || isModify == false"
+            v-html="item.descript.replace(/(?:\r\n|\r|\n)/g, '<br>')"
+          ></div>
+          <div
+            id="modifyinput"
+            v-if="memberId == item.member.id && isModify == true"
+          >
+            <div class="productReviewWrite">
+              <v-text-field
+                v-model="modifyContents"
+                placeholder="내용을 입력하세요."
+                @keyup.enter="modifyReview"
+              >
+              </v-text-field>
+              <div class="reviewModifyButton">
+                <div class="reviewModify" @click="modifyReview">수정</div>
+                <div class="reviewModifyCancel" @click="isModify = false">
+                  취소
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
+      <div class="productNoReview" v-show="list.length == 0">
+        해당 상품의 리뷰가 없습니다.
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+import moment from "moment";
+import "moment/locale/ko";
+
 export default {
   props: {
     item: Object,
@@ -107,22 +90,35 @@ export default {
     return {
       list: [],
       contents: "",
-      modicontents: "",
-      descript: "",
+      modifycontents: "",
+      reviewContent: "",
       memberId: this.$store.getters["userStore/id"],
       verify: false,
       review: {},
       isModify: false,
       isWrite: false,
+      isFocus: false,
     };
   },
   created() {
     this.getReviewList();
     this.verifyBuy();
   },
+  filters: {
+    time(date) {
+      return date.replace("T", " ");
+    },
+    diff(date) {
+      return moment(date).fromNow();
+    },
+  },
   methods: {
+    cancel() {
+      this.reviewContent = "";
+      this.isFocus = false;
+    },
     modifyClick(descript) {
-      this.modicontents = descript;
+      this.modifyContents = descript;
       this.isModify = true;
     },
     getReviewList() {
@@ -151,12 +147,16 @@ export default {
       }
     },
     writeReview() {
+      if (this.reviewContent == "" || this.reviewContent.trim() == "") {
+        alert("작성된 내용이 존재하지 않습니다.");
+        return;
+      }
       this.$axios({
         url: "/review/" + this.memberId,
         method: "POST",
         headers: { "x-access-token": localStorage.getItem("token") },
         data: {
-          descript: this.descript,
+          descript: this.reviewContent,
           productId: this.item.product.id,
         },
       })
@@ -186,32 +186,31 @@ export default {
           alert("상품 후기 삭제에 실패했습니다.");
         });
     },
-    modifyReview(event) {
-      event.preventDefault();
-      if (this.modicontents == "" || this.modicontents.trim() == "") {
+    modifyReview() {
+      if (this.modifyContents == "" || this.modifyContents.trim() == "") {
         alert("작성된 내용이 존재하지 않습니다.");
-      } else {
-        this.$axios({
-          url: "/review",
-          method: "PUT",
-          headers: { "x-access-token": localStorage.getItem("token") },
-          data: {
-            id: this.review.id,
-            descript: this.modicontents,
-          },
-        })
-          .then((response) => {
-            if (response.data.success === "success") {
-              this.$router.go(this.$router.currentRoute);
-            } else {
-              alert("수정에 실패했습니다.");
-            }
-          })
-          .catch((error) => {
-            console.log(error);
-            alert("수정에 실패했습니다.");
-          });
+        return;
       }
+      this.$axios({
+        url: "/review",
+        method: "PUT",
+        headers: { "x-access-token": localStorage.getItem("token") },
+        data: {
+          id: this.review.id,
+          descript: this.modifyContents,
+        },
+      })
+        .then((response) => {
+          if (response.data.success === "success") {
+            this.$router.go(this.$router.currentRoute);
+          } else {
+            alert("수정에 실패했습니다.");
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+          alert("수정에 실패했습니다.");
+        });
     },
     verifyBuy() {
       this.$axios({
@@ -236,4 +235,4 @@ export default {
 };
 </script>
 
-<style></style>
+<style src="@/assets/css/product/detail/DetailReview.css" scoped></style>

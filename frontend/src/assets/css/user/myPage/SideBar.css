@@ -1,0 +1,10 @@
+.sideBar {
+    height: 100%;
+  }
+.sideBarTitle {
+    font-weight: bold;
+    font-size: 22px;
+}
+.divider {
+    border-bottom: solid 2px green;
+}

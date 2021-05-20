@@ -1,0 +1,27 @@
+.buyInfoTitle {
+    clear: both;
+    font-weight: bold;
+    font-size: 25px;
+    border-bottom: solid 2px green;
+}
+.buyGrid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.5%;
+    width: 100% !important;
+    margin-top: 15px;
+    align-items: center;
+}
+.buyBody {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+.buyText {
+    padding-top: 5%;
+    padding-bottom: 2%;
+    font-size: 24px;
+    font-weight: bold;
+}

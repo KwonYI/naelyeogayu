@@ -1,0 +1,70 @@
+.productReview {
+    clear: both;
+    padding-top: 1%;
+  }
+  .reviewWriteButton {
+    float: right;
+  }
+  .productReviewWrite {
+    clear: both;
+    padding-top: 1%;
+    margin-bottom: 1%;
+  }
+  .productReviewList {
+    clear: both;
+    margin-bottom: 10px;
+    margin-left: 0px;
+    box-shadow: 5px 5px 5px #cccccc;
+    min-height: 80px;
+    border-radius: 5px;
+  }
+  .productNoReview {
+    font-family: "NEXON Lv1 Gothic OTF Bold";
+    font-size: 30px;
+    text-align: center;
+    padding-top: 105px;
+    margin-bottom: 105px;
+  }
+  .productReviewHeader {
+    border-bottom: 1px solid gray;
+  }
+  .productReviewWriter {
+    font-family: "NEXON Lv1 Gothic OTF Bold";
+    font-size: 20px;
+  }
+  .productReviewDate {
+    margin-left: 10px;
+    font-family: "NEXON Lv1 Gothic OTF";
+  }
+  .productReviewModifyButtons {
+    float: right;
+    cursor: pointer;
+  }
+  .productReviewModifyButtonLeft {
+    float: left;
+    padding: 0 10px;
+  }
+  .productReviewModifyButtonRight {
+    float: right;
+    padding: 0 10px;
+  }
+  .productReviewContent {
+    font-family: "NEXON Lv1 Gothic OTF";
+    font-size: 16px;
+    padding: 20px 20px 10px 20px;
+  }
+  .reviewModifyButton {
+    float: right;
+    cursor: pointer;
+  }
+  .productReviewWrite {
+    padding: 0;
+  }
+  .reviewModify {
+    float: left;
+    padding: 0 10px;
+  }
+  .reviewModifyCancel {
+    float: right;
+    padding: 0 10px;
+  }

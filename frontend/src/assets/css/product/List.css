@@ -21,21 +21,21 @@
     height: 170px;
     width: 1050px;
     border: solid 2px rgb(95, 95, 95);
-    background-image: url("../../assets/banner/expire.png");
+    background-image: url("../../../assets/banner/expire.png");
   }
   #uglypthoto{
     margin: 0 auto;
     height: 170px;
     width: 1050px;
     border: solid 2px rgb(95, 95, 95);
-    background-image: url("../../assets/banner/ugly.png");
+    background-image: url("../../../assets/banner/ugly.png");
   }
   #refurbphoto{
     margin: 0 auto;
     height: 170px;
     width: 1050px;
     border: solid 2px rgb(95, 95, 95);
-    background-image: url("../../assets/banner/refurb.png");  
+    background-image: url("../../../assets/banner/refurb.png");  
   }
 #title{
   width: 1290px;

@@ -87,28 +87,4 @@ export default {
 };
 </script>
 
-<style>
-.passwordCheckTitle {
-  font-weight: bold;
-  font-size: 25px;
-  border-bottom: solid 2px green;
-  clear: both;
-}
-.passwordCheckBody {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  overflow: hidden;
-}
-.passwordCheckText {
-  padding-top: 5%;
-  padding-bottom: 2%;
-  font-size: 24px;
-  font-weight: bold;
-}
-.passwordCheckButton {
-  float: right;
-  margin-right: 15px;
-}
-</style>
+<style src="@/assets/css/user/myPage/PasswordChange.css" scoped></style>
