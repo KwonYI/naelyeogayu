@@ -20,4 +20,5 @@ public interface WatchLogDao extends JpaRepository<Watchlog, Long> {
 	
 	@Query(value = "SELECT COUNT(DISTINCT(MEMBER_ID)) FROM watchlog WHERE PRODUCT_ID = :PRODUCT_ID", nativeQuery = true)
 	long countWatchLogIdByProductId(@Param("PRODUCT_ID") long productId);
+	long countByProductIdAndIp(long productId, String ip);
 }

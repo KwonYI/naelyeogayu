@@ -44,9 +44,14 @@ public class WatchLogController {
 		watchlog.setIp(getClientIpAddr(request));
 
 		try {
-			watchlogDao.save(watchlog);
-			result.put("success", "success");
-			entity = new ResponseEntity<>(result, HttpStatus.OK);
+			long cnt = watchlogDao.countByProductIdAndIp(watchlog.getProductId(), watchlog.getIp());
+			System.out.println(cnt);
+			if(cnt == 0) {
+				watchlogDao.save(watchlog);
+				entity = new ResponseEntity<>(result, HttpStatus.OK);
+				result.put("success", "success");				
+			}
+			
 		} catch (Exception e) {
 			logger.error("error", e);
 			result.put("success", "error");
