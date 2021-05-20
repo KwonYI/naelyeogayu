@@ -1,0 +1,28 @@
+#{} 중괄호 부분은 환경에 맞게 세팅해야할 사항입니다.
+
+cloud:
+  aws:
+    credentials:
+      accessKey: {S3 accessKey}
+      secretKey: {S3 secretKey}
+    s3:
+      bucket: {S3 bucket name}
+    region:
+      static: {S3 region}
+    stack:
+      auto: false
+      
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://{mysql server url}?serverTimezone=Asia/Seoul&useUniCode=yes&characterEncoding=UTF-8&useLegacyDatetimeCode=false
+    username: {mysql username}
+    password: {mysql userpassword}
+
+server:
+  servlet:
+    context-path: /a103
+  port: 9000
+
+kakao :
+  admin-key: {kakao pay api admin key}
