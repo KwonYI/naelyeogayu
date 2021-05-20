@@ -20,10 +20,17 @@ SSAFY 4기 자율 1반 3팀 입니다.
 
 실행방법 :
 
-1. cd frontend
+1. a103_DB_Dump.zip을 이용하여서 DB를 설정해줍니다.
 
-2. npm install
+2. application.yml파일을 exec/backend/a103/src/main/resources로 옮긴뒤 설정에 맞게 파일을 수정해줍니다.
+    ({mysql server url}, {mysql username}, {mysql userpasswor} 부분)
 
-3. npm run serve
+3. .env.local파일을 exec/frontend로 이동시킨다.
+
+4. cd exec/frontend
+
+5. npm install
+
+6. npm run serve
 
 
