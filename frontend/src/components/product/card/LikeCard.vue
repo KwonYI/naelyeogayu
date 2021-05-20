@@ -107,8 +107,10 @@ export default {
       return "최대 할인";
     },
     dday() {
-      if (this.item.dday >= 0) {
-        return "D-" + this.item.dday;
+      if (this.item.productCurDday > 0) {
+        return "D-" + this.item.productCurDday;
+      } else if (this.item.productCurDday == 0) {
+        return "D-day";
       }
       return "";
     },
