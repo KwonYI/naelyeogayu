@@ -343,7 +343,6 @@ export default {
       this.checkForm();
     },
     reserveEndDate() {
-      console.log(this.reserveEndDate);
       this.checkForm();
     },
   },

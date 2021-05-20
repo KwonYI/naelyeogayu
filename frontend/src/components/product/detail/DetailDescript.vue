@@ -16,7 +16,7 @@ export default {
     };
   },
   created() {
-    this.desc = this.item.product.descript.replace("\n", "<br />");
+    this.desc = this.item.product.descript.replace(/(?:\r\n|\r|\n)/g, "<br>");
   },
 };
 </script>
