@@ -41,9 +41,5 @@ public class Reserve {
 	
 	private int status;
 
-	@PrePersist
-	public void dueDate() {
-		this.dueDate = LocalDateTime.now();
-	}
 	
 }
