@@ -304,14 +304,11 @@
               ><span v-if="totalflag">- {{ totalDiscount }}%</span>
             </div>
             <div>
-              <span>일별 평균 하락율 : </span
-              ><span v-if="dayflag">{{ dayDiscount }}%</span>
+              <span>일별 평균 하락율 : </span><span>{{ dayDiscount }}%</span>
             </div>
             <div>
-              <span>경매 기간 : </span
-              ><span v-if="dayflag">
-                {{ product.startDate }} ~ {{ product.endDate }}</span
-              >
+              <span>경매 기간 : </span>
+              <span> {{ product.startDate }} ~ {{ product.endDate }}</span>
             </div>
             <div>
               <span style="color: rgb(247, 96, 96); font-size: 15px"
@@ -333,8 +330,8 @@
 import axios from "axios";
 import moment from "moment";
 import "moment/locale/ko";
-// const SERVER_URL = process.env.VUE_APP_SERVER_URL;
 const KakaoAK = process.env.VUE_APP_KAKAOAK;
+
 export default {
   data() {
     return {
@@ -343,7 +340,6 @@ export default {
       endDateMenu: false,
       releaseMenu: false,
       totalflag: false,
-      dayflag: false,
       startPrice: "",
       endPrice: "",
       product: {
@@ -390,9 +386,6 @@ export default {
     };
   },
   watch: {
-    "product.endDate": function () {
-      this.dayflag = true;
-    },
     endPrice: function () {
       this.totalflag = true;
     },
