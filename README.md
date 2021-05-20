@@ -51,7 +51,7 @@ SSAFY 4기 자율 1반 3팀 <span style="color: green; font-size: 25px">더치�
 
 # 💡기획배경
 
-<img src="https://raw.githubusercontent.com/chunawoos/image/main/A103_%EA%B8%B0%ED%9A%8D%EB%B0%9C%ED%91%9C.png?token=ASMETDB3N6HWVGEHXNNDN6TAUZMEK">
+![A103_기획발표](/uploads/81ae4b2081d5c2ceebee714fdf1867f4/A103_기획발표.png)
 
 &nbsp;
 &nbsp;
@@ -63,19 +63,19 @@ SSAFY 4기 자율 1반 3팀 <span style="color: green; font-size: 25px">더치�
 
 ## [와이어 프레임](https://www.figma.com/file/6Qi8Xm9QdUBCSITZJSI4Qw/%EC%9E%90%EC%9C%A8-%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8?node-id=0%3A1)
 
-<img src="https://raw.githubusercontent.com/chunawoos/image/main/Image%20Pasted%20at%202021-5-20%2016-37.png?token=ASMETDETBAZ4GI3WPLIRPNDAUZNLY">
+![Image_Pasted_at_2021-5-20_16-37](/uploads/62c28d740bc3274f52439764adedbc5e/Image_Pasted_at_2021-5-20_16-37.png)
 
 ## [ERD](https://www.erdcloud.com/d/Q2J7PtKbnRL55vnw4)
 
-<img src="https://raw.githubusercontent.com/chunawoos/image/main/erd.jpg?token=ASMETDB5GM726MJ5JJS7RU3AUZN2S">
+![erd](/uploads/c0274eca643542e1cc651b14c3a3c806/erd.jpg)
 
 ## [API Table](https://www.notion.so/API-ad638aad80a84f769262a9eabb2930d0)
 
-<img src="https://raw.githubusercontent.com/chunawoos/image/main/api%201.jpg?token=ASMETDB4FSG6Y7MCIS7V2SLAUZPBS">
+![api_1](/uploads/6c176f210da4fc37342adac4f9c1b3f7/api_1.jpg)
 <br />
-<img src="https://raw.githubusercontent.com/chunawoos/image/main/api%202.jpg?token=ASMETDEZLBK7GYLEZWDPPYDAUZPC4">
+![api_2](/uploads/a7c3ab6d87ab34ec7fe860e9ef81a90f/api_2.jpg)
 <br />
-<img src="https://raw.githubusercontent.com/chunawoos/image/main/api%203.jpg?token=ASMETDCHHUS4YRFRM5MC323AUZPGA">
+![api_3](/uploads/59e5900a4e90e936a92db6eb37a306a1/api_3.jpg)
 
 &nbsp;
 &nbsp;
@@ -85,11 +85,11 @@ SSAFY 4기 자율 1반 3팀 <span style="color: green; font-size: 25px">더치�
 
 # 🛒주요기능
 
-<img src="https://raw.githubusercontent.com/chunawoos/image/main/%EB%A9%94%EC%9D%B8%201.jpg?token=ASMETDHETCF2YGSLFJYGQWDAUZQGA">
+![메인_1](/uploads/4c20d46648a890ad742190f2788893d1/메인_1.jpg)
 <br />
-<img src="https://raw.githubusercontent.com/chunawoos/image/main/%EB%A9%94%EC%9D%B8%202.jpg?token=ASMETDA3LVJET66SXFMI4CLAUZQHQ">
+![메인_2](/uploads/b11534176bb60f147c016075d1e193f7/메인_2.jpg)
 <br />
-<img src="https://raw.githubusercontent.com/chunawoos/image/main/%EB%A9%94%EC%9D%B8%203.jpg?token=ASMETDBLY63G73BQPING7STAUZQI4">
+![메인_3](/uploads/b695086209b89bd56cf63ca96edf855e/메인_3.jpg)
 
 ## 1. 테마 별 상품 조회
 ## 2. 상품 카드화로 간편하게 정보 확인
@@ -152,7 +152,7 @@ SSAFY 4기 자율 1반 3팀 <span style="color: green; font-size: 25px">더치�
 
 ### 소스트리(Sourcetree)
 
-<img src="https://raw.githubusercontent.com/chunawoos/image/main/%EC%86%8C%EC%8A%A4%ED%8A%B8%EB%A6%AC.jpg?token=ASMETDFGALGP4LY3D5AS3X3AUZVGA" >
+![소스트리](/uploads/b795ae873572fb860ebad31b541c48e7/소스트리.jpg)
 
 - 소스트리를 활용하여 깃을 체계적으로 관리했습니다.
 - branch를 쉽게 생성하며, 어떤 branch가 존재하는지 파악하기 쉽습니다.
@@ -225,4 +225,4 @@ SSAFY 4기 자율 1반 3팀 <span style="color: green; font-size: 25px">더치�
 
 <h2>지금까지 <strong style="color: green; font-size: 45px;">더치페이</strong>의 리드미였습니다. <br/> 감사합니다!</h2>
 
-<img src="https://raw.githubusercontent.com/chunawoos/image/main/A103_%EA%B8%B0%ED%9A%8D%EB%B0%9C%ED%91%9C.jpg?token=ASMETDEVOWAITYGIQCDCYULAUZYHG">
+![A103_기획발표](/uploads/82c2c8bfe89b7df58215cfb7b2d89602/A103_기획발표.jpg)
