@@ -87,6 +87,14 @@ public class ReserveScheduler {
 				
 			}
 			
+			if(detail.getProduct().getStock() < waiting.getCount()) {
+				reserveDao.updateStatus(3, waiting.getId());
+			}
+			
+			if(waiting.getDueDate().isBefore(LocalDate.now())) {
+				reserveDao.updateStatus(2, waiting.getId());
+			}
+			
 		}
 
 	}
