@@ -35,7 +35,7 @@ export default {
       return String(v).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     },
     fixed(v) {
-      return Math.floor(v);
+      return Math.ceil(v);
     },
   },
   methods: {
