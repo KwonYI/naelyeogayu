@@ -1,7 +1,3 @@
-<span style="font-size:30px">내</span><span style="font-size:25px">려</span><strong style="font-size:20px">가</strong><strong style="font-size:17px">유</strong>
-
-SSAFY 4기 자율 1반 3팀 <span style="color: green; font-size: 25px">더치페이</span>입니다.
-
 ![LOGO1](https://user-images.githubusercontent.com/68232654/119427154-7d72ca00-bd45-11eb-96a5-2e62d16a98b8.png)
 
 - 리퍼브 상품에 하향식 경매를 이용해 판매하는 쇼핑몰 프로젝트입니다.
